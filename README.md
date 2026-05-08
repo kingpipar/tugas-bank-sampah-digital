@@ -59,7 +59,7 @@ Proyek ini menggunakan pendekatan **Polyglot Persistence** untuk mengoptimalkan 
 
 Repository ini menggunakan satu direktori utama untuk mempermudah manajemen versi antar *platform*:
 
-
+```
 bank-sampah-digital/
 ├── mobile-warga/               
 │   ├── lib/
@@ -76,3 +76,4 @@ bank-sampah-digital/
 │   ├── .env                    
 │   └── server.js               
 └── README.md
+```
