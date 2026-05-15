@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Request Jemput</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 p-10">
+
+    <div class="max-w-6xl mx-auto">
+
+        <h1 class="text-4xl font-black mb-8">
+            Request Jemput
+        </h1>
+
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+
+            <table class="w-full">
+
+                <thead class="bg-emerald-500 text-white">
+
+                    <tr>
+
+                        <th class="p-5 text-left">
+                            Nama
+                        </th>
+
+                        <th class="p-5 text-left">
+                            Alamat
+                        </th>
+
+                        <th class="p-5 text-left">
+                            Jenis Sampah
+                        </th>
+
+                        <th class="p-5 text-left">
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="request-body">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        async function loadRequest() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        'http://localhost:3000/api/request_jemput'
+                    );
+
+                const data =
+                    await response.json();
+
+                const tbody =
+                    document.getElementById(
+                        'request-body'
+                    );
+
+                tbody.innerHTML = '';
+
+                data.forEach((item) => {
+
+                    let badge =
+                        'bg-yellow-100 text-yellow-700';
+
+                    if (item.status === 'proses') {
+
+                        badge =
+                            'bg-blue-100 text-blue-700';
+
+                    }
+
+                    if (item.status === 'selesai') {
+
+                        badge =
+                            'bg-green-100 text-green-700';
+
+                    }
+
+                    tbody.innerHTML += `
+
+                <tr class="border-b">
+
+                    <td class="p-5 font-semibold">
+
+                        ${item.nama_warga}
+
+                    </td>
+
+                    <td class="p-5">
+
+                        ${item.alamat}
+
+                    </td>
+
+                    <td class="p-5">
+
+                        ${item.jenis_sampah}
+
+                    </td>
+
+                    <td class="p-5">
+
+                        <span class="
+                        px-4 py-2 rounded-full text-sm font-bold
+                        ${badge}">
+
+                            ${item.status}
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                `;
+
+                });
+
+            }
+
+            catch (error) {
+
+                console.log(error);
+
+            }
+
+        }
+
+        loadRequest();
+
+    </script>
+
+</body>
+
+</html>

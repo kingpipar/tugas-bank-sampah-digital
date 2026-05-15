@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Transaksi | Bank Sampah Digital</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <!DOCTYPE html>
+    <html lang="id">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Laporan Transaksi | Bank Sampah Digital</title>
+
+        <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+            rel="stylesheet">
+
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+        <style>
+            body {
+                font-family: 'Plus Jakarta Sans', sans-serif;
+
+                background:
+                    radial-gradient(circle at top left, #d1fae5 0%, transparent 20%),
+                    radial-gradient(circle at bottom right, #dcfce7 0%, transparent 25%),
+                    #f8fafc;
+
+                color: #0f172a;
+            }
+
+            ::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 10px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #10b981;
+            }
+
+            .glass-card {
+                background: rgba(255, 255, 255, .75);
+
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+
+                border: 1px solid rgba(255, 255, 255, .5);
+            }
+
+            .input-glow:focus {
+                box-shadow: 0 0 0 4px rgba(16, 185, 129, .15);
+
+                border-color: #10b981;
+            }
+
+            .hover-card {
+                transition: all .35s ease;
+            }
+
+            .hover-card:hover {
+                transform: translateY(-4px);
+
+                box-shadow:
+                    0 20px 40px rgba(16, 185, 129, .08);
+            }
+
+            .table-row {
+                transition: all .3s ease;
+            }
+
+            .table-row:hover {
+                background: rgba(16, 185, 129, .04);
+
+                transform: scale(1.003);
+            }
+
+            .btn-modern {
+                transition: all .3s ease;
+            }
+
+            .btn-modern:hover {
+                transform: translateY(-2px);
+            }
+
+            .btn-modern:active {
+                transform: scale(.98);
+            }
+
+            .sidebar-menu {
+                transition: all .3s ease;
+            }
+
+            .sidebar-menu:hover {
+                transform: translateX(5px);
+            }
+
+            .active-sidebar {
+                background: linear-gradient(135deg, #10b981, #34d399);
+
+                box-shadow:
+                    0 20px 40px rgba(16, 185, 129, .28);
+            }
+
+            /* DATE INPUT MODERN */
+
+            .custom-date::-webkit-calendar-picker-indicator {
+                opacity: .7;
+                cursor: pointer;
+
+                transition: .3s;
+            }
+
+            .custom-date::-webkit-calendar-picker-indicator:hover {
+                opacity: 1;
+
+                transform: scale(1.1);
+            }
+
+            .custom-date {
+                color: #334155;
+                letter-spacing: .3px;
+            }
+
+            /* HILANGKAN FORMAT BAWAAN */
+
+            input[type="date"]::-webkit-datetime-edit {
+                padding: 0;
+            }
+
+            input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+                color: #334155;
+            }
+
+            input[type="date"]::-webkit-datetime-edit-text {
+                color: #94a3b8;
+                padding: 0 4px;
+            }
+
+            input[type="date"]::-webkit-datetime-edit-month-field,
+            input[type="date"]::-webkit-datetime-edit-day-field,
+            input[type="date"]::-webkit-datetime-edit-year-field {
+                color: #334155;
+                font-weight: 800;
+            }
+        </style>
+    </head>
+
+<body class="flex h-screen overflow-hidden antialiased">
+
+    <!-- SIDEBAR -->
+    <aside
+        class="w-[95px] md:w-[300px] bg-[#f5f7f6] border-r border-[#e5e7eb] flex flex-col justify-between px-4 py-6 shadow-sm z-50">
+
+        <div>
+
+            <!-- LOGO -->
+            <div class="flex items-center gap-4 mb-12 px-2">
+
+                <div
+                    class="w-[64px] h-[64px] rounded-[24px] bg-gradient-to-br from-[#22c55e] to-[#4ade80] flex items-center justify-center shadow-[0_18px_35px_rgba(34,197,94,0.30)]">
+
+                    <span class="text-[28px]">♻️</span>
+
+                </div>
+
+                <div class="hidden md:block leading-tight">
+
+                    <h1 class="text-[17px] font-black text-[#0f172a] leading-5">
+                        Bank<br>Sampah
+                    </h1>
+
+                    <p class="text-[#94a3b8] text-[13px] font-medium mt-1">
+                        Digital System
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- MENU -->
+            <nav class="space-y-5">
+
+                <!-- DASHBOARD -->
+                <a href="index.html"
+                    class="sidebar-menu flex items-center gap-4 px-4 py-4 rounded-[24px] hover:bg-white">
+
+                    <div
+                        class="w-[50px] h-[50px] rounded-2xl bg-[#eef2f7] flex items-center justify-center text-[22px] shadow-inner">
+                        📊
+                    </div>
+
+                    <div class="hidden md:block">
+
+                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">
+                            Dashboard
+                        </h3>
+
+                        <p class="text-[#94a3b8] text-[13px] font-medium">
+                            Ringkasan sistem
+                        </p>
+
+                    </div>
+
+                </a>
+
+                <!-- HARGA -->
+                <a href="harga.html"
+                    class="sidebar-menu flex items-center gap-4 px-4 py-4 rounded-[24px] hover:bg-white">
+
+                    <div
+                        class="w-[50px] h-[50px] rounded-2xl bg-[#eef2f7] flex items-center justify-center text-[22px] shadow-inner">
+                        💰
+                    </div>
+
+                    <div class="hidden md:block">
+
+                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">
+                            Harga Sampah
+                        </h3>
+
+                        <p class="text-[#94a3b8] text-[13px] font-medium">
+                            Kelola harga realtime
+                        </p>
+
+                    </div>
+
+                </a>
+
+                <!-- LAPORAN -->
+                <a href="laporan.html"
+                    class="active-sidebar flex items-center gap-4 px-4 py-4 rounded-[28px] scale-[1.02]">
+
+                    <div
+                        class="w-[50px] h-[50px] rounded-2xl bg-white/20 border border-white/20 flex items-center justify-center text-[22px] text-white shadow-inner">
+                        📄
+                    </div>
+
+                    <div class="hidden md:block">
+
+                        <h3 class="text-white font-extrabold text-[15px]">
+                            Laporan
+                        </h3>
+
+                        <p class="text-[#dcfce7] text-[13px] font-medium">
+                            Data & statistik
+                        </p>
+
+                    </div>
+
+                </a>
+
+                <!-- NOTIF -->
+                <a href="notifikasi.html"
+                    class="sidebar-menu flex items-center gap-4 px-4 py-4 rounded-[24px] hover:bg-white relative">
+
+                    <div
+                        class="w-[50px] h-[50px] rounded-2xl bg-[#eef2f7] flex items-center justify-center text-[22px] shadow-inner">
+                        🔔
+                    </div>
+
+                    <div class="hidden md:block">
+
+                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">
+                            Notifikasi
+                        </h3>
+
+                        <p class="text-[#94a3b8] text-[13px] font-medium">
+                            Update terbaru
+                        </p>
+
+                    </div>
+
+                    <div
+                        class="absolute right-5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-[#ef4444] text-white text-[12px] font-bold flex items-center justify-center shadow-md">
+                        4
+                    </div>
+
+                </a>
+
+            </nav>
+
+        </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 overflow-y-auto bg-[#F9FBFA] relative">
+
+        <!-- HEADER -->
+        <header
+            class="glass-card px-10 py-5 flex items-center justify-between sticky top-0 z-30 border-b border-white/40 shadow-[0_10px_40px_rgba(0,0,0,.04)] backdrop-blur-2xl">
+
+            <div>
+
+                <h1 class="text-3xl font-black text-slate-800 tracking-tight">
+                    Laporan Transaksi
+                </h1>
+
+                <p class="text-sm text-slate-500 mt-1 font-medium">
+                    Catat setoran warga dan cetak laporan PDF dengan mudah.
+                </p>
+
+            </div>
+
+            <div
+                class="hidden md:flex items-center gap-4 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 hover-card">
+
+                <div class="text-right">
+
+                    <p class="text-sm font-bold text-slate-800">
+                        Admin Utama
+                    </p>
+
+                    <div class="flex items-center justify-end gap-1.5 mt-0.5">
+
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+
+                        <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">
+                            Online
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-xl border border-slate-200 shadow-inner">
+                    👨‍💼
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- CONTENT -->
+        <div class="p-8 md:p-10 max-w-[1400px] mx-auto space-y-8">
+
+            <!-- FILTER -->
+            <section
+                class="glass-card rounded-[36px] p-8 shadow-[0_15px_50px_rgba(0,0,0,.05)] border border-white/50 relative overflow-hidden">
+
+                <div class="absolute -left-20 bottom-0 w-72 h-72 bg-emerald-100 rounded-full blur-3xl opacity-40">
+                </div>
+
+                <div class="flex items-end justify-between gap-6 relative z-10 flex-wrap">
+
+                    <!-- LEFT -->
+                    <div class="flex items-end gap-5 flex-wrap">
+
+                        <!-- FILTER TANGGAL -->
+                        <div class="w-[250px]">
+
+                            <label
+                                class="block text-[12px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">
+
+                                Filter Tanggal
+
+                            </label>
+
+                            <input type="date" id="filter-tanggal" onchange="filterTabelHarian()" class="w-full
+                                h-[56px]
+                                px-5
+                                rounded-[20px]
+                                border border-[#dbe4ee]
+                                bg-white
+                                text-[#334155]
+                                font-extrabold
+                                text-[15px]
+                                outline-none
+                                focus:border-[#22c55e]
+                                focus:ring-4
+                                focus:ring-green-100
+                                transition-all
+                                appearance-none
+                                custom-date">
+
+                        </div>
+
+                        <!-- SEARCH -->
+                        <div class="w-[320px]">
+
+                            <label
+                                class="block text-[12px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">
+
+                                Pencarian Warga
+
+                            </label>
+
+                            <div class="relative">
+
+                                <span class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-lg">
+
+                                    🔍
+
+                                </span>
+
+                                <input type="text" id="search-input" onkeyup="filterTabelHarian()"
+                                    placeholder="Ketik nama warga..." class="w-full
+                        h-[56px]
+                        pl-14 pr-5
+                        rounded-[18px]
+                        border border-[#dbe4ee]
+                        bg-white
+                        text-[#334155]
+                        font-semibold
+                        text-[15px]
+                        outline-none
+                        focus:border-[#22c55e]
+                        focus:ring-4
+                        focus:ring-green-100
+                        transition-all">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT BUTTON -->
+                    <div class="flex gap-4">
+
+                        <!-- CATAT -->
+                        <button onclick="bukaModal()" class="h-[56px]
+                px-7
+                rounded-[18px]
+                bg-gradient-to-r
+                from-[#22c55e]
+                to-[#34d399]
+                text-white
+                font-bold
+                shadow-[0_14px_30px_rgba(34,197,94,.25)]
+                hover:scale-[1.02]
+                transition-all
+                whitespace-nowrap">
+
+                            ✍️ Catat Setoran
+
+                        </button>
+
+                        <!-- PDF -->
+                        <button onclick="exportKePDF()" class="h-[56px]
+                px-7
+                rounded-[18px]
+                bg-[#0f172a]
+                text-white
+                font-bold
+                shadow-lg
+                hover:scale-[1.02]
+                transition-all
+                whitespace-nowrap">
+
+                            📄 Cetak PDF
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- TABLE -->
+            <section
+                class="glass-card rounded-[36px] shadow-[0_15px_50px_rgba(0,0,0,.05)] border border-white/50 overflow-hidden">
+
+                <div
+                    class="p-6 md:px-8 md:pt-8 md:pb-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
+
+                    <h2 class="text-lg font-black text-slate-800 flex items-center gap-3">
+                        📋 Riwayat Setoran Masuk
+                    </h2>
+
+                </div>
+
+                <div class="overflow-x-auto custom-scrollbar">
+
+                    <table class="w-full text-sm text-left">
+
+                        <thead
+                            class="bg-slate-50 text-slate-400 uppercase text-[12px] font-black tracking-widest border-b border-slate-100">
+
+                            <tr>
+                                <th class="py-5 px-8 whitespace-nowrap">Tanggal</th>
+                                <th class="py-5 px-8 whitespace-nowrap">Nama Warga</th>
+                                <th class="py-5 px-8 whitespace-nowrap">Kategori</th>
+                                <th class="py-5 px-8 whitespace-nowrap">Jenis Sampah</th>
+                                <th class="py-5 px-8 text-right whitespace-nowrap">Berat</th>
+                                <th class="py-5 px-8 text-right whitespace-nowrap">Total Kas</th>
+                            </tr>
+
+                        </thead>
+
+                        <!-- INI JANGAN DIHAPUS -->
+                        <tbody id="tabel-laporan" class="divide-y divide-slate-100/80 text-slate-600">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </div>
+
+        <!-- SEMUA MODAL + SCRIPT ASLI KAMU TETAP DI BAWAH SINI -->
+
+        <div id="modalTambah"
+            class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div
+                class="bg-white w-full max-w-lg rounded-[24px] shadow-2xl relative transform transition-all duration-300 scale-100">
+
+                <div class="px-8 py-6 border-b border-slate-100 flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <div
+                            class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                            <i class="ph-bold ph-plus"></i>
+                        </div>
+                        Catat Setoran Baru
+                    </h2>
+                    <button onclick="tutupModal()"
+                        class="text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                        <i class="ph-bold ph-x"></i>
+                    </button>
+                </div>
+
+                <form id="formSetoran" class="p-8 space-y-5">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                            <i class="ph-bold ph-user text-slate-400"></i> Nama Warga
+                        </label>
+                        <input type="text" name="nama_warga" placeholder="Masukkan nama lengkap..." required
+                            class="input-modern w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                            <i class="ph-bold ph-tag text-slate-400"></i> Kategori
+                        </label>
+                        <select name="kategori" required
+                            class="input-modern w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 outline-none appearance-none cursor-pointer">
+                            <option value="">Pilih Kategori Kertas/Plastik...</option>
+                            <option value="Plastik">Plastik</option>
+                            <option value="Kertas">Kertas</option>
+                            <option value="Logam">Logam</option>
+                            <option value="Kaca">Kaca</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                            <i class="ph-bold ph-recycle text-slate-400"></i> Jenis Sampah
+                        </label>
+                        <select name="id_sampah" id="id_sampah" required onchange="hitungTotalOtomatis()"
+                            class="input-modern w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 outline-none appearance-none cursor-pointer">
+                            <option value="" data-harga="0">Pilih Detail Jenis...</option>
+                            <optgroup label="Kertas & Kardus">
+                                <option value="1" data-harga="1500">Kardus Bekas</option>
+                                <option value="2" data-harga="2000">Kertas HVS/Buku</option>
+                                <option value="3" data-harga="1800">Koran Bekas</option>
+                            </optgroup>
+                            <optgroup label="Plastik">
+                                <option value="4" data-harga="2500">Botol Plastik (PET)</option>
+                                <option value="5" data-harga="2000">Gelas Plastik (PP)</option>
+                                <option value="6" data-harga="1000">Plastik Campuran</option>
+                            </optgroup>
+                            <optgroup label="Logam & Metal">
+                                <option value="7" data-harga="1200">Kaleng Bekas</option>
+                                <option value="8" data-harga="4000">Besi Bekas</option>
+                                <option value="9" data-harga="50000">Tembaga</option>
+                            </optgroup>
+                            <optgroup label="Kaca">
+                                <option value="10" data-harga="500">Botol Kaca Bening</option>
+                                <option value="11" data-harga="300">Botol Kaca Warna</option>
+                                <option value="12" data-harga="100">Pecahan Kaca</option>
+                            </optgroup>
+                            <optgroup label="Lain-lain">
+                                <option value="13" data-harga="3000">Minyak Jelantah</option>
+                                <option value="14" data-harga="5000">Elektronik Bekas (E-Waste)</option>
+                                <option value="15" data-harga="10000">Aki Bekas</option>
+                                <option value="16" data-harga="500">Ban Bekas</option>
+                                <option value="17" data-harga="2000">Pakaian Layak Pakai</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                                <i class="ph-bold ph-scales text-slate-400"></i> Berat (Kg)
+                            </label>
+                            <div class="relative">
+                                <input type="number" step="0.1" name="berat_kg" id="berat_kg" required
+                                    oninput="hitungTotalOtomatis()" placeholder="0.0"
+                                    class="input-modern w-full bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-10 py-3 text-sm text-slate-800 outline-none">
+                                <span class="absolute right-4 top-3 text-sm font-bold text-slate-400">kg</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                                <i class="ph-bold ph-money text-slate-400"></i> Total Harga
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-sm font-bold text-slate-400">Rp</span>
+                                <input type="number" name="total_harga" id="total_harga" readonly placeholder="0"
+                                    class="w-full bg-slate-100 border border-slate-200 text-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm outline-none cursor-not-allowed font-bold">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 mt-6 pt-4 border-t border-slate-100">
+                        <button type="button" onclick="tutupModal()"
+                            class="w-1/3 bg-white border border-slate-200 text-slate-600 font-bold py-3 rounded-xl hover:bg-slate-50 transition-all text-sm">
+                            Batal
+                        </button>
+                        <button type="submit" id="btnSimpan"
+                            class="w-2/3 bg-emerald-500 text-white font-bold py-3 rounded-xl hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 text-sm">
+                            <i class="ph-bold ph-floppy-disk text-lg"></i>
+                            <span id="btnText">Simpan Setoran</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="modalProfil"
+            class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div
+                class="bg-white w-full max-w-sm rounded-[24px] shadow-2xl relative transform transition-all p-8 text-center">
+
+                <button onclick="tutupModalProfil()"
+                    class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 bg-slate-50 hover:bg-slate-100 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+
+                <div class="w-24 h-24 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-4xl font-black mx-auto mb-4 border-4 border-white shadow-lg"
+                    id="prof-inisial">
+                    <i class="ph-fill ph-user"></i>
+                </div>
+
+                <script>
+                    let dataLaporanLengkap = [];
+
+                    // LOAD DATA LAPORAN
+                    async function getLaporan() {
+                        try {
+                            const response = await fetch('http://localhost:3000/api/laporan');
+                            const data = await response.json();
+                            dataLaporanLengkap = data;
+                            renderTabel(data);
+                        } catch (error) {
+                            console.log(error);
+                            document.getElementById('tabel-laporan').innerHTML = `<tr><td colspan="6" class="py-10 text-center text-red-500 font-bold bg-red-50 rounded-xl">⚠️ Gagal terhubung ke database. Pastikan backend jalan.</td></tr>`;
+                        }
+                    }
+
+                    // RENDER TABEL
+                    function renderTabel(data) {
+                        const tbody = document.getElementById('tabel-laporan');
+                        tbody.innerHTML = '';
+
+                        if (data.length === 0) {
+                            tbody.innerHTML = `<tr><td colspan="6" class="py-16 px-8 text-center text-slate-400 font-bold text-lg">Belum ada data setoran hari ini 📭</td></tr>`;
+                            return;
+                        }
+
+                        data.forEach((item) => {
+                            const dateObj = new Date(item.tanggal_setor);
+                            const tahun = dateObj.getFullYear();
+                            const bulan = String(dateObj.getMonth() + 1).padStart(2, '0');
+                            const hari = String(dateObj.getDate()).padStart(2, '0');
+
+                            const tanggalFormatFilter = `${tahun}-${bulan}-${hari}`;
+                            const tanggalTampil = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+
+                            const rupiahFormat = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(item.total_harga);
+
+                            let badgeStyle = "bg-slate-100 text-slate-600 border border-slate-200";
+                            if (item.kategori && item.kategori.toUpperCase() === "PLASTIK") badgeStyle = "bg-emerald-50 text-emerald-700 border border-emerald-200";
+                            if (item.kategori && item.kategori.toUpperCase() === "KERTAS") badgeStyle = "bg-blue-50 text-blue-700 border border-blue-200";
+                            if (item.kategori && item.kategori.toUpperCase() === "LOGAM") badgeStyle = "bg-orange-50 text-orange-700 border border-orange-200";
+
+                            tbody.innerHTML += `
+                    <tr class="table-row group" data-tanggal="${tanggalFormatFilter}">
+                        <td class="py-5 px-8 font-semibold text-slate-500 group-hover:text-emerald-600 transition-colors">${tanggalTampil}</td>
+                        <td class="py-5 px-8 font-black text-slate-800 text-base">${item.nama_warga}</td>
+                        <td class="py-5 px-8">
+                            <span class="${badgeStyle} px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-sm">${item.kategori || '-'}</span>
+                        </td>
+                        <td class="py-5 px-8 font-bold text-slate-600">${item.nama_sampah}</td>
+                        <td class="py-5 px-8 text-right font-black text-slate-700 text-base">${item.berat_kg} <span class="text-slate-400 text-xs font-semibold ml-1">KG</span></td>
+                        <td class="py-5 px-8 text-right font-black text-emerald-600 text-base">${rupiahFormat}</td>
+                    </tr>
+                `;
+                        });
+                    }
+
+                    // LOAD OPSI SAMPAH UNTUK MODAL INPUT
+                    async function loadOpsiSampah() {
+                        try {
+                            const res = await fetch('http://localhost:3000/api/harga');
+                            const hargaData = await res.json();
+                            const select = document.getElementById('id_sampah');
+                            select.innerHTML = '<option value="" data-harga="0">Pilih Jenis Sampah...</option>';
+
+                            hargaData.forEach(item => {
+                                select.innerHTML += `<option value="${item.id}" data-harga="${item.harga_per_kg}">${item.nama_sampah} (${item.kategori}) - Rp ${item.harga_per_kg}/kg</option>`;
+                            });
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+
+                    // FUNGSI MODAL
+                    function bukaModal() {
+                        const modal = document.getElementById('modalTambah');
+                        modal.classList.remove('hidden');
+                    }
+
+                    function tutupModal() {
+                        const modal = document.getElementById('modalTambah');
+                        modal.classList.add('hidden');
+                        document.getElementById('formSetoran').reset();
+                        document.getElementById('total_harga').value = '';
+                    }
+
+                    // HITUNG TOTAL HARGA OTOMATIS
+                    function hitungTotalOtomatis() {
+                        const selectSampah = document.getElementById('id_sampah');
+                        const inputBerat = document.getElementById('berat_kg').value;
+                        const inputTotal = document.getElementById('total_harga');
+
+                        if (selectSampah.selectedIndex === -1) return;
+
+                        const optionYangDipilih = selectSampah.options[selectSampah.selectedIndex];
+                        const hargaPerKg = optionYangDipilih.getAttribute('data-harga') || 0;
+
+                        if (inputBerat && hargaPerKg > 0) {
+                            const total = parseFloat(inputBerat) * parseInt(hargaPerKg);
+                            inputTotal.value = Math.round(total);
+                        } else {
+                            inputTotal.value = '';
+                        }
+                    }
+
+                    // SUBMIT FORM SETORAN KE BACKEND
+                    document.getElementById('formSetoran').addEventListener('submit', async function (e) {
+                        e.preventDefault();
+
+                        const btn = document.getElementById('btnSimpan');
+                        const btnText = document.getElementById('btnText');
+
+                        const payload = {
+                            nama_warga: document.querySelector('input[name="nama_warga"]').value,
+                            id_sampah: parseInt(document.getElementById('id_sampah').value),
+                            berat_kg: parseFloat(document.getElementById('berat_kg').value),
+                            total_harga: parseInt(document.getElementById('total_harga').value),
+                            tanggal_setor: new Date().toISOString().split('T')[0]
+                        };
+
+                        try {
+                            btn.disabled = true;
+                            btnText.innerHTML = 'Menyimpan... ⏳';
+                            btn.classList.add('opacity-70');
+
+                            const response = await fetch('http://localhost:3000/api/laporan', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+
+                            if (!response.ok) throw new Error('Gagal simpan ke database');
+
+                            alert('✅ Data setoran berhasil dicatat!');
+                            tutupModal();
+                            getLaporan(); // Reload tabel otomatis
+                        } catch (error) {
+                            console.log(error);
+                            alert('❌ Gagal terhubung ke server!');
+                        } finally {
+                            btn.disabled = false;
+                            btnText.innerHTML = 'Simpan Data Setoran';
+                            btn.classList.remove('opacity-70');
+                        }
+                    });
+
+                    // FILTER TABEL
+                    function filterTabelHarian() {
+                        const inputTanggal = document.getElementById('filter-tanggal').value;
+                        const inputNama = document.getElementById('search-input').value.toLowerCase();
+                        const rows = document.querySelectorAll('#tabel-laporan tr');
+
+                        rows.forEach(row => {
+                            if (!row.hasAttribute('data-tanggal')) return;
+                            const tglRow = row.getAttribute('data-tanggal');
+                            const namaRow = row.children[1].innerText.toLowerCase();
+
+                            const matchTanggal = inputTanggal === "" || tglRow === inputTanggal;
+                            const matchNama = namaRow.includes(inputNama);
+
+                            row.style.display = (matchTanggal && matchNama) ? '' : 'none';
+                        });
+                    }
+
+                    // EXPORT PDF
+                    function exportKePDF() {
+                        if (dataLaporanLengkap.length === 0) {
+                            alert("❌ Tidak ada data untuk dicetak!"); return;
+                        }
+
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF();
+
+                        doc.setFont('helvetica', 'bold');
+                        doc.setFontSize(18);
+                        doc.text('Laporan Transaksi Bank Sampah', 14, 22);
+
+                        doc.setFont('helvetica', 'normal');
+                        doc.setFontSize(10);
+
+                        const waktuCetak = new Date().toLocaleString('id-ID');
+                        const filterTgl = document.getElementById('filter-tanggal').value;
+                        const teksPeriode = filterTgl ? `Periode: ${filterTgl}` : 'Periode: Semua Waktu';
+
+                        doc.text(`Dicetak pada: ${waktuCetak}`, 14, 30);
+                        doc.text(teksPeriode, 14, 36);
+
+                        const tableColumn = ["No", "Tanggal", "Nama Warga", "Kategori", "Sampah", "Berat", "Total Kas"];
+                        const tableRows = [];
+                        const rows = document.querySelectorAll('#tabel-laporan tr');
+
+                        let no = 1, totalBeratAll = 0, totalKasAll = 0;
+
+                        rows.forEach(row => {
+                            if (row.style.display !== 'none' && row.hasAttribute('data-tanggal')) {
+                                const tanggal = row.children[0].innerText;
+                                const nama = row.children[1].innerText;
+                                const kategori = row.children[2].innerText;
+                                const sampah = row.children[3].innerText;
+                                const beratStr = row.children[4].innerText.replace('KG', '').replace('kg', '').trim();
+                                const hargaStr = row.children[5].innerText.replace('Rp', '').replace(/\./g, '').trim();
+
+                                const berat = parseFloat(beratStr);
+                                const harga = parseInt(hargaStr);
+
+                                totalBeratAll += berat;
+                                totalKasAll += harga;
+
+                                tableRows.push([no, tanggal, nama, kategori, sampah, `${berat} kg`, `Rp ${harga.toLocaleString('id-ID')}`]);
+                                no++;
+                            }
+                        });
+
+                        tableRows.push(['', '', '', '', 'TOTAL:', `${totalBeratAll.toFixed(1)} kg`, `Rp ${totalKasAll.toLocaleString('id-ID')}`]);
+
+                        doc.autoTable({
+                            head: [tableColumn],
+                            body: tableRows,
+                            startY: 45,
+                            theme: 'grid',
+                            styles: { font: 'helvetica', fontSize: 9, cellPadding: 4 },
+                            headStyles: { fillColor: [16, 185, 129], textColor: 255, fontStyle: 'bold' },
+                            alternateRowStyles: { fillColor: [248, 250, 252] },
+                            willDrawCell: function (data) {
+                                if (data.row.index === tableRows.length - 1) {
+                                    doc.setFillColor(241, 245, 249);
+                                    doc.setFont('helvetica', 'bold');
+                                }
+                            }
+                        });
+
+                        doc.save(`Laporan_BankSampah_${new Date().getTime()}.pdf`);
+                    }
+
+                    // INIT LOAD
+                    getLaporan();
+                    loadOpsiSampah();
+                </script>
+</body>
+
+</html>

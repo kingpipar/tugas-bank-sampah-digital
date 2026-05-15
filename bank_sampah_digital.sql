@@ -1,0 +1,214 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 15 Bulan Mei 2026 pada 14.35
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `bank_sampah_digital`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `harga_sampah`
+--
+
+CREATE TABLE `harga_sampah` (
+  `id` int(11) NOT NULL,
+  `kategori` varchar(50) NOT NULL,
+  `nama_sampah` varchar(100) NOT NULL,
+  `harga_per_kg` int(11) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `harga_sampah`
+--
+
+INSERT INTO `harga_sampah` (`id`, `kategori`, `nama_sampah`, `harga_per_kg`, `updated_at`) VALUES
+(1, 'Plastik', 'Botol Plastik PET', 3000, '2026-05-12 07:34:15'),
+(2, 'Kertas', 'kardus bekas', 2500, '2026-05-12 07:49:46'),
+(3, 'Plastik', 'Botol Plastik PET', 3000, '2026-05-12 10:07:48'),
+(4, 'Plastik', 'Gelas Plastik', 2500, '2026-05-12 10:07:48'),
+(5, 'Plastik', 'Jerigen Plastik', 4000, '2026-05-12 10:07:48'),
+(6, 'Kertas', 'Kardus Bekas', 2500, '2026-05-12 10:07:48'),
+(7, 'Kertas', 'Kertas HVS', 1800, '2026-05-12 10:07:48'),
+(8, 'Kertas', 'Koran Bekas', 2000, '2026-05-12 10:07:48'),
+(9, 'Logam', 'Kaleng Minuman', 5000, '2026-05-12 10:07:48'),
+(10, 'Logam', 'Besi Bekas', 4500, '2026-05-12 10:07:48'),
+(11, 'Logam', 'Aluminium', 7000, '2026-05-12 10:07:48'),
+(12, 'Elektronik', 'Kabel Bekas', 8000, '2026-05-12 10:07:48'),
+(13, 'Elektronik', 'Charger Rusak', 6000, '2026-05-12 10:07:48'),
+(14, 'Kaca', 'Botol Kaca', 1500, '2026-05-12 10:07:48'),
+(15, 'Kaca', 'Pecahan Kaca', 1000, '2026-05-12 10:07:48'),
+(16, 'Minyak', 'Minyak Jelantah', 6000, '2026-05-12 10:07:48'),
+(17, 'Organik', 'Kompos Organik', 1200, '2026-05-12 10:07:48');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `laporan_setoran`
+--
+
+CREATE TABLE `laporan_setoran` (
+  `id` int(11) NOT NULL,
+  `nama_warga` varchar(100) NOT NULL,
+  `id_sampah` int(11) NOT NULL,
+  `berat_kg` decimal(5,2) NOT NULL,
+  `total_harga` int(11) NOT NULL,
+  `tanggal_setor` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `laporan_setoran`
+--
+
+INSERT INTO `laporan_setoran` (`id`, `nama_warga`, `id_sampah`, `berat_kg`, `total_harga`, `tanggal_setor`) VALUES
+(1, 'Budi Santoso', 1, 2.50, 7500, '2026-05-12 07:37:31'),
+(2, 'ruye', 1, 5.00, 15000, '2026-05-12 07:47:57'),
+(3, 'nomi', 2, 6.00, 15000, '2026-05-12 07:49:59'),
+(4, 'ichang', 2, 999.99, 2147483647, '2026-05-12 10:04:01'),
+(5, 'cece', 7, 0.60, 1080, '2026-05-13 17:00:00'),
+(6, 'cece', 4, 0.60, 1500, '2026-05-14 13:07:47'),
+(7, 'cece', 4, 0.50, 1250, '2026-05-13 17:00:00'),
+(8, 'cece', 4, 0.40, 1000, '2026-05-13 17:00:00'),
+(9, 'cece', 1, 0.50, 750, '2026-05-13 17:00:00'),
+(10, 'cece', 4, 0.40, 1000, '2026-05-13 17:00:00'),
+(11, 'cece', 4, 0.50, 1250, '2026-05-13 17:00:00'),
+(12, 'cece', 10, 1.00, 500, '2026-05-13 17:00:00'),
+(13, 'cece', 4, 2.20, 5500, '2026-05-13 17:00:00'),
+(14, 'cece', 17, 0.40, 480, '2026-05-14 17:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `request_jemput`
+--
+
+CREATE TABLE `request_jemput` (
+  `id` int(11) NOT NULL,
+  `nama_warga` varchar(100) DEFAULT NULL,
+  `alamat` text DEFAULT NULL,
+  `jenis_sampah` varchar(100) DEFAULT NULL,
+  `estimasi_berat` decimal(10,2) DEFAULT NULL,
+  `tanggal_jemput` date DEFAULT NULL,
+  `catatan` text DEFAULT NULL,
+  `status` enum('Menunggu','Diproses','Selesai') DEFAULT 'Menunggu',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `request_jemput`
+--
+
+INSERT INTO `request_jemput` (`id`, `nama_warga`, `alamat`, `jenis_sampah`, `estimasi_berat`, `tanggal_jemput`, `catatan`, `status`, `created_at`) VALUES
+(1, 'cece', 'Sleman', 'Plastik', 2.20, '0000-00-00', 'Tolong pagi', 'Menunggu', '2026-05-15 09:17:15');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `role` enum('admin') DEFAULT 'admin',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `users`
+--
+
+INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role`, `created_at`) VALUES
+(1, 'Admin', 'admin@gmail.com', 'admin123', 'admin', '2026-05-12 08:27:55');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indeks untuk tabel `harga_sampah`
+--
+ALTER TABLE `harga_sampah`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `laporan_setoran`
+--
+ALTER TABLE `laporan_setoran`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_sampah` (`id_sampah`);
+
+--
+-- Indeks untuk tabel `request_jemput`
+--
+ALTER TABLE `request_jemput`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT untuk tabel yang dibuang
+--
+
+--
+-- AUTO_INCREMENT untuk tabel `harga_sampah`
+--
+ALTER TABLE `harga_sampah`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT untuk tabel `laporan_setoran`
+--
+ALTER TABLE `laporan_setoran`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT untuk tabel `request_jemput`
+--
+ALTER TABLE `request_jemput`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT untuk tabel `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `laporan_setoran`
+--
+ALTER TABLE `laporan_setoran`
+  ADD CONSTRAINT `laporan_setoran_ibfk_1` FOREIGN KEY (`id_sampah`) REFERENCES `harga_sampah` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
