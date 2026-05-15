@@ -15,7 +15,7 @@
 ![Flutter](https://img.shields.io/badge/Mobile-Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
 ![Express.js](https://img.shields.io/badge/Backend-Express.js-404D59?style=for-the-badge)
 ![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![MongoDB](https://img.shields.io/badge/Database-MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![Firebase](https://img.shields.io/badge/Database-Firebase_Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 ![GCP](https://img.shields.io/badge/Cloud-GCP_Ubuntu_VM-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
 
 ---
@@ -47,8 +47,8 @@ Proyek ini menggunakan pendekatan **Polyglot Persistence** untuk mengoptimalkan 
 1. **MySQL (Relational Data)**
    - Menangani data transaksional yang membutuhkan integritas tinggi (ACID Compliance).
    - Menyimpan tabel: `users`, `kategori_sampah`, `saldo_poin`, `setoran_sampah`, dan `transaksi_penukaran`.
-2. **MongoDB (NoSQL Document Data)**
-   - Menangani data yang dinamis, tidak terstruktur ketat, dan membutuhkan operasi I/O cepat.
+2. **Firebase Firestore (NoSQL Document Data)**
+   - Menangani data yang dinamis, tidak terstruktur ketat, dan membutuhkan sinkronisasi *real-time* dengan operasi I/O cepat.
    - Menyimpan *collections*: `pickup_requests` (koordinat lokasi dinamis) dan `notifications`.
 3. **Google Cloud Platform (GCP)**
    - Keseluruhan *backend* dan *database* berjalan secara *native* di dalam 1 *instance* **Ubuntu VM**.
@@ -63,9 +63,12 @@ Repository ini menggunakan satu direktori utama untuk mempermudah manajemen vers
 bank-sampah-digital/
 ├── mobile-warga/               
 │   ├── lib/
-│   │   ├── models/             
-│   │   ├── screens/            
-│   │   └── services/           
+│   │   ├── config/             # Konstanta & Base URL
+│   │   ├── models/             # Data Models (User, Pickup, dsb.)
+│   │   ├── providers/          # State Management
+│   │   ├── screens/            # UI/Pages
+│   │   ├── services/           # API & Firestore Services
+│   │   └── widgets/            # Reusable UI components
 │   └── pubspec.yaml
 ├── web-admin-backend/          
 │   ├── src/
