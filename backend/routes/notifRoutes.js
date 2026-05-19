@@ -1,17 +1,8 @@
-const express =
-require('express');
+const express = require('express');
+const router = express.Router();
+const notifController = require('../controllers/notifController');
 
-const router =
-express.Router();
+router.get('/', notifController.getAll);
+router.post('/', notifController.create);
 
-const {
-    getNotif
-} = require('../controllers/notifController');
-
-router.get(
-    '/',
-    getNotif
-);
-
-module.exports =
-router;
+module.exports = router;

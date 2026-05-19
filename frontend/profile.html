@@ -1,598 +1,113 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Admin | Bank Sampah Digital</title>
-    <link rel="stylesheet" href="./src/css/output.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #F9FBFA;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
-
-        .gradient-green {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-
-        .active-glow {
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-        }
-
-        /* SCROLLBAR */
-
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 20px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #10b981;
-        }
-
-        /* SIDEBAR HOVER */
-
-        nav a {
-            transition: all .3s ease;
-        }
-
-        nav a:hover {
-            transform: translateX(4px);
-        }
-
-        /* GLASS EFFECT */
-
-        .glass-soft {
-            background: rgba(255, 255, 255, .7);
-
-            backdrop-filter: blur(14px);
-
-            border: 1px solid rgba(255, 255, 255, .4);
-        }
-
-        /* CARD HOVER */
-
-        .hover-card {
-            transition: all .35s ease;
-        }
-
-        .hover-card:hover {
-            transform: translateY(-4px);
-
-            box-shadow:
-                0 20px 40px rgba(15, 23, 42, .06);
-        }
-
-        /* REALTIME CLOCK */
-
-        #realtime-clock {
-            line-height: 1.5;
-        }
-
-        /* PROFILE HERO */
-
-        .profile-hero {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .profile-hero::before {
-            content: '';
-
-            position: absolute;
-
-            width: 300px;
-            height: 300px;
-
-            background: rgba(255, 255, 255, .08);
-
-            border-radius: 999px;
-
-            top: -100px;
-            right: -100px;
-
-            filter: blur(10px);
-        }
-
-        /* STATUS DOT */
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-
-            border-radius: 999px;
-
-            background: #10b981;
-
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-
-            0% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: .5;
-                transform: scale(1.4);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
+<body>
+<div class="app-layout">
+    <aside class="sidebar">
+        <div>
+            <div class="sidebar-logo"><div class="sidebar-logo-icon">♻️</div><div class="sidebar-logo-text"><h1>Bank Sampah</h1><p>Digital System</p></div></div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-link"><div class="sidebar-link-icon">📊</div><div><div class="sidebar-link-title">Dashboard</div><div class="sidebar-link-sub">Ringkasan sistem</div></div></a>
+                <a href="harga.html" class="sidebar-link"><div class="sidebar-link-icon">💰</div><div><div class="sidebar-link-title">Harga Sampah</div><div class="sidebar-link-sub">Kelola harga</div></div></a>
+                <a href="laporan.html" class="sidebar-link"><div class="sidebar-link-icon">📄</div><div><div class="sidebar-link-title">Laporan</div><div class="sidebar-link-sub">Statistik data</div></div></a>
+                <a href="penukaran.html" class="sidebar-link"><div class="sidebar-link-icon">🔄</div><div><div class="sidebar-link-title">Penukaran</div><div class="sidebar-link-sub">Tukar poin</div></div></a>
+                <a href="notifikasi.html" class="sidebar-link"><div class="sidebar-link-icon">🔔</div><div><div class="sidebar-link-title">Notifikasi</div><div class="sidebar-link-sub">Update terbaru</div></div><div class="sidebar-badge">4</div></a>
+            </nav>
+        </div>
+        <a href="profile.html" class="sidebar-profile"><div class="sidebar-profile-icon">👤</div><div><div class="sidebar-link-title">Profil Admin</div><div class="sidebar-link-sub">Kelola akun</div></div></a>
+    </aside>
 
-<body class="text-slate-800 antialiased">
-
-    <div class="flex h-screen overflow-hidden">
-
-        <!-- SIDEBAR -->
-        <aside
-            class="w-[250px] min-w-[250px] bg-[#f3f5f4] border-r border-[#e5e7eb] flex flex-col justify-between px-5 py-7 shadow-sm">
-
-            <div>
-
-                <!-- LOGO -->
-                <div class="flex items-center gap-4 mb-14 px-2">
-
-                    <div class="w-[58px] h-[58px] rounded-[20px]
-                        bg-gradient-to-br from-[#22c55e] to-[#4ade80]
-                        flex items-center justify-center
-                        shadow-[0_16px_35px_rgba(34,197,94,.25)]">
-
-                        <i class="ph-fill ph-leaf text-white text-[26px]"></i>
-
+    <main class="main-content">
+        <header class="main-header">
+            <div><h1>Akun Administrator</h1><div class="header-status" style="margin-top:4px;"><div class="header-status-dot"></div><span>Sesi Aktif</span></div></div>
+            <div id="realtime-clock" style="font-size:13px;font-weight:700;color:#94a3b8;"></div>
+        </header>
+        <div class="content-area">
+            <!-- PROFILE HERO -->
+            <section class="hero" style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
+                <div style="position:relative;">
+                    <div id="display-avatar" style="width:110px;height:110px;border-radius:28px;background:#fff;color:#10b981;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:900;box-shadow:0 12px 30px rgba(0,0,0,.1);">A</div>
+                    <div style="position:absolute;bottom:-6px;right:-6px;background:#facc15;width:36px;height:36px;border-radius:50%;border:3px solid #10b981;display:flex;align-items:center;justify-content:center;font-size:16px;">👑</div>
+                </div>
+                <div style="position:relative;z-index:1;">
+                    <div id="display-nama" style="font-size:32px;font-weight:900;">Memuat...</div>
+                    <div id="display-email" style="color:rgba(255,255,255,.7);font-size:16px;margin-top:4px;">admin@mail.com</div>
+                    <div style="display:flex;gap:10px;margin-top:16px;">
+                        <span style="background:rgba(255,255,255,.2);padding:6px 14px;border-radius:10px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;" id="display-role">ADMINISTRATOR</span>
+                        <span style="background:rgba(52,211,153,.4);padding:6px 14px;border-radius:10px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;display:flex;align-items:center;gap:6px;"><span style="width:6px;height:6px;border-radius:50%;background:#fff;"></span> Verified</span>
                     </div>
+                </div>
+            </section>
 
-                    <div>
-
-                        <h1 class="text-[16px] font-black leading-5 text-[#0f172a]">
-                            Bank
-                            <br>
-                            Sampah
-                        </h1>
-
-                        <p class="text-[#94a3b8] text-[13px] font-semibold mt-1">
-                            Digital System
-                        </p>
-
+            <div style="display:grid;grid-template-columns:2fr 1fr;gap:28px;">
+                <!-- INFO -->
+                <div class="glass-card p-lg">
+                    <h3 style="font-size:18px;font-weight:900;margin-bottom:24px;">Informasi Personal</h3>
+                    <div class="grid-2" style="gap:28px;">
+                        <div><label style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;">Nama Lengkap</label><p style="font-weight:700;font-size:16px;color:#334155;margin-top:4px;" id="info-nama">-</p></div>
+                        <div><label style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;">Alamat Email</label><p style="font-weight:700;font-size:16px;color:#334155;margin-top:4px;" id="info-email">-</p></div>
+                        <div><label style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;">Role Akun</label><p style="font-weight:700;font-size:16px;color:#334155;margin-top:4px;" id="info-role">-</p></div>
+                        <div><label style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;">ID Kepegawaian</label><p style="font-weight:700;font-size:16px;color:#334155;margin-top:4px;" id="info-id">#ADM-000</p></div>
                     </div>
-
                 </div>
 
-                <!-- MENU -->
-                <nav class="space-y-7">
-
-                    <!-- DASHBOARD -->
-                    <a href="index.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-                        hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-                            bg-[#eef2f7]
-                            flex items-center justify-center
-                            shadow-inner">
-
-                            <i class="ph-fill ph-squares-four text-[22px] text-[#334155]"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px]">
-                                Dashboard
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium">
-                                Ringkasan sistem
-                            </p>
-
-                        </div>
-
-                    </a>
-
-                    <!-- HARGA -->
-                    <a href="harga.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-                        hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-                            bg-[#eef2f7]
-                            flex items-center justify-center
-                            shadow-inner">
-
-                            <i class="ph-fill ph-tag text-[22px] text-[#334155]"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px]">
-                                Harga Sampah
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium">
-                                Kelola harga
-                            </p>
-
-                        </div>
-
-                    </a>
-
-                    <!-- LAPORAN -->
-                    <a href="laporan.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-                        hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-                            bg-[#eef2f7]
-                            flex items-center justify-center
-                            shadow-inner">
-
-                            <i class="ph-fill ph-file-text text-[22px] text-[#334155]"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px]">
-                                Laporan
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium">
-                                Statistik data
-                            </p>
-
-                        </div>
-
-                    </a>
-
-                    <!-- NOTIF -->
-                    <a href="notifikasi.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-                        hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-                            bg-[#eef2f7]
-                            flex items-center justify-center
-                            shadow-inner">
-
-                            <i class="ph-fill ph-bell text-[22px] text-[#334155]"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px]">
-                                Notifikasi
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium">
-                                Update terbaru
-                            </p>
-
-                        </div>
-
-                    </a>
-
-                </nav>
-
-            </div>
-
-            <!-- PROFILE ACTIVE -->
-            <div class="bg-[#eef7f0]
-                border border-[#d7f2df]
-                rounded-[24px]
-                p-4
-                flex items-center gap-4">
-
-                <div class="w-[52px] h-[52px]
-                    rounded-[18px]
-                    bg-gradient-to-br from-[#22c55e] to-[#34d399]
-                    flex items-center justify-center">
-
-                    <i class="ph-fill ph-user-circle text-white text-[24px]"></i>
-
-                </div>
-
-                <div>
-
-                    <h3 class="text-[#334155] font-extrabold text-[15px]">
-                        Profil Admin
-                    </h3>
-
-                    <p class="text-[#94a3b8] text-[13px] font-medium">
-                        Kelola akun
-                    </p>
-
-                </div>
-
-            </div>
-
-        </aside>
-
-        <!-- MAIN -->
-        <main class="flex-1 overflow-y-auto custom-scrollbar">
-
-            <!-- HEADER -->
-            <header
-                class="px-10 py-6 flex items-center justify-between sticky top-0 bg-[#F9FBFA]/80 backdrop-blur-md z-30">
-
-                <div>
-
-                    <h1 class="text-xl font-extrabold tracking-tight text-slate-900">
-                        Akun Administrator
-                    </h1>
-
-                    <div class="flex items-center gap-2 mt-1">
-
-                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-
-                        <p class="text-slate-500 font-medium text-xs uppercase tracking-widest">
-                            Sesi Aktif
-                        </p>
-
+                <!-- SYSTEM -->
+                <div style="display:flex;flex-direction:column;gap:28px;">
+                    <div class="glass-card p-lg">
+                        <p style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;">Aktivitas Sesi</p>
+                        <p style="font-size:13px;color:#64748b;margin-top:8px;" id="last-login-time">Memperbarui...</p>
                     </div>
-
-                </div>
-
-                <div id="realtime-clock" class="text-right font-bold text-slate-400 text-sm">
-                </div>
-
-            </header>
-
-            <div class="p-10 max-w-6xl mx-auto space-y-10">
-
-                <section
-                    class="gradient-green rounded-[40px] p-1 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden shadow-2xl shadow-emerald-200/50">
-                    <div class="bg-white/10 w-full h-full absolute top-0 left-0"></div>
-                    <div
-                        class="relative z-10 bg-white/10 backdrop-blur-xl w-full rounded-[38px] p-10 flex flex-col md:flex-row items-center gap-8 border border-white/20">
-                        <div class="relative">
-                            <div id="display-avatar"
-                                class="w-32 h-32 rounded-[32px] bg-white text-emerald-600 flex items-center justify-center text-5xl font-black shadow-xl border-4 border-emerald-100/20">
-                                A
-                            </div>
-                            <div
-                                class="absolute -bottom-2 -right-2 bg-yellow-400 w-10 h-10 rounded-full border-4 border-[#10b981] flex items-center justify-center text-white">
-                                <i class="ph-fill ph-crown text-lg"></i>
-                            </div>
+                    <div style="background:#0f172a;border-radius:28px;padding:28px;color:#fff;">
+                        <h3 style="font-size:10px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:2px;margin-bottom:24px;">System Infrastructure</h3>
+                        <div style="display:flex;flex-direction:column;gap:16px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;"></span><span style="font-size:13px;font-weight:700;color:#cbd5e1;">MySQL Database</span></div><span style="font-size:9px;font-weight:800;color:#10b981;">STABLE</span></div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;"></span><span style="font-size:13px;font-weight:700;color:#cbd5e1;">Firebase Firestore</span></div><span style="font-size:9px;font-weight:800;color:#10b981;">CONNECTED</span></div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:10px;"><span style="width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 8px #10b981;"></span><span style="font-size:13px;font-weight:700;color:#cbd5e1;">Real-time Service</span></div><span style="font-size:9px;font-weight:800;color:#10b981;">ACTIVE</span></div>
                         </div>
-                        <div class="text-center md:text-left text-white">
-                            <h2 class="text-4xl font-black tracking-tight mb-2" id="display-nama">Memuat...</h2>
-                            <p class="text-emerald-50 font-medium text-lg opacity-80" id="display-email">
-                                admin@mail.com
-                            </p>
-                            <div class="flex gap-3 mt-6 justify-center md:justify-start">
-                                <span
-                                    class="bg-white/20 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-[2px] backdrop-blur-md border border-white/10">Administrator
-                                    Utama</span>
-                                <span
-                                    class="bg-emerald-400/40 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-[2px] backdrop-blur-md border border-white/10 flex items-center gap-2">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-                                    Verified
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-
-                    <div class="lg:col-span-8 space-y-8">
-                        <div class="bg-white rounded-[32px] p-8 shadow-sm border border-slate-100">
-                            <div class="flex items-center justify-between mb-8">
-                                <h3 class="text-lg font-black text-slate-800 flex items-center gap-3">
-                                    <div
-                                        class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                                        <i class="ph-fill ph-user-focus text-lg"></i>
-                                    </div>
-                                    Informasi Personal
-                                </h3>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
-                                <div class="group">
-                                    <label
-                                        class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Nama
-                                        Lengkap</label>
-                                    <p class="font-bold text-slate-700 text-lg border-b-2 border-transparent group-hover:border-emerald-200 transition-all pb-1"
-                                        id="info-nama">-</p>
-                                </div>
-                                <div class="group">
-                                    <label
-                                        class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Alamat
-                                        Email</label>
-                                    <p class="font-bold text-slate-700 text-lg border-b-2 border-transparent group-hover:border-emerald-200 transition-all pb-1"
-                                        id="info-email">-</p>
-                                </div>
-                                <div class="group">
-                                    <label
-                                        class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Role
-                                        Akun</label>
-                                    <p class="font-bold text-slate-700 text-lg border-b-2 border-transparent group-hover:border-emerald-200 transition-all pb-1"
-                                        id="info-role">-</p>
-                                </div>
-                                <div class="group">
-                                    <label
-                                        class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">ID
-                                        Kepegawaian</label>
-                                    <p class="font-bold text-slate-700 text-lg border-b-2 border-transparent group-hover:border-emerald-200 transition-all pb-1"
-                                        id="info-id">#ADM-000</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-[32px] p-8 shadow-sm border border-slate-100">
-                            <h3 class="text-lg font-black text-slate-800 mb-6 flex items-center gap-3">
-                                <div
-                                    class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
-                                    <i class="ph-fill ph-shield-check text-lg"></i>
-                                </div>
-                                Keamanan & Aktivitas
-                            </h3>
-                            <div
-                                class="flex items-center justify-between p-6 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
-                                <div class="flex items-center gap-4">
-                                    <div
-                                        class="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-emerald-500">
-                                        <i class="ph ph-clock-countdown text-2xl"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-bold text-slate-800 text-sm">Aktivitas Sesi Terakhir</p>
-                                        <p class="text-xs text-slate-500 mt-0.5" id="last-login-time">
-                                            Memperbarui...</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <span
-                                        class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-black uppercase tracking-tighter">Secure
-                                        Link</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-4 space-y-8">
-
-                        <div
-                            class="bg-white rounded-[32px] p-8 shadow-sm border border-slate-100 relative overflow-hidden group">
-                            <div
-                                class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                                <i class="ph ph-chart-line-up text-6xl"></i>
-                            </div>
-                            <div class="relative z-10">
-                                <div class="flex items-center justify-between mb-4">
-                                    <span
-                                        class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Notifikasi
-                                        Baru</span>
-                                    <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                                </div>
-                                <h4 class="text-5xl font-black text-slate-800 mb-6">24</h4>
-                                <div class="pt-6 border-t border-slate-50 flex items-center justify-between">
-                                    <div>
-                                        <p class="text-[10px] font-bold text-slate-400 uppercase">Input Setoran
-                                        </p>
-                                        <p class="text-xl font-black text-emerald-600">120 <span
-                                                class="text-xs text-slate-400 font-medium tracking-normal">Data</span>
-                                        </p>
-                                    </div>
-                                    <div
-                                        class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
-                                        <i class="ph ph-arrow-up-right text-lg"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-slate-900 rounded-[32px] p-8 shadow-xl shadow-slate-200">
-                            <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[3px] mb-8">
-                                System
-                                Infrastructure</h3>
-                            <div class="space-y-6">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]">
-                                        </div>
-                                        <span class="text-sm font-bold text-slate-300">MySQL Database</span>
-                                    </div>
-                                    <span class="text-[9px] font-black text-emerald-500">STABLE</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]">
-                                        </div>
-                                        <span class="text-sm font-bold text-slate-300">Firebase Auth</span>
-                                    </div>
-                                    <span class="text-[9px] font-black text-emerald-500 animate-pulse">CONNECTED</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]">
-                                        </div>
-                                        <span class="text-sm font-bold text-slate-300">Real-time Service</span>
-                                    </div>
-                                    <span class="text-[9px] font-black text-emerald-500">ACTIVE</span>
-                                </div>
-                            </div>
-
-                            <button onclick="logout()"
-                                class="w-full mt-10 bg-white/5 hover:bg-red-500/10 border border-white/10 text-slate-300 hover:text-red-400 p-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 text-sm">
-                                <i class="ph-bold ph-sign-out text-lg"></i> Logout Securely
-                            </button>
-                        </div>
-
+                        <button onclick="logout()" style="width:100%;margin-top:28px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#cbd5e1;padding:14px;border-radius:16px;font-weight:700;font-size:14px;transition:all .3s ease;" onmouseover="this.style.background='rgba(239,68,68,.15)';this.style.color='#fca5a5';" onmouseout="this.style.background='rgba(255,255,255,.05)';this.style.color='#cbd5e1';">🔒 Logout Securely</button>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 
-    <script>
-        // FUNGSI JAM REAL-TIME DI HEADER
-        function updateClock() {
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const dateStr = now.toLocaleDateString('id-ID', options);
-            const timeStr = now.toLocaleTimeString('id-ID');
-            document.getElementById('realtime-clock').innerHTML = `${dateStr} <span class="text-emerald-500 ml-2">${timeStr} WIB</span>`;
-        }
-        setInterval(updateClock, 1000);
+<script>
+    function updateClock() {
+        const now = new Date();
+        const d = now.toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+        const t = now.toLocaleTimeString('id-ID');
+        document.getElementById('realtime-clock').innerHTML = d+' <span style="color:#10b981;margin-left:8px;">'+t+' WIB</span>';
+    }
+    setInterval(updateClock, 1000);
 
-        function initProfile() {
-            const admin = JSON.parse(localStorage.getItem('admin'));
+    function initProfile() {
+        const admin = JSON.parse(localStorage.getItem('admin'));
+        if (!admin) { window.location.href = 'login.html'; return; }
+        document.getElementById('display-nama').innerText = admin.nama;
+        document.getElementById('display-email').innerText = admin.email;
+        document.getElementById('display-avatar').innerText = admin.nama.charAt(0).toUpperCase();
+        document.getElementById('display-role').innerText = admin.role || 'ADMINISTRATOR';
+        document.getElementById('info-nama').innerText = admin.nama;
+        document.getElementById('info-email').innerText = admin.email;
+        document.getElementById('info-role').innerText = admin.role || 'Super Admin';
+        if (admin.id) document.getElementById('info-id').innerText = '#ADM-DIGITAL-'+admin.id;
+        const lt = new Date();
+        document.getElementById('last-login-time').innerText = 'Terdeteksi masuk pada '+lt.getHours()+':'+lt.getMinutes()+' WIB';
+        updateClock();
+    }
 
-            if (!admin) {
-                window.location.href = 'login.html';
-                return;
-            }
+    function logout() {
+        if (confirm('Yakin ingin keluar?')) { localStorage.removeItem('admin'); window.location.href = 'login.html'; }
+    }
 
-            // Injeksi Data ke UI
-            document.getElementById('display-nama').innerText = admin.nama;
-            document.getElementById('display-email').innerText = admin.email;
-            document.getElementById('info-nama').innerText = admin.nama;
-            document.getElementById('info-email').innerText = admin.email;
-            document.getElementById('info-role').innerText = admin.role || 'Super Admin';
-            document.getElementById('display-role').innerText = admin.role || 'ADMINISTRATOR';
-            document.getElementById('display-avatar').innerText = admin.nama.charAt(0).toUpperCase();
-
-            if (admin.id) document.getElementById('info-id').innerText = '#ADM-DIGITAL-' + admin.id;
-
-            // Logika Waktu Login Real-time (Static set at load)
-            const loginTime = new Date();
-            document.getElementById('last-login-time').innerText = `Terdeteksi masuk pada ${loginTime.getHours()}:${loginTime.getMinutes()} WIB melalui Browser Dekstop`;
-
-            updateClock();
-        }
-
-        function logout() {
-            if (confirm('Sistem akan menutup sesi Anda. Yakin ingin keluar?')) {
-                localStorage.removeItem('admin');
-                window.location.href = 'login.html';
-            }
-        }
-
-        window.onload = initProfile;
-    </script>
+    window.onload = initProfile;
+</script>
 </body>
-
 </html>

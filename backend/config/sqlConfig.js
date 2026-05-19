@@ -1,36 +1,19 @@
-const mysql =
-require('mysql2');
+require('dotenv').config();
+const mysql = require('mysql2');
 
-const db =
-mysql.createConnection({
-
-    host: 'localhost',
-
-    user: 'root',
-
-    password: '',
-
-    database: 'bank_sampah_digital'
-
+const db = mysql.createConnection({
+    host: process.env.DB_HOST || '35.226.121.24',
+    user: process.env.DB_USER || 'admin',
+    password: process.env.DB_PASS || 'password',
+    database: process.env.DB_NAME || 'testprojek'
 });
 
 db.connect((err) => {
-
     if (err) {
-
-        console.log(err);
-
+        console.error('❌ MySQL Connection Error:', err.message);
+    } else {
+        console.log('✅ MySQL Connected (bank_sampah_digital)');
     }
-
-    else {
-
-        console.log(
-            'Berhasil terhubung ke database MySQL!'
-        );
-
-    }
-
 });
 
-module.exports =
-db;
+module.exports = db;

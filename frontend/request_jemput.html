@@ -1,155 +1,87 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Request Jemput</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Request Jemput | Bank Sampah Digital</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
-
-<body class="bg-slate-100 p-10">
-
-    <div class="max-w-6xl mx-auto">
-
-        <h1 class="text-4xl font-black mb-8">
-            Request Jemput
-        </h1>
-
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
-
-            <table class="w-full">
-
-                <thead class="bg-emerald-500 text-white">
-
-                    <tr>
-
-                        <th class="p-5 text-left">
-                            Nama
-                        </th>
-
-                        <th class="p-5 text-left">
-                            Alamat
-                        </th>
-
-                        <th class="p-5 text-left">
-                            Jenis Sampah
-                        </th>
-
-                        <th class="p-5 text-left">
-                            Status
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody id="request-body">
-
-                </tbody>
-
-            </table>
-
+<body>
+<div class="app-layout">
+    <aside class="sidebar">
+        <div>
+            <div class="sidebar-logo"><div class="sidebar-logo-icon">♻️</div><div class="sidebar-logo-text"><h1>Bank Sampah</h1><p>Digital System</p></div></div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-link"><div class="sidebar-link-icon">📊</div><div><div class="sidebar-link-title">Dashboard</div><div class="sidebar-link-sub">Ringkasan sistem</div></div></a>
+                <a href="harga.html" class="sidebar-link"><div class="sidebar-link-icon">💰</div><div><div class="sidebar-link-title">Harga Sampah</div><div class="sidebar-link-sub">Kelola harga</div></div></a>
+                <a href="laporan.html" class="sidebar-link"><div class="sidebar-link-icon">📄</div><div><div class="sidebar-link-title">Laporan</div><div class="sidebar-link-sub">Statistik data</div></div></a>
+                <a href="penukaran.html" class="sidebar-link"><div class="sidebar-link-icon">🔄</div><div><div class="sidebar-link-title">Penukaran</div><div class="sidebar-link-sub">Tukar poin</div></div></a>
+                <a href="notifikasi.html" class="sidebar-link"><div class="sidebar-link-icon">🔔</div><div><div class="sidebar-link-title">Notifikasi</div><div class="sidebar-link-sub">Update terbaru</div></div><div class="sidebar-badge">4</div></a>
+            </nav>
         </div>
+        <a href="profile.html" class="sidebar-profile"><div class="sidebar-profile-icon">👤</div><div><div class="sidebar-link-title">Profil Admin</div><div class="sidebar-link-sub">Kelola akun</div></div></a>
+    </aside>
 
-    </div>
+    <main class="main-content">
+        <header class="main-header"><div><h1>Request Penjemputan</h1><p>Kelola permintaan penjemputan sampah dari warga</p></div></header>
+        <div class="content-area">
+            <section class="hero"><div style="position:relative;z-index:1;"><div class="hero-title">Request<br>Jemput 🚛</div><div class="hero-subtitle">Daftar permintaan penjemputan sampah dari warga.</div></div></section>
 
-    <script>
+            <section class="glass-card" style="overflow:hidden;">
+                <div style="padding:24px 28px;border-bottom:1px solid #f1f5f9;"><h2 style="font-size:18px;font-weight:900;">📋 Daftar Request</h2></div>
+                <div style="overflow-x:auto;">
+                    <table class="data-table">
+                        <thead><tr><th>Nama</th><th>Alamat</th><th>Jenis Sampah</th><th>Status</th><th style="text-align:center;">Aksi</th></tr></thead>
+                        <tbody id="request-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
 
-        async function loadRequest() {
+<script>
+    const API = 'http://localhost:3000/api';
 
-            try {
+    async function loadRequest() {
+        try {
+            const res = await fetch(API+'/request_jemput');
+            const data = await res.json();
+            const tbody = document.getElementById('request-body');
+            tbody.innerHTML = '';
+            if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="padding:48px;text-align:center;color:#94a3b8;font-weight:700;">Belum ada request 🚛</td></tr>'; return; }
+            data.forEach(item => {
+                let bc = 'badge-yellow';
+                if (item.status === 'Diproses') bc = 'badge-blue';
+                if (item.status === 'Selesai') bc = 'badge-green';
+                tbody.innerHTML += `<tr class="animate-fade">
+                    <td style="font-weight:700;">${item.nama_warga}</td>
+                    <td>${item.alamat}</td>
+                    <td>${item.jenis_sampah}</td>
+                    <td><span class="badge ${bc}">${item.status}</span></td>
+                    <td><div class="action-btns">
+                        <select onchange="updateStatus(${item.id},this.value)" style="padding:6px 10px;border-radius:8px;border:1px solid #e2e8f0;font-size:12px;font-weight:600;">
+                            <option value="Menunggu" ${item.status==='Menunggu'?'selected':''}>Menunggu</option>
+                            <option value="Diproses" ${item.status==='Diproses'?'selected':''}>Diproses</option>
+                            <option value="Selesai" ${item.status==='Selesai'?'selected':''}>Selesai</option>
+                        </select>
+                        <button onclick="hapusRequest(${item.id})" class="btn-icon btn-icon-delete">🗑️</button>
+                    </div></td></tr>`;
+            });
+        } catch(e) { console.log(e); }
+    }
 
-                const response =
-                    await fetch(
-                        'http://localhost:3000/api/request_jemput'
-                    );
+    async function updateStatus(id, status) {
+        try { await fetch(`${API}/request-jemput/${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({status}) }); loadRequest(); } catch(e) { alert('Gagal update'); }
+    }
 
-                const data =
-                    await response.json();
+    async function hapusRequest(id) {
+        if (!confirm('Yakin hapus request ini?')) return;
+        try { await fetch(`${API}/request-jemput/${id}`, { method:'DELETE' }); loadRequest(); } catch(e) { alert('Gagal hapus'); }
+    }
 
-                const tbody =
-                    document.getElementById(
-                        'request-body'
-                    );
-
-                tbody.innerHTML = '';
-
-                data.forEach((item) => {
-
-                    let badge =
-                        'bg-yellow-100 text-yellow-700';
-
-                    if (item.status === 'proses') {
-
-                        badge =
-                            'bg-blue-100 text-blue-700';
-
-                    }
-
-                    if (item.status === 'selesai') {
-
-                        badge =
-                            'bg-green-100 text-green-700';
-
-                    }
-
-                    tbody.innerHTML += `
-
-                <tr class="border-b">
-
-                    <td class="p-5 font-semibold">
-
-                        ${item.nama_warga}
-
-                    </td>
-
-                    <td class="p-5">
-
-                        ${item.alamat}
-
-                    </td>
-
-                    <td class="p-5">
-
-                        ${item.jenis_sampah}
-
-                    </td>
-
-                    <td class="p-5">
-
-                        <span class="
-                        px-4 py-2 rounded-full text-sm font-bold
-                        ${badge}">
-
-                            ${item.status}
-
-                        </span>
-
-                    </td>
-
-                </tr>
-
-                `;
-
-                });
-
-            }
-
-            catch (error) {
-
-                console.log(error);
-
-            }
-
-        }
-
-        loadRequest();
-
-    </script>
-
+    loadRequest();
+</script>
 </body>
-
 </html>

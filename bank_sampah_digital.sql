@@ -207,6 +207,33 @@ ALTER TABLE `users`
 --
 ALTER TABLE `laporan_setoran`
   ADD CONSTRAINT `laporan_setoran_ibfk_1` FOREIGN KEY (`id_sampah`) REFERENCES `harga_sampah` (`id`);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `transaksi_penukaran`
+--
+
+CREATE TABLE `transaksi_penukaran` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nama_warga` varchar(100) NOT NULL,
+  `jenis_penukaran` enum('Uang','Sembako') NOT NULL,
+  `jumlah_poin` int(11) NOT NULL,
+  `nilai_tukar` int(11) NOT NULL,
+  `keterangan` text DEFAULT NULL,
+  `status` enum('Pending','Diproses','Selesai','Ditolak') DEFAULT 'Pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `transaksi_penukaran`
+--
+
+INSERT INTO `transaksi_penukaran` (`nama_warga`, `jenis_penukaran`, `jumlah_poin`, `nilai_tukar`, `keterangan`, `status`) VALUES
+('Budi Santoso', 'Uang', 15000, 15000, 'Tukar poin ke uang tunai', 'Selesai'),
+('cece', 'Sembako', 10000, 10000, 'Tukar poin ke beras 5kg', 'Diproses');
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
