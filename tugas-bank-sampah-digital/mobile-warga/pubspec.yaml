@@ -1,0 +1,46 @@
+name: mobile
+description: "Bank Sampah Digital - Aplikasi Mobile Warga"
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ============================================================
+  # State Management
+  # ============================================================
+  provider: ^6.1.5+1
+
+  # ============================================================
+  # HTTP Client — untuk koneksi ke REST API (MySQL via Express.js)
+  # ============================================================
+  http: ^1.6.0
+
+  # ============================================================
+  # Firebase — untuk fitur real-time (pickup requests & notifikasi)
+  # CATATAN: Pastikan google-services.json (Android) dan
+  #          GoogleService-Info.plist (iOS) sudah dikonfigurasi.
+  # Docs: https://firebase.google.com/docs/flutter/setup
+  # ============================================================
+  firebase_core: ^4.9.0
+  cloud_firestore: ^6.4.1
+
+  # ============================================================
+  # Utils
+  # ============================================================
+  intl: ^0.20.2
+  google_fonts: ^8.1.0
+  firebase_auth: ^6.5.1
+  firebase_messaging: ^16.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
