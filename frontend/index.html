@@ -402,7 +402,55 @@
                         </div>
 
                     </a>
+                    <!-- KATALOG SEMBAKO -->
+                    <a href="katalog_sembako.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
 
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300">
+
+                            🛒
+
+                        </div>
+
+                        <div class="mobile-hide">
+
+                            <h3 class="font-bold text-slate-700">
+                                Katalog Sembako
+                            </h3>
+
+                            <p class="text-xs text-slate-400">
+                                Data sembako
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                    <!-- TRANSAKSI PENUKARAN -->
+                    <a href="transaksi_penukaran.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
+
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300">
+
+                            🔄
+
+                        </div>
+
+                        <div class="mobile-hide">
+
+                            <h3 class="font-bold text-slate-700">
+                                Transaksi Penukaran
+                            </h3>
+
+                            <p class="text-xs text-slate-400">
+                                Riwayat penukaran
+                            </p>
+
+                        </div>
+
+                    </a>
                     <!-- LAPORAN -->
                     <a href="laporan.html"
                         class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
@@ -700,7 +748,27 @@
                                 </h4>
 
                             </a>
+                            <!-- TOTAL SEMBAKO -->
+                            <div
+                                class="bg-white/12 backdrop-blur-xl border border-white/10 rounded-[28px] p-7 shadow-[0_10px_35px_rgba(0,0,0,.08)] transition-all duration-300 hover:-translate-y-1 hover:bg-white/15">
 
+                                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-5">
+
+                                    🛒
+
+                                </div>
+
+                                <p class="text-white/75 text-sm font-semibold mb-2">
+                                    Total Sembako
+                                </p>
+
+                                <h4 class="text-5xl font-black text-white tracking-tight" id="stat-sembako">
+
+                                    0
+
+                                </h4>
+
+                            </div>
                         </div>
 
                     </div>
@@ -762,6 +830,11 @@
                 ).innerText =
                     stats.total_jemput || 0;
 
+                // TOTAL SEMBAKO
+                document.getElementById(
+                    'stat-sembako'
+                ).innerText =
+                    stats.total_sembako || 0;
             }
 
             catch (error) {

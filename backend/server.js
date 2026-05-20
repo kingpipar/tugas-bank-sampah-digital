@@ -190,7 +190,12 @@ app.get('/api/stats', (req, res) => {
                 SELECT COUNT(*)
                 FROM request_jemput
                 WHERE status != 'Selesai'
-            ) AS total_jemput
+            ) AS total_jemput,
+
+            (
+                SELECT COUNT(*)
+                FROM katalog_sembako
+            ) AS total_sembako
 
     `;
 
@@ -219,7 +224,10 @@ app.get('/api/stats', (req, res) => {
                 result[0].total_kas || 0,
 
             total_jemput:
-                result[0].total_jemput || 0
+                result[0].total_jemput || 0,
+            
+            total_sembako:
+                result[0].total_sembako || 0
 
         });
 
@@ -399,17 +407,17 @@ app.get('/api/penukaran', (req, res) => {
 app.post('/api/penukaran', (req, res) => {
     const { nama_warga, jenis_penukaran, id_sembako, poin_ditukar } = req.body;
     const sql = 'INSERT INTO transaksi_penukaran (nama_warga, jenis_penukaran, id_sembako, poin_ditukar) VALUES (?, ?, ?, ?)';
-    
+
     db.query(sql, [nama_warga, jenis_penukaran, id_sembako || null, poin_ditukar], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
-        
+
         if (jenis_penukaran === 'Sembako' && id_sembako) {
             const updateStokSql = 'UPDATE katalog_sembako SET stok = stok - 1 WHERE id = ?';
             db.query(updateStokSql, [id_sembako], (updateErr) => {
                 if (updateErr) console.error('Gagal memotong stok sembako:', updateErr.message);
             });
         }
-        
+
         res.status(201).json({ success: true, message: 'Transaksi penukaran poin berhasil dicatat!' });
     });
 });

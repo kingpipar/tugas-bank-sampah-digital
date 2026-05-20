@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaksi Penukaran</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="p-10 text-slate-700">
+
+<h1 class="text-4xl font-black mb-8 text-green-600">
+    Transaksi Penukaran
+</h1>
+
+<div class="bg-white rounded-3xl shadow-xl p-6 overflow-x-auto">
+
+    <table class="w-full">
+
+        <thead>
+            <tr class="border-b border-slate-200 text-left">
+                <th class="py-4">No</th>
+                <th>Nama Nasabah</th>
+                <th>Jenis Penukaran</th>
+                <th>Total Poin</th>
+                <th>Tanggal</th>
+            </tr>
+        </thead>
+
+        <tbody id="tableBody"></tbody>
+
+    </table>
+</div>
+
+<script>
+
+const API_URL = 'http://localhost:5000/api/penukaran';
+
+async function getData() {
+
+    const response = await fetch(API_URL);
+    const data = await response.json();
+
+    let html = '';
+
+    data.forEach((item, index) => {
+
+        html += `
+            <tr class="border-b border-slate-100 hover:bg-slate-50">
+
+                <td class="py-4">${index + 1}</td>
+
+                <td>${item.nama_nasabah || '-'}</td>
+
+                <td>${item.jenis_penukaran}</td>
+
+                <td>${item.total_poin}</td>
+
+                <td>${item.created_at || '-'}</td>
+
+            </tr>
+        `;
+    });
+
+    document.getElementById('tableBody').innerHTML = html;
+}
+
+getData();
+
+</script>
+
+</body>
+</html>

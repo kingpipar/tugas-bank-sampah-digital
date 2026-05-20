@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Sembako | Bank Sampah Digital</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at top left, #d1fae5 0%, transparent 20%),
+                radial-gradient(circle at bottom right, #dcfce7 0%, transparent 25%),
+                #f8fafc;
+        }
+
+        .glass {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(18px);
+        }
+    </style>
+</head>
+
+<body class="text-slate-700">
+
+<div class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-[250px] bg-white border-r border-slate-200 p-6">
+
+        <h1 class="text-2xl font-black text-green-600 mb-10">
+            ♻️ Bank Sampah
+        </h1>
+
+        <nav class="flex flex-col gap-3">
+
+            <a href="index.html"
+               class="px-4 py-3 rounded-xl hover:bg-slate-100 font-semibold">
+                Dashboard
+            </a>
+
+            <a href="harga.html"
+               class="px-4 py-3 rounded-xl hover:bg-slate-100 font-semibold">
+                Harga Sampah
+            </a>
+
+            <a href="katalog_sembako.html"
+               class="px-4 py-3 rounded-xl bg-green-500 text-white font-semibold">
+                Katalog Sembako
+            </a>
+
+            <a href="transaksi_penukaran.html"
+               class="px-4 py-3 rounded-xl hover:bg-slate-100 font-semibold">
+                Transaksi Penukaran
+            </a>
+
+        </nav>
+    </aside>
+
+    <!-- CONTENT -->
+    <main class="flex-1 overflow-y-auto p-10">
+
+        <!-- HEADER -->
+        <div class="flex justify-between items-center mb-8">
+
+            <div>
+                <h1 class="text-4xl font-black text-slate-800">
+                    Katalog Sembako
+                </h1>
+
+                <p class="text-slate-500 mt-2">
+                    Kelola data sembako penukaran poin
+                </p>
+            </div>
+
+            <button onclick="openModal()"
+                class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-2xl font-bold">
+                + Tambah Sembako
+            </button>
+        </div>
+
+        <!-- TABLE -->
+        <div class="glass rounded-3xl p-6 border border-white shadow-xl">
+
+            <div class="overflow-x-auto">
+
+                <table class="w-full">
+
+                    <thead>
+                        <tr class="border-b border-slate-200 text-left">
+                            <th class="py-4">No</th>
+                            <th>Nama Sembako</th>
+                            <th>Harga Poin</th>
+                            <th>Stok</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tableBody"></tbody>
+
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- MODAL -->
+<div id="modal"
+     class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+    <div class="bg-white w-[400px] rounded-3xl p-8">
+
+        <h2 class="text-2xl font-black mb-6">
+            Tambah Sembako
+        </h2>
+
+        <div class="space-y-4">
+
+            <input type="text"
+                   id="nama_sembako"
+                   placeholder="Nama sembako"
+                   class="w-full border border-slate-200 rounded-xl px-4 py-3">
+
+            <input type="number"
+                   id="harga_poin"
+                   placeholder="Harga poin"
+                   class="w-full border border-slate-200 rounded-xl px-4 py-3">
+
+            <input type="number"
+                   id="stok"
+                   placeholder="Stok"
+                   class="w-full border border-slate-200 rounded-xl px-4 py-3">
+
+        </div>
+
+        <div class="flex justify-end gap-3 mt-8">
+
+            <button onclick="closeModal()"
+                class="px-5 py-3 rounded-xl bg-slate-100">
+                Batal
+            </button>
+
+            <button onclick="addSembako()"
+                class="px-5 py-3 rounded-xl bg-green-500 text-white">
+                Simpan
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+const API_URL = 'http://localhost:5000/api/sembako';
+
+async function getData() {
+
+    const response = await fetch(API_URL);
+    const data = await response.json();
+
+    let html = '';
+
+    data.forEach((item, index) => {
+
+        html += `
+            <tr class="border-b border-slate-100 hover:bg-slate-50">
+
+                <td class="py-4">${index + 1}</td>
+
+                <td>${item.nama_sembako}</td>
+
+                <td>${item.harga_poin}</td>
+
+                <td>${item.stok}</td>
+
+                <td>
+                    <button onclick="deleteData(${item.id})"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                        Hapus
+                    </button>
+                </td>
+
+            </tr>
+        `;
+    });
+
+    document.getElementById('tableBody').innerHTML = html;
+}
+
+function openModal() {
+    document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
+
+async function addSembako() {
+
+    const nama_sembako = document.getElementById('nama_sembako').value;
+    const harga_poin = document.getElementById('harga_poin').value;
+    const stok = document.getElementById('stok').value;
+
+    await fetch(API_URL, {
+
+        method: 'POST',
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+            nama_sembako,
+            harga_poin,
+            stok
+        })
+    });
+
+    closeModal();
+    getData();
+}
+
+async function deleteData(id) {
+
+    if(confirm('Yakin hapus data?')) {
+
+        await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE'
+        });
+
+        getData();
+    }
+}
+
+getData();
+
+</script>
+
+</body>
+</html>
