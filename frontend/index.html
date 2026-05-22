@@ -45,8 +45,6 @@
 
         }
 
-        /* SCROLLBAR */
-
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -67,8 +65,6 @@
 
         }
 
-        /* GLASS */
-
         .glass {
 
             background: rgba(255, 255, 255, .72);
@@ -78,8 +74,6 @@
             -webkit-backdrop-filter: blur(18px);
 
         }
-
-        /* HERO */
 
         .hero-pattern {
 
@@ -93,8 +87,6 @@
             background-size: 40px 40px;
 
         }
-
-        /* CARD */
 
         .card-modern {
 
@@ -144,8 +136,6 @@
 
         }
 
-        /* BUTTON */
-
         .btn-modern {
 
             transition: all .3s ease;
@@ -163,8 +153,6 @@
             transform: scale(.98);
 
         }
-
-        /* INPUT */
 
         .input-modern {
 
@@ -187,8 +175,6 @@
 
         }
 
-        /* TABLE */
-
         .table-row {
 
             transition: all .25s ease;
@@ -202,8 +188,6 @@
             transform: scale(1.005);
 
         }
-
-        /* BADGE */
 
         .badge {
 
@@ -255,8 +239,6 @@
 
         }
 
-        /* ANIMATION */
-
         .animate-fade {
 
             animation: fade .5s ease;
@@ -282,8 +264,6 @@
             }
 
         }
-
-        /* MOBILE */
 
         @media(max-width:768px) {
 
@@ -320,17 +300,15 @@
 
     <div class="flex h-screen overflow-hidden">
 
-        <!-- SIDEBAR -->
-        <aside class="w-[250px] glass border-r border-white/40 flex flex-col justify-between py-6 px-5 shadow-2xl z-50">
+        <aside
+            class="w-[250px] glass border-r border-white/40 flex flex-col justify-between py-6 px-5 shadow-2xl z-50 overflow-y-auto">
 
-            <!-- TOP -->
             <div>
 
-                <!-- LOGO -->
                 <div class="mb-12 flex items-center gap-4 px-2">
 
                     <div
-                        class="w-16 h-16 rounded-[24px] bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center text-white text-3xl shadow-[0_12px_30px_rgba(34,197,94,0.35)]">
+                        class="w-16 h-16 rounded-[24px] bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center text-white text-3xl shadow-[0_12px_30px_rgba(34,197,94,0.35)] shrink-0">
 
                         ♻️
 
@@ -350,15 +328,13 @@
 
                 </div>
 
-                <!-- MENU -->
-                <nav class="flex flex-col gap-3">
+                <nav class="flex flex-col gap-2">
 
-                    <!-- DASHBOARD -->
                     <a href="index.html"
                         class="group flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-400 shadow-[0_12px_30px_rgba(34,197,94,0.3)] transition-all duration-300">
 
                         <div
-                            class="w-12 h-12 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center text-white text-xl border border-white/10">
+                            class="w-12 h-12 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center text-white text-xl border border-white/10 shrink-0">
 
                             📊
 
@@ -370,7 +346,7 @@
                                 Dashboard
                             </h3>
 
-                            <p class="text-xs text-green-50">
+                            <p class="text-[11px] text-green-50 mt-0.5">
                                 Ringkasan sistem
                             </p>
 
@@ -378,12 +354,11 @@
 
                     </a>
 
-                    <!-- HARGA -->
                     <a href="harga.html"
                         class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
 
                         <div
-                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300">
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
 
                             💰
 
@@ -391,72 +366,95 @@
 
                         <div class="mobile-hide">
 
-                            <h3 class="font-bold text-slate-700">
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">
                                 Harga Sampah
                             </h3>
 
-                            <p class="text-xs text-slate-400">
+                            <p class="text-[11px] text-slate-400 mt-0.5">
                                 Kelola harga
                             </p>
 
                         </div>
 
                     </a>
-                    <!-- KATALOG SEMBAKO -->
-                    <a href="katalog_sembako.html"
+
+                    <a href="request_jemput.html"
                         class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
 
                         <div
-                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300">
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
 
-                            🛒
+                            🚚
 
                         </div>
 
                         <div class="mobile-hide">
 
-                            <h3 class="font-bold text-slate-700">
-                                Katalog Sembako
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">
+                                Penjemputan
                             </h3>
 
-                            <p class="text-xs text-slate-400">
-                                Data sembako
+                            <p class="text-[11px] text-slate-400 mt-0.5">
+                                Request warga
                             </p>
 
                         </div>
 
                     </a>
 
-                    <!-- TRANSAKSI PENUKARAN -->
                     <a href="transaksi_penukaran.html"
                         class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
 
                         <div
-                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300">
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
 
-                            🔄
+                            🤝
 
                         </div>
 
                         <div class="mobile-hide">
 
-                            <h3 class="font-bold text-slate-700">
-                                Transaksi Penukaran
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">
+                                Penukaran Poin
                             </h3>
 
-                            <p class="text-xs text-slate-400">
-                                Riwayat penukaran
+                            <p class="text-[11px] text-slate-400 mt-0.5">
+                                Riwayat klaim
                             </p>
 
                         </div>
 
                     </a>
-                    <!-- LAPORAN -->
+
+                    <a href="voucher_reward.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
+
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+
+                            🎟️
+
+                        </div>
+
+                        <div class="mobile-hide">
+
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">
+                                Voucher Reward
+                            </h3>
+
+                            <p class="text-[11px] text-slate-400 mt-0.5">
+                                Master data reward
+                            </p>
+
+                        </div>
+
+                    </a>
+
                     <a href="laporan.html"
                         class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
 
                         <div
-                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300">
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
 
                             📄
 
@@ -464,11 +462,11 @@
 
                         <div class="mobile-hide">
 
-                            <h3 class="font-bold text-slate-700">
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">
                                 Laporan
                             </h3>
 
-                            <p class="text-xs text-slate-400">
+                            <p class="text-[11px] text-slate-400 mt-0.5">
                                 Statistik data
                             </p>
 
@@ -476,14 +474,13 @@
 
                     </a>
 
-                    <!-- NOTIFIKASI -->
                     <a href="notifikasi.html"
                         class="group flex items-center justify-between px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
 
                         <div class="flex items-center gap-4">
 
                             <div
-                                class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 relative">
+                                class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 relative shrink-0">
 
                                 🔔
 
@@ -491,11 +488,11 @@
 
                             <div class="mobile-hide">
 
-                                <h3 class="font-bold text-slate-700">
+                                <h3 class="font-bold text-slate-700 group-hover:text-slate-900">
                                     Notifikasi
                                 </h3>
 
-                                <p class="text-xs text-slate-400">
+                                <p class="text-[11px] text-slate-400 mt-0.5">
                                     Update terbaru
                                 </p>
 
@@ -503,12 +500,9 @@
 
                         </div>
 
-                        <!-- BADGE -->
                         <div
-                            class="w-7 h-7 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center shadow-md animate-pulse">
-
+                            class="w-6 h-6 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow-md animate-pulse shrink-0">
                             4
-
                         </div>
 
                     </a>
@@ -517,14 +511,13 @@
 
             </div>
 
-            <!-- PROFILE -->
-            <div>
+            <div class="mt-4">
 
                 <a href="profile.html"
                     class="group flex items-center gap-4 px-5 py-4 rounded-2xl bg-green-50 hover:bg-green-100 transition-all duration-300 border border-green-100">
 
                     <div
-                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center text-white text-xl shadow-lg">
+                        class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center text-white text-xl shadow-lg shrink-0">
 
                         👤
 
@@ -536,7 +529,7 @@
                             Profil Admin
                         </h3>
 
-                        <p class="text-xs text-slate-400">
+                        <p class="text-[11px] text-slate-400 mt-0.5">
                             Kelola akun
                         </p>
 
@@ -548,10 +541,8 @@
 
         </aside>
 
-        <!-- MAIN -->
-        <main class="flex-1 overflow-y-auto">
+        <main class="flex-1 h-full overflow-y-auto relative scroll-smooth">
 
-            <!-- HEADER -->
             <header
                 class="glass border-b border-white/40 px-10 py-5 flex items-center justify-between sticky top-0 z-30 shadow-sm">
 
@@ -572,7 +563,6 @@
 
                 </div>
 
-                <!-- PROFILE HEADER -->
                 <div onclick="bukaModalProfil()"
                     class="flex items-center gap-3 bg-white/70 backdrop-blur-md border border-white/50 px-4 py-2 rounded-2xl shadow-lg hover:shadow-xl transition-all cursor-pointer">
 
@@ -610,10 +600,8 @@
 
             </header>
 
-            <!-- CONTENT -->
             <div class="p-8 md:p-10 max-w-[1400px] mx-auto space-y-8 mobile-padding">
 
-                <!-- HERO -->
                 <section
                     class="bg-gradient-to-br from-[#11998e] via-[#18c47c] to-[#38ef7d] rounded-[36px] p-10 text-white shadow-[0_25px_60px_rgba(16,185,129,0.35)] relative overflow-hidden hero-pattern">
 
@@ -644,10 +632,8 @@
 
                         </div>
 
-                        <!-- STATISTICS -->
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mobile-grid">
 
-                            <!-- TOTAL WARGA -->
                             <div
                                 class="bg-white/12 backdrop-blur-xl border border-white/10 rounded-[28px] p-7 shadow-[0_10px_35px_rgba(0,0,0,.08)] transition-all duration-300 hover:-translate-y-1 hover:bg-white/15">
 
@@ -670,7 +656,6 @@
 
                             </div>
 
-                            <!-- SAMPAH MASUK -->
                             <div
                                 class="bg-white/12 backdrop-blur-xl border border-white/10 rounded-[28px] p-7 shadow-[0_10px_35px_rgba(0,0,0,.08)] transition-all duration-300 hover:-translate-y-1 hover:bg-white/15">
 
@@ -703,7 +688,6 @@
 
                             </div>
 
-                            <!-- KAS KELUAR -->
                             <div
                                 class="bg-white/12 backdrop-blur-xl border border-white/10 rounded-[28px] p-7 shadow-[0_10px_35px_rgba(0,0,0,.08)] transition-all duration-300 hover:-translate-y-1 hover:bg-white/15">
 
@@ -727,7 +711,6 @@
 
                             </div>
 
-                            <!-- REQUEST JEMPUT -->
                             <a href="request_jemput.html"
                                 class="bg-white/12 backdrop-blur-xl border border-white/10 rounded-[28px] p-7 shadow-[0_10px_35px_rgba(0,0,0,.08)] transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 block">
                                 <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-5">
@@ -748,18 +731,17 @@
                                 </h4>
 
                             </a>
-                            <!-- TOTAL SEMBAKO -->
-                            <div
-                                class="bg-white/12 backdrop-blur-xl border border-white/10 rounded-[28px] p-7 shadow-[0_10px_35px_rgba(0,0,0,.08)] transition-all duration-300 hover:-translate-y-1 hover:bg-white/15">
+                            <a href="voucher_reward.html"
+                                class="bg-white/12 backdrop-blur-xl border border-white/10 rounded-[28px] p-7 shadow-[0_10px_35px_rgba(0,0,0,.08)] transition-all duration-300 hover:-translate-y-1 hover:bg-white/15 block md:col-span-4 lg:col-span-1">
 
                                 <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-5">
 
-                                    🛒
+                                    🎟️
 
                                 </div>
 
                                 <p class="text-white/75 text-sm font-semibold mb-2">
-                                    Total Sembako
+                                    Voucher Reward
                                 </p>
 
                                 <h4 class="text-5xl font-black text-white tracking-tight" id="stat-sembako">
@@ -768,7 +750,7 @@
 
                                 </h4>
 
-                            </div>
+                            </a>
                         </div>
 
                     </div>
@@ -783,29 +765,23 @@
 
     <script>
 
-        // =========================
-        // LOAD DASHBOARD STATS
-        // =========================
-
         async function loadDashboard() {
 
             try {
 
                 const response =
                     await fetch(
-                        'http://localhost:3000/api/stats'
+                        'http://localhost:5000/api/stats' // Pastikan port sesuai backend terbaru (5000)
                     );
 
                 const stats =
                     await response.json();
 
-                // TOTAL WARGA
                 document.getElementById(
                     'stat-warga'
                 ).innerText =
                     stats.total_warga || 0;
 
-                // TOTAL BERAT
                 document.getElementById(
                     'stat-berat'
                 ).innerText =
@@ -813,7 +789,6 @@
                         stats.total_berat || 0
                     ).toFixed(2);
 
-                // TOTAL KAS
                 document.getElementById(
                     'stat-kas'
                 ).innerText =
@@ -824,13 +799,11 @@
                         'id-ID'
                     );
 
-                // TOTAL REQUEST JEMPUT
                 document.getElementById(
                     'stat-jemput'
                 ).innerText =
                     stats.total_jemput || 0;
 
-                // TOTAL SEMBAKO
                 document.getElementById(
                     'stat-sembako'
                 ).innerText =
@@ -848,10 +821,6 @@
 
         }
 
-        // =========================
-        // LOAD ADMIN HEADER
-        // =========================
-
         function loadAdminData() {
 
             const admin =
@@ -861,13 +830,11 @@
 
             if (admin) {
 
-                // NAMA HEADER
                 document.getElementById(
                     'header-nama'
                 ).innerText =
                     admin.nama || 'Administrator';
 
-                // INISIAL
                 const inisial =
                     admin.nama
                         ? admin.nama.charAt(0).toUpperCase()
@@ -882,21 +849,13 @@
 
         }
 
-        // =========================
-        // MODAL PROFILE
-        // =========================
-
         function bukaModalProfil() {
 
             window.location.href =
                 'profile.html';
 
         }
-
-        // =========================
-        // REALTIME REFRESH
-        // =========================
-
+        
         function startRealtimeDashboard() {
 
             loadDashboard();
@@ -905,13 +864,9 @@
 
                 loadDashboard();
 
-            }, 2000);
+            }, 5000); // Diubah ke 5000ms (5 detik) agar server tidak terlalu berat
 
         }
-
-        // =========================
-        // INIT
-        // =========================
 
         document.addEventListener(
             'DOMContentLoaded',

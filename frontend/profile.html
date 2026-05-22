@@ -31,8 +31,6 @@
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
         }
 
-        /* SCROLLBAR */
-
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -47,8 +45,6 @@
             background: #10b981;
         }
 
-        /* SIDEBAR HOVER */
-
         nav a {
             transition: all .3s ease;
         }
@@ -57,8 +53,6 @@
             transform: translateX(4px);
         }
 
-        /* GLASS EFFECT */
-
         .glass-soft {
             background: rgba(255, 255, 255, .7);
 
@@ -66,8 +60,6 @@
 
             border: 1px solid rgba(255, 255, 255, .4);
         }
-
-        /* CARD HOVER */
 
         .hover-card {
             transition: all .35s ease;
@@ -80,13 +72,9 @@
                 0 20px 40px rgba(15, 23, 42, .06);
         }
 
-        /* REALTIME CLOCK */
-
         #realtime-clock {
             line-height: 1.5;
         }
-
-        /* PROFILE HERO */
 
         .profile-hero {
             position: relative;
@@ -110,8 +98,6 @@
 
             filter: blur(10px);
         }
-
-        /* STATUS DOT */
 
         .status-dot {
             width: 8px;
@@ -149,13 +135,11 @@
 
     <div class="flex h-screen overflow-hidden">
 
-        <!-- SIDEBAR -->
         <aside
             class="w-[250px] min-w-[250px] bg-[#f3f5f4] border-r border-[#e5e7eb] flex flex-col justify-between px-5 py-7 shadow-sm">
 
             <div>
 
-                <!-- LOGO -->
                 <div class="flex items-center gap-4 mb-14 px-2">
 
                     <div class="w-[58px] h-[58px] rounded-[20px]
@@ -183,10 +167,8 @@
 
                 </div>
 
-                <!-- MENU -->
                 <nav class="space-y-7">
 
-                    <!-- DASHBOARD -->
                     <a href="index.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
                         hover:bg-white transition-all duration-300">
 
@@ -213,7 +195,6 @@
 
                     </a>
 
-                    <!-- HARGA -->
                     <a href="harga.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
                         hover:bg-white transition-all duration-300">
 
@@ -240,7 +221,6 @@
 
                     </a>
 
-                    <!-- LAPORAN -->
                     <a href="laporan.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
                         hover:bg-white transition-all duration-300">
 
@@ -267,7 +247,6 @@
 
                     </a>
 
-                    <!-- NOTIF -->
                     <a href="notifikasi.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
                         hover:bg-white transition-all duration-300">
 
@@ -298,7 +277,6 @@
 
             </div>
 
-            <!-- PROFILE ACTIVE -->
             <div class="bg-[#eef7f0]
                 border border-[#d7f2df]
                 rounded-[24px]
@@ -330,10 +308,8 @@
 
         </aside>
 
-        <!-- MAIN -->
         <main class="flex-1 overflow-y-auto custom-scrollbar">
 
-            <!-- HEADER -->
             <header
                 class="px-10 py-6 flex items-center justify-between sticky top-0 bg-[#F9FBFA]/80 backdrop-blur-md z-30">
 
@@ -548,7 +524,6 @@
     </div>
 
     <script>
-        // FUNGSI JAM REAL-TIME DI HEADER
         function updateClock() {
             const now = new Date();
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -566,7 +541,6 @@
                 return;
             }
 
-            // Injeksi Data ke UI
             document.getElementById('display-nama').innerText = admin.nama;
             document.getElementById('display-email').innerText = admin.email;
             document.getElementById('info-nama').innerText = admin.nama;
@@ -577,7 +551,6 @@
 
             if (admin.id) document.getElementById('info-id').innerText = '#ADM-DIGITAL-' + admin.id;
 
-            // Logika Waktu Login Real-time (Static set at load)
             const loginTime = new Date();
             document.getElementById('last-login-time').innerText = `Terdeteksi masuk pada ${loginTime.getHours()}:${loginTime.getMinutes()} WIB melalui Browser Dekstop`;
 

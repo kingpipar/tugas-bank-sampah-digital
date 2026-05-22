@@ -11,10 +11,8 @@
         Login Admin | Bank Sampah Digital
     </title>
 
-    <!-- CSS -->
     <link rel="stylesheet" href="./src/css/output.css">
 
-    <!-- FONT -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 </head>
@@ -22,15 +20,12 @@
 <body
     class="min-h-screen bg-gradient-to-br from-green-500 to-emerald-400 font-[Inter] flex items-center justify-center overflow-hidden">
 
-    <!-- BG BLUR -->
     <div class="absolute w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl top-[-100px] left-[-100px]"></div>
 
     <div class="absolute w-[400px] h-[400px] bg-white/10 rounded-full blur-3xl bottom-[-100px] right-[-100px]"></div>
 
-    <!-- LOGIN CARD -->
     <div class="relative bg-white w-full max-w-md rounded-[40px] shadow-2xl p-10">
 
-        <!-- LOGO -->
         <div class="text-center">
 
             <div
@@ -48,10 +43,8 @@
 
         </div>
 
-        <!-- FORM -->
         <form id="loginForm" class="mt-10 space-y-6">
 
-            <!-- EMAIL -->
             <div>
 
                 <label class="font-semibold">
@@ -64,7 +57,6 @@
 
             </div>
 
-            <!-- PASSWORD -->
             <div>
 
                 <label class="font-semibold">
@@ -77,7 +69,6 @@
 
             </div>
 
-            <!-- BUTTON -->
             <button type="submit"
                 class="w-full bg-gradient-to-r from-green-500 to-emerald-400 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:scale-[1.02] transition">
                 Login Admin
@@ -85,14 +76,12 @@
 
         </form>
 
-        <!-- FOOTER -->
         <div class="text-center mt-8 text-slate-400 text-sm">
             Bank Sampah Digital © 2026
         </div>
 
     </div>
 
-    <!-- SCRIPT -->
     <script>
 
         document
@@ -142,7 +131,6 @@
                         const data =
                             await response.json();
 
-                        // SUCCESS
                         if (data.success) {
 
                             localStorage.setItem(
@@ -161,7 +149,6 @@
 
                         }
 
-                        // FAILED
                         else {
 
                             alert(

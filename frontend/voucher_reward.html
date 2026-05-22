@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Penukaran | Bank Sampah Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .active-link {
+            background-color: #e6f4ea;
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 antialiased selection:bg-emerald-200 selection:text-emerald-900">
+    <div class="flex h-screen overflow-hidden">
+        <aside
+            class="w-[280px] bg-white border-r border-slate-100 p-6 flex flex-col justify-between hidden md:flex shrink-0 z-20 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+            <div class="flex flex-col gap-8">
+                <div class="flex items-center gap-3 px-2">
+                    <div
+                        class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-200/50">
+                        <i class="ph-bold ph-recycle text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-black text-slate-900 leading-none tracking-tight">EcoBank</h1>
+                        <span class="text-[10px] text-emerald-600 font-bold tracking-widest uppercase">Digital
+                            System</span>
+                    </div>
+                </div>
+                <nav class="flex flex-col gap-1.5">
+                    <a href="index.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-700 font-semibold transition-all text-sm">
+                        <i class="ph-bold ph-squares-four text-lg"></i>Dashboard
+                    </a>
+                    <a href="harga.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-700 font-semibold transition-all text-sm">
+                        <i class="ph-bold ph-currency-circle-dollar text-lg"></i>Manajemen Harga
+                    </a>
+                    <a href="request_jemput.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-700 font-semibold transition-all text-sm">
+                        <i class="ph-bold ph-truck text-lg"></i>Penjemputan
+                    </a>
+                    <a href="transaksi_penukaran.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl active-link text-sm shadow-sm border border-emerald-100/50">
+                        <i class="ph-bold ph-hand-coins text-lg"></i>Penukaran Poin
+                    </a>
+                    <a href="voucher_reward.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-700 font-semibold transition-all text-sm">
+                        <i class="ph-bold ph-ticket text-lg"></i>Voucher Reward
+                    </a>
+                </nav>
+            </div>
+            <div class="pt-6 border-t border-slate-100 flex flex-col gap-4">
+                <div class="flex items-center gap-3 px-2">
+                    <img src="https://api.dicebear.com/8.x/notionists/svg?seed=admin"
+                        class="w-10 h-10 rounded-full bg-slate-50 border border-slate-200">
+                    <div>
+                        <p class="font-bold text-sm text-slate-900">Admin Utama</p>
+                        <p class="text-xs text-slate-500 font-medium">Administrator</p>
+                    </div>
+                </div>
+                <a href="login.html"
+                    class="flex w-full items-center justify-center gap-2.5 p-3.5 rounded-xl bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-600 text-sm font-bold transition-all border border-slate-100 hover:border-rose-100">
+                    <i class="ph-bold ph-sign-out"></i>Keluar Sesi
+                </a>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto relative">
+            <div class="p-8 pb-32 bg-gradient-to-br from-emerald-600 to-green-500 relative overflow-hidden">
+                <div
+                    class="absolute -right-10 -top-10 w-64 h-64 border-[30px] border-white/10 rounded-full opacity-50 blur-sm">
+                </div>
+                <div class="absolute right-40 top-20 w-32 h-32 bg-white/10 rounded-full opacity-50 blur-2xl"></div>
+
+                <div class="flex justify-between items-end relative z-10">
+                    <div>
+                        <span class="text-emerald-100 font-bold text-xs tracking-widest uppercase mb-2 block">Aktivitas
+                            Klaim Reward</span>
+                        <h1 class="text-3xl font-black text-white mb-2 tracking-tight">Riwayat Penukaran</h1>
+                        <p class="text-emerald-50 text-sm font-medium opacity-90 max-w-md leading-relaxed">Kelola dan
+                            pantau seluruh transaksi penukaran poin warga, baik untuk voucher, sembako, maupun uang
+                            tunai.</p>
+                    </div>
+                    <button
+                        class="bg-white hover:bg-emerald-50 text-emerald-700 px-6 py-3.5 rounded-xl shadow-lg font-bold transition-all text-sm flex items-center gap-2 hover:scale-105 active:scale-95">
+                        <i class="ph-bold ph-plus"></i> Catat Penukaran Manual
+                    </button>
+                </div>
+            </div>
+
+            <div class="px-8 -mt-16 relative z-20">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div
+                        class="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 transition-transform duration-300">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center border border-blue-100">
+                            <i class="ph-fill ph-receipt text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-400 mb-1">Total Transaksi</p>
+                            <h3 class="text-2xl font-black text-slate-800 tracking-tight" id="stat-total">156</h3>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 transition-transform duration-300">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center border border-emerald-100">
+                            <i class="ph-fill ph-star text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-400 mb-1">Poin Tercairkan</p>
+                            <h3 class="text-2xl font-black text-slate-800 tracking-tight" id="stat-poin">12.5K</h3>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 flex items-center gap-5 hover:-translate-y-1 transition-transform duration-300">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-500 flex items-center justify-center border border-purple-100">
+                            <i class="ph-fill ph-ticket text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-400 mb-1">Voucher Diklaim</p>
+                            <h3 class="text-2xl font-black text-slate-800 tracking-tight" id="stat-voucher">89</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 overflow-hidden mb-10">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                        <h2 class="font-bold text-slate-800 text-lg">Daftar Transaksi</h2>
+                        <div class="flex gap-3">
+                            <div class="relative">
+                                <i
+                                    class="ph-bold ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" placeholder="Cari ID atau Nama..."
+                                    class="pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 w-64 shadow-sm transition-all">
+                            </div>
+                            <button
+                                class="px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-600 flex items-center gap-2 hover:bg-slate-50 shadow-sm transition-all">
+                                <i class="ph-bold ph-funnel"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[900px]">
+                            <thead>
+                                <tr
+                                    class="bg-white border-b border-slate-100 text-[11px] font-bold text-slate-400 tracking-widest uppercase">
+                                    <th class="py-5 px-6 whitespace-nowrap">ID Transaksi</th>
+                                    <th class="py-5 px-6 whitespace-nowrap">Nama Warga</th>
+                                    <th class="py-5 px-6 whitespace-nowrap">Jenis Klaim</th>
+                                    <th class="py-5 px-6 whitespace-nowrap">Item / Keterangan</th>
+                                    <th class="py-5 px-6 whitespace-nowrap">Poin Terpotong</th>
+                                    <th class="py-5 px-6 whitespace-nowrap">Tanggal & Waktu</th>
+                                    <th class="py-5 px-6 text-center whitespace-nowrap">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody" class="text-sm divide-y divide-slate-50"></tbody>
+                        </table>
+                    </div>
+                    <div class="p-5 border-t border-slate-100 flex justify-between items-center bg-white">
+                        <p class="text-sm text-slate-500 font-medium">Menampilkan <span
+                                class="font-bold text-slate-800">1-10</span> dari <span
+                                class="font-bold text-slate-800">156</span> data</p>
+                        <div class="flex gap-2">
+                            <button
+                                class="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50 transition-all shadow-sm">
+                                <i class="ph-bold ph-caret-left"></i>
+                            </button>
+                            <button
+                                class="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-emerald-600 hover:border-emerald-200 hover:bg-emerald-50 transition-all shadow-sm">
+                                <i class="ph-bold ph-caret-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api/penukaran';
+
+        function getStatusBadge(jenis) {
+            if (jenis.toLowerCase().includes('uang')) {
+                return `<span class="bg-amber-50 text-amber-600 border border-amber-100 font-bold text-xs px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 w-full"><i class="ph-fill ph-clock text-sm"></i> Diproses</span>`;
+            }
+            return `<span class="bg-emerald-50 text-emerald-600 border border-emerald-100 font-bold text-xs px-3 py-1.5 rounded-lg flex items-center justify-center gap-1.5 w-full"><i class="ph-fill ph-check-circle text-sm"></i> Berhasil</span>`;
+        }
+
+        function getJenisBadge(jenis) {
+            let color = 'bg-slate-50 text-slate-600 border-slate-200';
+            if (jenis === 'Voucher') color = 'bg-purple-50 text-purple-600 border-purple-200';
+            else if (jenis === 'Sembako') color = 'bg-blue-50 text-blue-600 border-blue-200';
+            else if (jenis.includes('Uang')) color = 'bg-amber-50 text-amber-600 border-amber-200';
+
+            return `<span class="${color} border font-bold text-[11px] px-2.5 py-1 rounded-md uppercase tracking-wider">${jenis}</span>`;
+        }
+
+        async function getData() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                let html = '';
+
+                data.forEach((item) => {
+                    const dateObj = new Date(item.tanggal_tukar);
+                    const tgl = dateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+                    const wkt = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+                    html += `
+                        <tr class="hover:bg-slate-50/80 transition-colors group">
+                            <td class="py-4 px-6 font-bold text-slate-500">#TX-${item.id}</td>
+                            <td class="py-4 px-6 font-bold text-slate-800">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs border border-slate-200">
+                                        ${item.nama_warga.charAt(0)}
+                                    </div>
+                                    ${item.nama_warga}
+                                </div>
+                            </td>
+                            <td class="py-4 px-6">
+                                ${getJenisBadge(item.jenis_penukaran)}
+                            </td>
+                            <td class="py-4 px-6 font-semibold text-slate-600">${item.nama_sembako || 'Pencairan Dana'}</td>
+                            <td class="py-4 px-6 font-black text-rose-500">- ${item.poin_ditukar.toLocaleString('id-ID')} <span class="text-xs font-semibold text-slate-400 ml-1">Pts</span></td>
+                            <td class="py-4 px-6">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-slate-700">${tgl}</span>
+                                    <span class="text-xs font-semibold text-slate-400">${wkt} WIB</span>
+                                </div>
+                            </td>
+                            <td class="py-4 px-6">
+                                ${getStatusBadge(item.jenis_penukaran)}
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById('tableBody').innerHTML = html || `<tr><td colspan="7" class="text-center py-12 text-slate-400 font-medium">Belum ada riwayat transaksi penukaran.</td></tr>`;
+            } catch (error) {
+                console.error(error);
+                document.getElementById('tableBody').innerHTML = `
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-4 px-6 font-bold text-slate-500">#TX-1042</td>
+                        <td class="py-4 px-6 font-bold text-slate-800"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs border border-slate-200">B</div>Budi Santoso</div></td>
+                        <td class="py-4 px-6">${getJenisBadge('Voucher')}</td>
+                        <td class="py-4 px-6 font-semibold text-slate-600">Gratis Ongkir Jemput</td>
+                        <td class="py-4 px-6 font-black text-rose-500">- 50 <span class="text-xs font-semibold text-slate-400 ml-1">Pts</span></td>
+                        <td class="py-4 px-6"><div class="flex flex-col"><span class="font-bold text-slate-700">12 Okt 2023</span><span class="text-xs font-semibold text-slate-400">10:30 WIB</span></div></td>
+                        <td class="py-4 px-6">${getStatusBadge('Voucher')}</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-4 px-6 font-bold text-slate-500">#TX-1041</td>
+                        <td class="py-4 px-6 font-bold text-slate-800"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs border border-slate-200">S</div>Siti Aminah</div></td>
+                        <td class="py-4 px-6">${getJenisBadge('Sembako')}</td>
+                        <td class="py-4 px-6 font-semibold text-slate-600">Beras 5Kg Premium</td>
+                        <td class="py-4 px-6 font-black text-rose-500">- 15.000 <span class="text-xs font-semibold text-slate-400 ml-1">Pts</span></td>
+                        <td class="py-4 px-6"><div class="flex flex-col"><span class="font-bold text-slate-700">11 Okt 2023</span><span class="text-xs font-semibold text-slate-400">09:15 WIB</span></div></td>
+                        <td class="py-4 px-6">${getStatusBadge('Sembako')}</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-4 px-6 font-bold text-slate-500">#TX-1040</td>
+                        <td class="py-4 px-6 font-bold text-slate-800"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-xs border border-slate-200">A</div>Ahmad Yani</div></td>
+                        <td class="py-4 px-6">${getJenisBadge('Uang Tunai')}</td>
+                        <td class="py-4 px-6 font-semibold text-slate-600">Pencairan Rp 50.000</td>
+                        <td class="py-4 px-6 font-black text-rose-500">- 5.000 <span class="text-xs font-semibold text-slate-400 ml-1">Pts</span></td>
+                        <td class="py-4 px-6"><div class="flex flex-col"><span class="font-bold text-slate-700">10 Okt 2023</span><span class="text-xs font-semibold text-slate-400">14:20 WIB</span></div></td>
+                        <td class="py-4 px-6">${getStatusBadge('Uang Tunai')}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        window.onload = getData;
+    </script>
+</body>
+
+</html>

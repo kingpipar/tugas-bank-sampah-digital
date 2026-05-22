@@ -1,83 +1,146 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaksi Penukaran</title>
-
+    <title>Penukaran Poin | Bank Sampah Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .active-link {
+            background-color: #e6f4ea;
+            color: #10b981;
+            font-weight: 700;
         }
     </style>
 </head>
 
-<body class="p-10 text-slate-700">
+<body class="text-slate-800 antialiased">
+    <div class="flex h-screen overflow-hidden">
+        <aside class="w-[280px] bg-white border-r border-slate-100 p-6 flex flex-col justify-between hidden md:flex">
+            <div class="flex flex-col gap-8">
+                <div class="flex items-center gap-3 px-2">
+                    <div
+                        class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-emerald-200">
+                        <i class="ph-bold ph-recycle text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-black text-slate-900 leading-none">EcoBank</h1>
+                        <span class="text-[11px] text-emerald-600 font-bold tracking-wider uppercase">Digital
+                            System</span>
+                    </div>
+                </div>
+                <nav class="flex flex-col gap-1">
+                    <a href="index.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium transition-all text-sm">
+                        <i class="ph-bold ph-squares-four text-lg"></i>Dashboard
+                    </a>
+                    <a href="harga.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium transition-all text-sm">
+                        <i class="ph-bold ph-currency-circle-dollar text-lg"></i>Manajemen Harga
+                    </a>
+                    <a href="request_jemput.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium transition-all text-sm">
+                        <i class="ph-bold ph-truck text-lg"></i>Penjemputan
+                    </a>
+                    <a href="transaksi_penukaran.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl active-link text-sm">
+                        <i class="ph-bold ph-hand-coins text-lg"></i>Penukaran Poin
+                    </a>
+                    <a href="voucher_reward.html"
+                        class="flex items-center gap-3.5 p-3.5 rounded-xl text-slate-600 hover:bg-slate-50 font-medium transition-all text-sm">
+                        <i class="ph-bold ph-ticket text-lg"></i>Voucher Reward
+                    </a>
+                </nav>
+            </div>
+            <div class="pt-4 border-t border-slate-100 flex flex-col gap-4">
+                <div class="flex items-center gap-3 p-1">
+                    <img src="https://api.dicebear.com/8.x/notionists/svg?seed=admin"
+                        class="w-10 h-10 rounded-xl bg-slate-100 border border-slate-100">
+                    <div>
+                        <p class="font-bold text-sm text-slate-900">Admin Utama</p>
+                        <p class="text-xs text-slate-400 font-medium">Super Administrator</p>
+                    </div>
+                </div>
+                <a href="login.html"
+                    class="flex w-full items-center justify-center gap-2.5 p-3.5 rounded-xl bg-slate-50 hover:bg-red-50 text-slate-600 hover:text-red-600 text-sm font-bold transition-all border border-slate-100 hover:border-red-100">
+                    <i class="ph-bold ph-sign-out"></i>Keluar Sesi
+                </a>
+            </div>
+        </aside>
 
-<h1 class="text-4xl font-black mb-8 text-green-600">
-    Transaksi Penukaran
-</h1>
+        <main class="flex-1 overflow-y-auto p-12">
+            <div class="flex justify-between items-center mb-10">
+                <div>
+                    <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Aktivitas Klaim
+                        Reward</span>
+                    <h1 class="text-4xl font-black text-slate-900 mt-1">Riwayat <span
+                            class="text-emerald-500">Penukaran</span></h1>
+                </div>
+            </div>
 
-<div class="bg-white rounded-3xl shadow-xl p-6 overflow-x-auto">
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr
+                            class="bg-slate-50/70 border-b border-slate-100 text-[11px] font-bold text-slate-400 tracking-wider uppercase">
+                            <th class="py-4.5 px-6">ID Transaksi</th>
+                            <th class="py-4.5 px-6">Nama Warga</th>
+                            <th class="py-4.5 px-6">Jenis Klaim</th>
+                            <th class="py-4.5 px-6">Item Voucher</th>
+                            <th class="py-4.5 px-6">Poin Terpotong</th>
+                            <th class="py-4.5 px-6">Tanggal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="text-sm divide-y divide-slate-50"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
 
-    <table class="w-full">
+    <script>
+        const API_URL = 'http://localhost:5000/api/penukaran';
 
-        <thead>
-            <tr class="border-b border-slate-200 text-left">
-                <th class="py-4">No</th>
-                <th>Nama Nasabah</th>
-                <th>Jenis Penukaran</th>
-                <th>Total Poin</th>
-                <th>Tanggal</th>
-            </tr>
-        </thead>
+        async function getData() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                let html = '';
+                data.forEach((item) => {
+                    const tgl = new Date(item.tanggal_tukar).toLocaleDateString('id-ID', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    });
+                    html += `
+                        <tr class="hover:bg-slate-50/80 transition-colors">
+                            <td class="py-4.5 px-6 font-semibold text-slate-500">#TX-${item.id}</td>
+                            <td class="py-4.5 px-6 font-bold text-slate-900">${item.nama_warga}</td>
+                            <td class="py-4.5 px-6">
+                                <span class="bg-blue-50 text-blue-600 font-bold text-[11px] px-2.5 py-1 rounded-md border border-blue-100">
+                                    ${item.jenis_penukaran}
+                                </span>
+                            </td>
+                            <td class="py-4.5 px-6 font-medium text-slate-700">${item.nama_sembako || 'Pencairan Dana'}</td>
+                            <td class="py-4.5 px-6 font-black text-rose-500">-${item.poin_ditukar} Poin</td>
+                            <td class="py-4.5 px-6 font-medium text-slate-400">${tgl}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('tableBody').innerHTML = html || `<tr><td colspan="6" class="text-center p-10 text-slate-400">Belum ada riwayat transaksi penukaran.</td></tr>`;
+            } catch (error) {
+                console.error(error);
+            }
+        }
 
-        <tbody id="tableBody"></tbody>
-
-    </table>
-</div>
-
-<script>
-
-const API_URL = 'http://localhost:5000/api/penukaran';
-
-async function getData() {
-
-    const response = await fetch(API_URL);
-    const data = await response.json();
-
-    let html = '';
-
-    data.forEach((item, index) => {
-
-        html += `
-            <tr class="border-b border-slate-100 hover:bg-slate-50">
-
-                <td class="py-4">${index + 1}</td>
-
-                <td>${item.nama_nasabah || '-'}</td>
-
-                <td>${item.jenis_penukaran}</td>
-
-                <td>${item.total_poin}</td>
-
-                <td>${item.created_at || '-'}</td>
-
-            </tr>
-        `;
-    });
-
-    document.getElementById('tableBody').innerHTML = html;
-}
-
-getData();
-
-</script>
-
+        window.onload = getData;
+    </script>
 </body>
+
 </html>

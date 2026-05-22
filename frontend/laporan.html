@@ -125,8 +125,6 @@
                     0 20px 40px rgba(16, 185, 129, .28);
             }
 
-            /* DATE INPUT MODERN */
-
             .custom-date::-webkit-calendar-picker-indicator {
                 opacity: .7;
                 cursor: pointer;
@@ -144,8 +142,6 @@
                 color: #334155;
                 letter-spacing: .3px;
             }
-
-            /* HILANGKAN FORMAT BAWAAN */
 
             input[type="date"]::-webkit-datetime-edit {
                 padding: 0;
@@ -171,13 +167,11 @@
 
 <body class="flex h-screen overflow-hidden antialiased">
 
-    <!-- SIDEBAR -->
     <aside
         class="w-[95px] md:w-[300px] bg-[#f5f7f6] border-r border-[#e5e7eb] flex flex-col justify-between px-4 py-6 shadow-sm z-50">
 
         <div>
 
-            <!-- LOGO -->
             <div class="flex items-center gap-4 mb-12 px-2">
 
                 <div
@@ -201,116 +195,151 @@
 
             </div>
 
-            <!-- MENU -->
             <nav class="space-y-5">
 
-                <!-- DASHBOARD -->
                 <a href="index.html"
                     class="sidebar-menu flex items-center gap-4 px-4 py-4 rounded-[24px] hover:bg-white">
-
                     <div
                         class="w-[50px] h-[50px] rounded-2xl bg-[#eef2f7] flex items-center justify-center text-[22px] shadow-inner">
                         📊
                     </div>
-
                     <div class="hidden md:block">
-
-                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">
-                            Dashboard
-                        </h3>
-
-                        <p class="text-[#94a3b8] text-[13px] font-medium">
-                            Ringkasan sistem
-                        </p>
-
+                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">Dashboard</h3>
+                        <p class="text-[#94a3b8] text-[13px] font-medium">Ringkasan sistem</p>
                     </div>
-
                 </a>
 
-                <!-- HARGA -->
                 <a href="harga.html"
                     class="sidebar-menu flex items-center gap-4 px-4 py-4 rounded-[24px] hover:bg-white">
-
                     <div
                         class="w-[50px] h-[50px] rounded-2xl bg-[#eef2f7] flex items-center justify-center text-[22px] shadow-inner">
                         💰
                     </div>
-
                     <div class="hidden md:block">
+                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">Harga Sampah</h3>
+                        <p class="text-[#94a3b8] text-[13px] font-medium">Kelola harga</p>
+                    </div>
+                </a>
 
-                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">
-                            Harga Sampah
+                <a href="request_jemput.html"
+                    class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
+
+                    <div
+                        class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+
+                        🚚
+
+                    </div>
+
+                    <div class="mobile-hide">
+
+                        <h3 class="font-bold text-slate-700 group-hover:text-slate-900">
+                            Penjemputan
                         </h3>
 
-                        <p class="text-[#94a3b8] text-[13px] font-medium">
-                            Kelola harga realtime
+                        <p class="text-[11px] text-slate-400 mt-0.5">
+                            Request warga
                         </p>
 
                     </div>
 
                 </a>
 
-                <!-- LAPORAN -->
+                <a href="transaksi_penukaran.html"
+                    class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
+
+                    <div
+                        class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+
+                        🤝
+
+                    </div>
+
+                    <div class="mobile-hide">
+
+                        <h3 class="font-bold text-slate-700 group-hover:text-slate-900">
+                            Penukaran Poin
+                        </h3>
+
+                        <p class="text-[11px] text-slate-400 mt-0.5">
+                            Riwayat klaim
+                        </p>
+
+                    </div>
+
+                </a>
+
+                <a href="voucher_reward.html"
+                    class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
+
+                    <div
+                        class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+
+                        🎟️
+
+                    </div>
+
+                    <div class="mobile-hide">
+
+                        <h3 class="font-bold text-slate-700 group-hover:text-slate-900">
+                            Voucher Reward
+                        </h3>
+
+                        <p class="text-[11px] text-slate-400 mt-0.5">
+                            Master data reward
+                        </p>
+
+                    </div>
+
+                </a>
+
                 <a href="laporan.html"
                     class="active-sidebar flex items-center gap-4 px-4 py-4 rounded-[28px] scale-[1.02]">
-
                     <div
                         class="w-[50px] h-[50px] rounded-2xl bg-white/20 border border-white/20 flex items-center justify-center text-[22px] text-white shadow-inner">
                         📄
                     </div>
-
                     <div class="hidden md:block">
-
-                        <h3 class="text-white font-extrabold text-[15px]">
-                            Laporan
-                        </h3>
-
-                        <p class="text-[#dcfce7] text-[13px] font-medium">
-                            Data & statistik
-                        </p>
-
+                        <h3 class="text-white font-extrabold text-[15px]">Laporan</h3>
+                        <p class="text-[#dcfce7] text-[13px] font-medium">Statistik data</p>
                     </div>
-
                 </a>
 
-                <!-- NOTIF -->
                 <a href="notifikasi.html"
                     class="sidebar-menu flex items-center gap-4 px-4 py-4 rounded-[24px] hover:bg-white relative">
-
                     <div
                         class="w-[50px] h-[50px] rounded-2xl bg-[#eef2f7] flex items-center justify-center text-[22px] shadow-inner">
                         🔔
                     </div>
-
                     <div class="hidden md:block">
-
-                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">
-                            Notifikasi
-                        </h3>
-
-                        <p class="text-[#94a3b8] text-[13px] font-medium">
-                            Update terbaru
-                        </p>
-
+                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">Notifikasi</h3>
+                        <p class="text-[#94a3b8] text-[13px] font-medium">Update terbaru</p>
                     </div>
-
                     <div
                         class="absolute right-5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-[#ef4444] text-white text-[12px] font-bold flex items-center justify-center shadow-md">
                         4
                     </div>
+                </a>
 
+                <a href="profil.html"
+                    class="sidebar-menu flex items-center gap-4 px-4 py-4 rounded-[24px] hover:bg-white">
+                    <div
+                        class="w-[50px] h-[50px] rounded-2xl bg-[#eef2f7] flex items-center justify-center text-[22px] shadow-inner">
+                        👨‍💼
+                    </div>
+                    <div class="hidden md:block">
+                        <h3 class="text-[#1e293b] font-extrabold text-[15px]">Profil Admin</h3>
+                        <p class="text-[#94a3b8] text-[13px] font-medium">Pengaturan akun</p>
+                    </div>
                 </a>
 
             </nav>
-
         </div>
 
     </aside>
 
-    <!-- MAIN -->
     <main class="flex-1 overflow-y-auto bg-[#F9FBFA] relative">
 
-        <!-- HEADER -->
         <header
             class="glass-card px-10 py-5 flex items-center justify-between sticky top-0 z-30 border-b border-white/40 shadow-[0_10px_40px_rgba(0,0,0,.04)] backdrop-blur-2xl">
 
@@ -356,10 +385,8 @@
 
         </header>
 
-        <!-- CONTENT -->
         <div class="p-8 md:p-10 max-w-[1400px] mx-auto space-y-8">
 
-            <!-- FILTER -->
             <section
                 class="glass-card rounded-[36px] p-8 shadow-[0_15px_50px_rgba(0,0,0,.05)] border border-white/50 relative overflow-hidden">
 
@@ -367,11 +394,9 @@
                 </div>
 
                 <div class="flex items-end justify-between gap-6 relative z-10 flex-wrap">
-
                     <!-- LEFT -->
                     <div class="flex items-end gap-5 flex-wrap">
 
-                        <!-- FILTER TANGGAL -->
                         <div class="w-[250px]">
 
                             <label
@@ -400,7 +425,6 @@
 
                         </div>
 
-                        <!-- SEARCH -->
                         <div class="w-[320px]">
 
                             <label
@@ -440,10 +464,8 @@
 
                     </div>
 
-                    <!-- RIGHT BUTTON -->
                     <div class="flex gap-4">
 
-                        <!-- CATAT -->
                         <button onclick="bukaModal()" class="h-[56px]
                 px-7
                 rounded-[18px]
@@ -461,7 +483,6 @@
 
                         </button>
 
-                        <!-- PDF -->
                         <button onclick="exportKePDF()" class="h-[56px]
                 px-7
                 rounded-[18px]
@@ -483,7 +504,6 @@
 
             </section>
 
-            <!-- TABLE -->
             <section
                 class="glass-card rounded-[36px] shadow-[0_15px_50px_rgba(0,0,0,.05)] border border-white/50 overflow-hidden">
 
@@ -514,7 +534,6 @@
 
                         </thead>
 
-                        <!-- INI JANGAN DIHAPUS -->
                         <tbody id="tabel-laporan" class="divide-y divide-slate-100/80 text-slate-600">
                         </tbody>
 
@@ -525,8 +544,6 @@
             </section>
 
         </div>
-
-        <!-- SEMUA MODAL + SCRIPT ASLI KAMU TETAP DI BAWAH SINI -->
 
         <div id="modalTambah"
             class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -666,10 +683,9 @@
                 <script>
                     let dataLaporanLengkap = [];
 
-                    // LOAD DATA LAPORAN
                     async function getLaporan() {
                         try {
-                            const response = await fetch('http://localhost:3000/api/laporan');
+                            const response = await fetch('http://localhost:5000/api/laporan');
                             const data = await response.json();
                             dataLaporanLengkap = data;
                             renderTabel(data);
@@ -679,7 +695,6 @@
                         }
                     }
 
-                    // RENDER TABEL
                     function renderTabel(data) {
                         const tbody = document.getElementById('tabel-laporan');
                         tbody.innerHTML = '';
@@ -720,7 +735,6 @@
                         });
                     }
 
-                    // LOAD OPSI SAMPAH UNTUK MODAL INPUT
                     async function loadOpsiSampah() {
                         try {
                             const res = await fetch('http://localhost:3000/api/harga');
@@ -736,7 +750,6 @@
                         }
                     }
 
-                    // FUNGSI MODAL
                     function bukaModal() {
                         const modal = document.getElementById('modalTambah');
                         modal.classList.remove('hidden');
@@ -749,7 +762,6 @@
                         document.getElementById('total_harga').value = '';
                     }
 
-                    // HITUNG TOTAL HARGA OTOMATIS
                     function hitungTotalOtomatis() {
                         const selectSampah = document.getElementById('id_sampah');
                         const inputBerat = document.getElementById('berat_kg').value;
@@ -768,7 +780,6 @@
                         }
                     }
 
-                    // SUBMIT FORM SETORAN KE BACKEND
                     document.getElementById('formSetoran').addEventListener('submit', async function (e) {
                         e.preventDefault();
 
@@ -788,7 +799,7 @@
                             btnText.innerHTML = 'Menyimpan... ⏳';
                             btn.classList.add('opacity-70');
 
-                            const response = await fetch('http://localhost:3000/api/laporan', {
+                            const response = await fetch('http://localhost:5000/api/laporan', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload)
@@ -798,7 +809,7 @@
 
                             alert('✅ Data setoran berhasil dicatat!');
                             tutupModal();
-                            getLaporan(); // Reload tabel otomatis
+                            getLaporan();
                         } catch (error) {
                             console.log(error);
                             alert('❌ Gagal terhubung ke server!');
@@ -809,7 +820,6 @@
                         }
                     });
 
-                    // FILTER TABEL
                     function filterTabelHarian() {
                         const inputTanggal = document.getElementById('filter-tanggal').value;
                         const inputNama = document.getElementById('search-input').value.toLowerCase();
@@ -827,7 +837,6 @@
                         });
                     }
 
-                    // EXPORT PDF
                     function exportKePDF() {
                         if (dataLaporanLengkap.length === 0) {
                             alert("❌ Tidak ada data untuk dicetak!"); return;
@@ -896,11 +905,10 @@
 
                         doc.save(`Laporan_BankSampah_${new Date().getTime()}.pdf`);
                     }
-
-                    // INIT LOAD
                     getLaporan();
                     loadOpsiSampah();
                 </script>
 </body>
+
 
 </html>
