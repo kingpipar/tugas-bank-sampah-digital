@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2026 at 02:46 PM
+-- Generation Time: May 23, 2026 at 05:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -57,30 +57,6 @@ INSERT INTO `harga_sampah` (`id`, `kategori`, `nama_sampah`, `harga_per_kg`, `up
 (15, 'Kaca', 'Pecahan Kaca', 1000, '2026-05-12 10:07:48'),
 (16, 'Minyak', 'Minyak Jelantah', 6000, '2026-05-12 10:07:48'),
 (17, 'Organik', 'Kompos Organik', 1200, '2026-05-12 10:07:48');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `katalog_sembako`
---
-
-CREATE TABLE `katalog_sembako` (
-  `id` int(11) NOT NULL,
-  `nama_sembako` varchar(100) NOT NULL,
-  `harga_poin` int(11) NOT NULL,
-  `stok` int(11) NOT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `katalog_sembako`
---
-
-INSERT INTO `katalog_sembako` (`id`, `nama_sembako`, `harga_poin`, `stok`, `updated_at`) VALUES
-(1, 'Minyak Goreng 1 Liter', 1500, 50, '2026-05-19 14:29:11'),
-(2, 'Beras Premium 1 Kg', 1200, 100, '2026-05-19 14:29:11'),
-(3, 'Gula Pasir 1 Kg', 1400, 40, '2026-05-19 14:29:11'),
-(4, 'Telur Ayam 1 Kg', 2000, 30, '2026-05-19 16:03:44');
 
 -- --------------------------------------------------------
 
@@ -152,7 +128,7 @@ CREATE TABLE `transaksi_penukaran` (
   `id` int(11) NOT NULL,
   `nama_warga` varchar(100) NOT NULL,
   `jenis_penukaran` enum('Uang','Sembako') NOT NULL,
-  `id_sembako` int(11) DEFAULT NULL,
+  `id_voucher` int(11) DEFAULT NULL,
   `poin_ditukar` int(11) NOT NULL,
   `tanggal_tukar` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -169,15 +145,40 @@ CREATE TABLE `users` (
   `email` varchar(100) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `role` enum('admin') DEFAULT 'admin',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `saldo_poin` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role`, `created_at`) VALUES
-(1, 'Admin', 'admin@gmail.com', 'admin123', 'admin', '2026-05-12 08:27:55');
+INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role`, `created_at`, `saldo_poin`) VALUES
+(1, 'Admin', 'admin@gmail.com', 'admin123', 'admin', '2026-05-12 08:27:55', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `voucher_reward`
+--
+
+CREATE TABLE `voucher_reward` (
+  `id` int(11) NOT NULL,
+  `nama_voucher` varchar(100) NOT NULL,
+  `min_poin` int(11) NOT NULL,
+  `stok` int(11) NOT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `voucher_reward`
+--
+
+INSERT INTO `voucher_reward` (`id`, `nama_voucher`, `min_poin`, `stok`, `updated_at`) VALUES
+(1, 'Minyak Goreng 1 Liter', 1500, 50, '2026-05-19 14:29:11'),
+(2, 'Beras Premium 1 Kg', 1200, 100, '2026-05-19 14:29:11'),
+(3, 'Gula Pasir 1 Kg', 1400, 40, '2026-05-19 14:29:11'),
+(4, 'Telur Ayam 1 Kg', 2000, 30, '2026-05-19 16:03:44');
 
 --
 -- Indexes for dumped tables
@@ -187,12 +188,6 @@ INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role`, `created_at`) VA
 -- Indexes for table `harga_sampah`
 --
 ALTER TABLE `harga_sampah`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `katalog_sembako`
---
-ALTER TABLE `katalog_sembako`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -213,7 +208,7 @@ ALTER TABLE `request_jemput`
 --
 ALTER TABLE `transaksi_penukaran`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_sembako` (`id_sembako`);
+  ADD KEY `id_sembako` (`id_voucher`);
 
 --
 -- Indexes for table `users`
@@ -221,6 +216,12 @@ ALTER TABLE `transaksi_penukaran`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `voucher_reward`
+--
+ALTER TABLE `voucher_reward`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -231,12 +232,6 @@ ALTER TABLE `users`
 --
 ALTER TABLE `harga_sampah`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
--- AUTO_INCREMENT for table `katalog_sembako`
---
-ALTER TABLE `katalog_sembako`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `laporan_setoran`
@@ -263,6 +258,12 @@ ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `voucher_reward`
+--
+ALTER TABLE `voucher_reward`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -276,7 +277,7 @@ ALTER TABLE `laporan_setoran`
 -- Constraints for table `transaksi_penukaran`
 --
 ALTER TABLE `transaksi_penukaran`
-  ADD CONSTRAINT `transaksi_penukaran_ibfk_1` FOREIGN KEY (`id_sembako`) REFERENCES `katalog_sembako` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `fk_transaksi_voucher` FOREIGN KEY (`id_voucher`) REFERENCES `voucher_reward` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

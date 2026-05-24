@@ -354,6 +354,18 @@
 
                     </a>
 
+                    <a href="warga_rt1.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+                            👥
+                        </div>
+                        <div class="mobile-hide">
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Warga RT 1</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Data warga</p>
+                        </div>
+                    </a>
+
                     <a href="harga.html"
                         class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
 
@@ -699,7 +711,7 @@
                                 </div>
 
                                 <p class="text-white/75 text-sm font-semibold mb-2">
-                                    Kas Keluar
+                                    Total Pendapatan
                                 </p>
 
                                 <h4 class="text-3xl font-black text-white tracking-tight leading-tight break-words"
@@ -764,122 +776,57 @@
     </div>
 
     <script>
-
         async function loadDashboard() {
-
             try {
+                const response = await fetch('http://localhost:3000/api/stats');
+                const stats = await response.json();
 
-                const response =
-                    await fetch(
-                        'http://localhost:5000/api/stats' // Pastikan port sesuai backend terbaru (5000)
-                    );
+                document.getElementById('stat-berat').innerText = parseFloat(stats.total_berat || 0).toFixed(2);
+                document.getElementById('stat-kas').innerText = 'Rp ' + parseInt(stats.total_kas || 0).toLocaleString('id-ID');
+                document.getElementById('stat-jemput').innerText = stats.total_jemput || 0;
 
-                const stats =
-                    await response.json();
+                try {
+                    const resWarga = await fetch('http://localhost:3000/api/warga_rt1/stats');
+                    const wargaStats = await resWarga.json();
+                    document.getElementById('stat-warga').innerText = wargaStats.total || 0;
+                } catch (e) {
+                    document.getElementById('stat-warga').innerText = stats.total_warga || 0;
+                }
 
-                document.getElementById(
-                    'stat-warga'
-                ).innerText =
-                    stats.total_warga || 0;
+                try {
+                    const resVoucher = await fetch('http://localhost:3000/api/voucher_reward');
+                    const vouchers = await resVoucher.json();
+                    document.getElementById('stat-sembako').innerText = vouchers.length;
+                } catch (e) {
+                    document.getElementById('stat-sembako').innerText = stats.total_sembako || 0;
+                }
 
-                document.getElementById(
-                    'stat-berat'
-                ).innerText =
-                    parseFloat(
-                        stats.total_berat || 0
-                    ).toFixed(2);
-
-                document.getElementById(
-                    'stat-kas'
-                ).innerText =
-                    'Rp ' +
-                    parseInt(
-                        stats.total_kas || 0
-                    ).toLocaleString(
-                        'id-ID'
-                    );
-
-                document.getElementById(
-                    'stat-jemput'
-                ).innerText =
-                    stats.total_jemput || 0;
-
-                document.getElementById(
-                    'stat-sembako'
-                ).innerText =
-                    stats.total_sembako || 0;
+            } catch (error) {
+                console.log('Gagal load dashboard:', error);
             }
-
-            catch (error) {
-
-                console.log(
-                    'Gagal load dashboard:',
-                    error
-                );
-
-            }
-
         }
 
         function loadAdminData() {
-
-            const admin =
-                JSON.parse(
-                    localStorage.getItem('admin')
-                );
-
+            const admin = JSON.parse(localStorage.getItem('admin'));
             if (admin) {
-
-                document.getElementById(
-                    'header-nama'
-                ).innerText =
-                    admin.nama || 'Administrator';
-
-                const inisial =
-                    admin.nama
-                        ? admin.nama.charAt(0).toUpperCase()
-                        : 'A';
-
-                document.getElementById(
-                    'header-inisial'
-                ).innerText =
-                    inisial;
-
+                document.getElementById('header-nama').innerText = admin.nama || 'Administrator';
+                const inisial = admin.nama ? admin.nama.charAt(0).toUpperCase() : 'A';
+                document.getElementById('header-inisial').innerText = inisial;
             }
-
         }
 
         function bukaModalProfil() {
-
-            window.location.href =
-                'profile.html';
-
+            window.location.href = 'profile.html';
         }
-        
-        function startRealtimeDashboard() {
 
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAdminData();
             loadDashboard();
-
-            setInterval(() => {
-
-                loadDashboard();
-
-            }, 5000); // Diubah ke 5000ms (5 detik) agar server tidak terlalu berat
-
-        }
-
-        document.addEventListener(
-            'DOMContentLoaded',
-            () => {
-
-                loadAdminData();
-
-                startRealtimeDashboard();
-
-            }
-        );
-
+            setInterval(loadDashboard, 5000); 
+        });
     </script>
+
+
 </body>
 
 </html>
