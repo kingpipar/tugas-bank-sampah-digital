@@ -1,61 +1,40 @@
 const db = require('../config/sqlConfig');
 
-// GET ALL TRANSAKSI PENUKARAN
-exports.getAll = (req, res) => {
-    const sql = 'SELECT * FROM transaksi_penukaran ORDER BY id DESC';
-    db.query(sql, (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
-    });
+// Get All History Penukaran
+const getAllPenukaran = async (req, res) => {
+    try {
+        const query = `
+            SELECT t.id, t.nama_warga, t.jenis_penukaran, k.nama_sembako, t.poin_ditukar, t.tanggal_tukar 
+            FROM transaksi_penukaran t
+            LEFT JOIN katalog_sembako k ON t.id_sembako = k.id
+            ORDER BY t.tanggal_tukar DESC
+        `;
+        const [rows] = await db.query(query);
+        res.json(rows);
+    } catch (error) {
+        res.status(500).json({ message: "Gagal mengambil data transaksi penukaran", error });
+    }
 };
 
-// CREATE TRANSAKSI PENUKARAN
-exports.create = (req, res) => {
-    const { nama_warga, jenis_penukaran, jumlah_poin, nilai_tukar, keterangan } = req.body;
+// Catat Transaksi Penukaran Baru (Mencairkan poin)
+const addPenukaran = async (req, res) => {
+    const { nama_warga, jenis_penukaran, id_sembako, poin_ditukar } = req.body;
+    try {
+        // Jalankan perintah insert transaksi
+        await db.query(
+            'INSERT INTO transaksi_penukaran (nama_warga, jenis_penukaran, id_sembako, poin_ditukar) VALUES (?, ?, ?, ?)', 
+            [nama_warga, jenis_penukaran, id_sembako || null, poin_ditukar]
+        );
 
-    if (!nama_warga || !jenis_penukaran || !jumlah_poin || !nilai_tukar) {
-        return res.status(400).json({ success: false, message: 'Data tidak lengkap' });
-    }
-
-    const sql = `INSERT INTO transaksi_penukaran (nama_warga, jenis_penukaran, jumlah_poin, nilai_tukar, keterangan) VALUES (?, ?, ?, ?, ?)`;
-    db.query(sql, [nama_warga, jenis_penukaran, jumlah_poin, nilai_tukar, keterangan || ''], (err, result) => {
-        if (err) return res.status(500).json({ success: false, error: err.sqlMessage || err.message });
-        res.status(201).json({ success: true, message: 'Transaksi penukaran berhasil dicatat', id: result.insertId });
-    });
-};
-
-// UPDATE STATUS TRANSAKSI PENUKARAN
-exports.update = (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    if (!status) {
-        return res.status(400).json({ success: false, message: 'Status wajib diisi' });
-    }
-
-    const sql = 'UPDATE transaksi_penukaran SET status = ? WHERE id = ?';
-    db.query(sql, [status, id], (err, result) => {
-        if (err) return res.status(500).json({ success: false, message: err.message });
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ success: false, message: 'Data tidak ditemukan' });
+        // POTONG STOK OTOMATIS: Jika jenis penukaran adalah Sembako, kurangi stoknya di tabel katalog
+        if (jenis_penukaran === 'Sembako' && id_sembako) {
+            await db.query('UPDATE katalog_sembako SET stok = stok - 1 WHERE id = ?', [id_sembako]);
         }
 
-        res.json({ success: true, message: 'Status penukaran berhasil diupdate' });
-    });
+        res.status(201).json({ message: "Transaksi penukaran poin berhasil dicatat!" });
+    } catch (error) {
+        res.status(500).json({ message: "Gagal mencatat transaksi penukaran", error });
+    }
 };
 
-// DELETE TRANSAKSI PENUKARAN
-exports.remove = (req, res) => {
-    const { id } = req.params;
-    const sql = 'DELETE FROM transaksi_penukaran WHERE id = ?';
-    db.query(sql, [id], (err, result) => {
-        if (err) return res.status(500).json({ success: false, message: err.message });
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ success: false, message: 'Data tidak ditemukan' });
-        }
-
-        res.json({ success: true, message: 'Transaksi penukaran berhasil dihapus' });
-    });
-};
+module.exports = { getAllPenukaran, addPenukaran };

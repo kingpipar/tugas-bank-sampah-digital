@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const penukaranController = require('../controllers/penukaranController');
+const { getAllPenukaran, addPenukaran } = require('../controllers/penukaranController');
 
-router.get('/', penukaranController.getAll);
-router.post('/', penukaranController.create);
-router.put('/:id', penukaranController.update);
-router.delete('/:id', penukaranController.remove);
+router.get('/', getAllPenukaran);
+router.post('/', addPenukaran);
 
 module.exports = router;

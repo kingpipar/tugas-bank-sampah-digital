@@ -1,62 +1,177 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin | Bank Sampah Digital</title>
-    <meta name="description" content="Login admin dashboard Bank Sampah Digital">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>
+        Login Admin | Bank Sampah Digital
+    </title>
+
+    <link rel="stylesheet" href="./src/css/output.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 </head>
-<body class="login-page">
 
-    <div class="login-card animate-fade">
-        <div class="login-logo">♻️</div>
-        <h1 class="login-title">Bank Sampah</h1>
-        <p class="login-sub">Admin Dashboard Login</p>
+<body
+    class="min-h-screen bg-gradient-to-br from-green-500 to-emerald-400 font-[Inter] flex items-center justify-center overflow-hidden">
 
-        <form id="loginForm" style="margin-top:32px;">
-            <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" id="email" class="form-input" placeholder="admin@gmail.com" required>
+    <div class="absolute w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl top-[-100px] left-[-100px]"></div>
+
+    <div class="absolute w-[400px] h-[400px] bg-white/10 rounded-full blur-3xl bottom-[-100px] right-[-100px]"></div>
+
+    <div class="relative bg-white w-full max-w-md rounded-[40px] shadow-2xl p-10">
+
+        <div class="text-center">
+
+            <div
+                class="w-24 h-24 rounded-[28px] bg-gradient-to-r from-green-500 to-emerald-400 flex items-center justify-center text-white text-5xl mx-auto shadow-lg">
+                ♻️
             </div>
-            <div class="form-group">
-                <label class="form-label">Password</label>
-                <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+
+            <h1 class="text-5xl font-black text-slate-800 mt-8">
+                Bank Sampah
+            </h1>
+
+            <p class="text-slate-500 mt-4 text-lg">
+                Admin Dashboard Login
+            </p>
+
+        </div>
+
+        <form id="loginForm" class="mt-10 space-y-6">
+
+            <div>
+
+                <label class="font-semibold">
+                    Email
+                </label>
+
+                <input type="email" id="email" placeholder="admin@gmail.com"
+                    class="w-full mt-3 bg-slate-100 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500"
+                    required>
+
             </div>
-            <button type="submit" class="btn btn-primary w-full" style="padding:16px;font-size:16px;margin-top:8px;">
+
+            <div>
+
+                <label class="font-semibold">
+                    Password
+                </label>
+
+                <input type="password" id="password" placeholder="••••••••"
+                    class="w-full mt-3 bg-slate-100 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-green-500"
+                    required>
+
+            </div>
+
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-green-500 to-emerald-400 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:scale-[1.02] transition">
                 Login Admin
             </button>
+
         </form>
 
-        <p style="text-align:center;margin-top:28px;color:#94a3b8;font-size:13px;">Bank Sampah Digital © 2026</p>
+        <div class="text-center mt-8 text-slate-400 text-sm">
+            Bank Sampah Digital © 2026
+        </div>
+
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
 
-            try {
-                const response = await fetch('http://localhost:3000/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    localStorage.setItem('admin', JSON.stringify(data.user));
-                    alert('Login berhasil');
-                    window.location.href = 'index.html';
-                } else {
-                    alert(data.message);
+        document
+            .getElementById(
+                'loginForm'
+            )
+            .addEventListener(
+                'submit',
+                async (e) => {
+
+                    e.preventDefault();
+
+                    const email =
+                        document.getElementById(
+                            'email'
+                        ).value;
+
+                    const password =
+                        document.getElementById(
+                            'password'
+                        ).value;
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                'http://localhost:3000/api/auth/login',
+                                {
+
+                                    method: 'POST',
+
+                                    headers: {
+                                        'Content-Type':
+                                            'application/json'
+                                    },
+
+                                    body: JSON.stringify({
+
+                                        email,
+                                        password
+
+                                    })
+
+                                }
+                            );
+
+                        const data =
+                            await response.json();
+
+                        if (data.success) {
+
+                            localStorage.setItem(
+                                'admin',
+                                JSON.stringify(
+                                    data.user
+                                )
+                            );
+
+                            alert(
+                                'Login berhasil'
+                            );
+
+                            window.location.href =
+                                'index.html';
+
+                        }
+
+                        else {
+
+                            alert(
+                                data.message
+                            );
+
+                        }
+
+                    } catch (error) {
+
+                        console.log(error);
+
+                        alert(
+                            'Server Error'
+                        );
+
+                    }
+
                 }
-            } catch (error) {
-                console.log(error);
-                alert('Server Error');
-            }
-        });
+            );
+
     </script>
+
 </body>
+
 </html>

@@ -1,175 +1,499 @@
 <!DOCTYPE html>
 <html lang="id">
+<<<<<<< HEAD
+=======
+
+>>>>>>> a9baf93d7a70f7bddedcd9d796d8cd697971b829
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manajemen Harga | Bank Sampah Digital</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-</head>
-<body>
-<div class="app-layout">
-    <aside class="sidebar">
-        <div>
-            <div class="sidebar-logo"><div class="sidebar-logo-icon">♻️</div><div class="sidebar-logo-text"><h1>Bank Sampah</h1><p>Digital System</p></div></div>
-            <nav class="sidebar-nav">
-                <a href="index.html" class="sidebar-link"><div class="sidebar-link-icon">📊</div><div><div class="sidebar-link-title">Dashboard</div><div class="sidebar-link-sub">Ringkasan sistem</div></div></a>
-                <a href="harga.html" class="sidebar-link active"><div class="sidebar-link-icon">💰</div><div><div class="sidebar-link-title">Harga Sampah</div><div class="sidebar-link-sub">Kelola harga</div></div></a>
-                <a href="laporan.html" class="sidebar-link"><div class="sidebar-link-icon">📄</div><div><div class="sidebar-link-title">Laporan</div><div class="sidebar-link-sub">Statistik data</div></div></a>
-                <a href="penukaran.html" class="sidebar-link"><div class="sidebar-link-icon">🔄</div><div><div class="sidebar-link-title">Penukaran</div><div class="sidebar-link-sub">Tukar poin</div></div></a>
-                <a href="notifikasi.html" class="sidebar-link"><div class="sidebar-link-icon">🔔</div><div><div class="sidebar-link-title">Notifikasi</div><div class="sidebar-link-sub">Update terbaru</div></div><div class="sidebar-badge">4</div></a>
-            </nav>
-        </div>
-        <a href="profile.html" class="sidebar-profile"><div class="sidebar-profile-icon">👤</div><div><div class="sidebar-link-title">Profil Admin</div><div class="sidebar-link-sub">Kelola akun</div></div></a>
-    </aside>
-
-    <main class="main-content">
-        <header class="main-header">
-            <div><h1>Manajemen Harga</h1><p>Kelola harga kategori sampah secara <span class="text-green">real-time</span></p></div>
-            <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.7);border:1px solid #e2e8f0;border-radius:16px;padding:10px 18px;">
-                <span>🔍</span>
-                <input type="text" id="search-input" placeholder="Cari jenis sampah..." onkeyup="searchTable()" style="border:none;outline:none;background:transparent;font-size:14px;font-weight:500;color:#334155;width:200px;">
-            </div>
-        </header>
-
-        <div class="content-area">
-            <!-- HERO -->
-            <section class="hero">
-                <div style="position:relative;z-index:1;">
-                    <div class="hero-title">Kelola Harga<br>Sampah ♻️</div>
-                    <div class="hero-subtitle">Atur harga jual beli sampah warga secara realtime untuk transparansi.</div>
-                </div>
-            </section>
-
-            <!-- ANALYTICS -->
-            <div class="grid-3 mb-lg">
-                <div class="glass-card card-hover p-lg">
-                    <p class="text-sm text-slate" style="text-transform:uppercase;letter-spacing:1px;font-weight:700;">Total Kategori</p>
-                    <div id="total-kategori" style="font-size:40px;font-weight:900;margin-top:12px;color:#0f172a;">0</div>
-                </div>
-                <div class="glass-card card-hover p-lg">
-                    <p class="text-sm text-slate" style="text-transform:uppercase;letter-spacing:1px;font-weight:700;">Harga Tertinggi</p>
-                    <div id="harga-tertinggi" style="font-size:32px;font-weight:900;margin-top:12px;color:#16a34a;">Rp 0</div>
-                </div>
-                <div class="glass-card card-hover p-lg">
-                    <p class="text-sm text-slate" style="text-transform:uppercase;letter-spacing:1px;font-weight:700;">Harga Rata-rata</p>
-                    <div id="harga-rata" style="font-size:32px;font-weight:900;margin-top:12px;color:#10b981;">Rp 0</div>
-                </div>
-            </div>
-
-            <!-- TABLE -->
-            <section class="glass-card" style="padding:28px;">
-                <div class="flex justify-between items-center mb-md">
-                    <div>
-                        <h2 style="font-size:20px;font-weight:900;">Daftar Harga Sampah</h2>
-                        <p class="text-sm text-slate mt-sm">Data harga kategori sampah yang tercatat di sistem</p>
-                    </div>
-                    <button onclick="bukaModal()" class="btn btn-dark">+ Tambah Data</button>
-                </div>
-                <div style="overflow-x:auto;border-radius:16px;border:1px solid #e2e8f0;">
-                    <table class="data-table">
-                        <thead><tr><th>Kategori</th><th>Nama Sampah</th><th>Harga / KG</th><th style="text-align:center;">Aksi</th></tr></thead>
-                        <tbody id="tabel-harga"></tbody>
-                    </table>
-                </div>
-            </section>
-        </div>
-    </main>
-</div>
-
-<!-- MODAL -->
-<div id="modal-harga" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modal-title">Tambah Harga Baru</h2>
-            <button onclick="tutupModal()" class="modal-close">×</button>
-        </div>
-        <form id="form-harga" onsubmit="submitHarga(event)">
-            <div class="modal-body">
-                <div class="form-group"><label class="form-label">Kategori</label><input type="text" id="input-kategori" class="form-input" placeholder="Misal: Plastik, Kertas..." required></div>
-                <div class="form-group"><label class="form-label">Nama Sampah</label><input type="text" id="input-nama" class="form-input" placeholder="Misal: Botol Plastik PET" required></div>
-                <div class="form-group"><label class="form-label">Harga / KG (Rp)</label><input type="number" id="input-harga" class="form-input" placeholder="0" required></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="tutupModal()" class="btn btn-outline" style="flex:1;">Batal</button>
-                <button type="submit" class="btn btn-primary" style="flex:2;">Simpan Harga</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
-    const API = 'http://localhost:3000/api/harga';
-    let editId = null;
-
-    async function getHarga() {
-        try {
-            const res = await fetch(API);
-            const data = await res.json();
-            const tbody = document.getElementById('tabel-harga');
-            tbody.innerHTML = '';
-            updateAnalytics(data);
-            if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="4" style="padding:48px;text-align:center;color:#94a3b8;font-weight:700;">Belum ada data ♻️</td></tr>'; return; }
-            data.forEach(item => {
-                const rp = new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',minimumFractionDigits:0}).format(item.harga_per_kg);
-                tbody.innerHTML += `<tr class="animate-fade">
-                    <td><span class="badge badge-green">${item.kategori}</span></td>
-                    <td style="font-weight:600;color:#334155;">${item.nama_sampah}</td>
-                    <td style="font-weight:700;color:#0f172a;">${rp}</td>
-                    <td><div class="action-btns">
-                        <button onclick="editHarga(${item.id},'${item.kategori}','${item.nama_sampah}',${item.harga_per_kg})" class="btn-icon btn-icon-edit">✏️</button>
-                        <button onclick="deleteHarga(${item.id})" class="btn-icon btn-icon-delete">🗑️</button>
-                    </div></td></tr>`;
-            });
-        } catch (e) { console.log(e); }
-    }
-
-    function updateAnalytics(data) {
-        document.getElementById('total-kategori').innerText = data.length;
-        if (data.length > 0) {
-            const prices = data.map(i => i.harga_per_kg);
-            const fmt = v => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',minimumFractionDigits:0}).format(v);
-            document.getElementById('harga-tertinggi').innerText = fmt(Math.max(...prices));
-            document.getElementById('harga-rata').innerText = fmt(prices.reduce((a,b)=>a+b,0)/prices.length);
+    <link rel="stylesheet" href="./src/css/output.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            scroll-behavior: smooth;
         }
-    }
 
-    function searchTable() {
-        const q = document.getElementById('search-input').value.toLowerCase();
-        document.querySelectorAll('#tabel-harga tr').forEach(row => {
-            row.style.display = row.innerText.toLowerCase().includes(q) ? '' : 'none';
-        });
-    }
+        body {
+            background:
+                radial-gradient(circle at top left, #d1fae5 0%, transparent 20%),
+                radial-gradient(circle at bottom right, #dcfce7 0%, transparent 25%),
+                #f5f7fb;
+        }
 
-    function bukaModal() { editId = null; document.getElementById('modal-title').innerText = 'Tambah Harga Baru'; document.getElementById('form-harga').reset(); document.getElementById('modal-harga').classList.add('active'); }
-    function tutupModal() { document.getElementById('modal-harga').classList.remove('active'); editId = null; }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
 
-    function editHarga(id, kat, nama, harga) {
-        editId = id;
-        document.getElementById('modal-title').innerText = 'Edit Harga';
-        document.getElementById('input-kategori').value = kat;
-        document.getElementById('input-nama').value = nama;
-        document.getElementById('input-harga').value = harga;
-        document.getElementById('modal-harga').classList.add('active');
-    }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
 
-    async function submitHarga(e) {
-        e.preventDefault();
-        const body = { kategori: document.getElementById('input-kategori').value, nama_sampah: document.getElementById('input-nama').value, harga_per_kg: parseInt(document.getElementById('input-harga').value) };
-        try {
-            const url = editId ? `${API}/${editId}` : API;
-            const method = editId ? 'PUT' : 'POST';
-            await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
-            tutupModal(); getHarga();
-        } catch (e) { alert('Gagal menyimpan'); }
-    }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #22c55e, #10b981);
+            border-radius: 20px;
+        }
 
-    async function deleteHarga(id) {
-        if (!confirm('Yakin hapus data ini?')) return;
-        try { await fetch(`${API}/${id}`, { method: 'DELETE' }); getHarga(); } catch (e) { alert('Gagal menghapus'); }
-    }
+        .glass {
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(18px);
+        }
 
-    getHarga();
-</script>
+        .card-hover {
+            transition: all .35s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, .08);
+        }
+
+        .gradient-border {
+            position: relative;
+        }
+
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            border-radius: 32px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, .5), rgba(16, 185, 129, .15));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .animate-fade {
+            animation: fade .5s ease;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table-row {
+            transition: all .25s ease;
+        }
+
+        .table-row:hover {
+            transform: scale(1.01);
+            background: #f8fafc;
+        }
+
+        @media(max-width:768px) {
+            aside {
+                display: none;
+            }
+
+            header {
+                padding: 20px;
+            }
+
+            .mobile-padding {
+                padding: 20px !important;
+            }
+
+            .mobile-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .mobile-title {
+                font-size: 28px !important;
+            }
+
+            .mobile-search {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-[Inter] text-slate-800 selection:bg-green-500 selection:text-white">
+    <div class="flex h-screen overflow-hidden">
+
+        <aside
+            class="w-[280px] bg-white border-r border-slate-200 flex flex-col justify-between py-6 px-5 shadow-sm overflow-y-auto">
+            <div>
+                <div class="mb-12 flex items-center gap-4 px-2">
+                    <div
+                        class="w-16 h-16 rounded-[24px] bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center text-white text-3xl shadow-[0_12px_30px_rgba(34,197,94,0.35)] shrink-0">
+                        ♻️</div>
+                    <div>
+                        <h1 class="text-lg font-black text-slate-800 leading-tight">Bank Sampah</h1>
+                        <p class="text-sm text-slate-400 font-medium">Digital System</p>
+                    </div>
+                </div>
+                <nav class="flex flex-col gap-2">
+                    <a href="index.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+                            📊</div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Dashboard</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Ringkasan sistem</p>
+                        </div>
+                    </a>
+                    <a href="warga_rt1.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+                            👥</div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Warga RT 1</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Data warga</p>
+                        </div>
+                    </a>
+                    <a href="harga.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-400 shadow-[0_12px_30px_rgba(34,197,94,0.3)] transition-all duration-300">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-xl border border-white/20 shrink-0">
+                            💰</div>
+                        <div>
+                            <h3 class="font-bold text-white">Harga Sampah</h3>
+                            <p class="text-[11px] text-green-50 mt-0.5">Kelola harga realtime</p>
+                        </div>
+                    </a>
+                    <a href="request_jemput.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+                            🚚</div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Penjemputan</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Request warga</p>
+                        </div>
+                    </a>
+                    <a href="transaksi_penukaran.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+                            🤝</div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Penukaran Poin</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Riwayat klaim warga</p>
+                        </div>
+                    </a>
+                    <a href="voucher_reward.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+                            🎟️</div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Voucher Reward</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Master data reward</p>
+                        </div>
+                    </a>
+                    <a href="laporan.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+                            📄</div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Laporan</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Data & statistik</p>
+                        </div>
+                    </a>
+                    <a href="notifikasi.html"
+                        class="group flex items-center justify-between px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 relative shrink-0">
+                                🔔</div>
+                            <div>
+                                <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Notifikasi</h3>
+                                <p class="text-[11px] text-slate-400 mt-0.5">Update terbaru</p>
+                            </div>
+                        </div>
+                        <div
+                            class="w-6 h-6 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow-md animate-pulse">
+                            4</div>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="flex-1 h-full overflow-y-auto relative scroll-smooth">
+            <header
+                class="glass border-b border-white/40 px-10 py-5 flex items-center justify-between sticky top-0 z-40 shadow-sm">
+                <div>
+                    <h1 class="text-3xl font-black text-slate-800 tracking-tight mobile-title">Manajemen Harga</h1>
+                    <p class="text-slate-500 mt-1 text-sm font-medium">Kelola harga kategori sampah secara <span
+                            class="text-green-500 font-semibold">real-time</span></p>
+                </div>
+                <div
+                    class="mobile-search bg-white/70 backdrop-blur-md border border-slate-200 rounded-2xl px-5 py-3 flex items-center gap-3 w-80 focus-within:ring-4 focus-within:ring-green-500/20 focus-within:border-green-500 transition-all duration-300 shadow-sm">
+                    <span class="text-slate-400">🔍</span>
+                    <input type="text" id="search-input" placeholder="Cari jenis sampah..."
+                        class="bg-transparent outline-none w-full text-sm font-medium text-slate-700 placeholder:text-slate-400"
+                        onkeyup="searchTable()">
+                </div>
+            </header>
+
+            <div class="p-10 max-w-7xl mx-auto mobile-padding">
+                <section
+                    class="relative overflow-hidden rounded-[36px] p-10 mb-10 shadow-2xl bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500">
+                    <div class="absolute -right-10 -top-20 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
+                    <div class="flex justify-between items-center relative z-10">
+                        <div>
+                            <h2 class="text-5xl font-black leading-tight tracking-tight text-white mobile-title">Kelola
+                                Harga<br>Sampah ♻️</h2>
+                            <p class="mt-4 text-green-50 text-lg font-medium opacity-90">Atur harga jual beli sampah
+                                warga secara realtime untuk transparansi.</p>
+                        </div>
+                        <div
+                            class="hidden md:flex items-center justify-center w-32 h-32 bg-white/10 rounded-full backdrop-blur-sm text-7xl shadow-inner border border-white/20">
+                            💰</div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mt-10 relative z-10 mobile-grid">
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                            <p class="text-sm text-white/70">Status Sistem</p>
+                            <h3 class="text-2xl font-black mt-1 text-white">Online</h3>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                            <p class="text-sm text-white/70">Update Harga</p>
+                            <h3 class="text-2xl font-black mt-1 text-white">Real-time</h3>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                            <p class="text-sm text-white/70">Sistem</p>
+                            <h3 class="text-2xl font-black mt-1 text-white">Aktif</h3>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 mobile-grid">
+                    <div class="glass rounded-[28px] p-7 gradient-border card-hover shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-slate-500 font-medium text-sm uppercase tracking-wider">Total Kategori</p>
+                            <span
+                                class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">📦</span>
+                        </div>
+                        <h3 id="total-kategori" class="text-5xl font-black mt-4 text-slate-800 tracking-tight">0</h3>
+                    </div>
+                    <div class="glass rounded-[28px] p-7 gradient-border card-hover shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-slate-500 font-medium text-sm uppercase tracking-wider">Harga Tertinggi</p>
+                            <span
+                                class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">📈</span>
+                        </div>
+                        <h3 id="harga-tertinggi" class="text-4xl font-black mt-4 text-green-600 tracking-tight">Rp 0
+                        </h3>
+                    </div>
+                    <div class="glass rounded-[28px] p-7 gradient-border card-hover shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-slate-500 font-medium text-sm uppercase tracking-wider">Harga Rata-rata</p>
+                            <span
+                                class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">⚖️</span>
+                        </div>
+                        <h3 id="harga-rata" class="text-4xl font-black mt-4 text-emerald-500 tracking-tight">Rp 0</h3>
+                    </div>
+                </section>
+
+                <section class="glass rounded-[32px] gradient-border shadow-xl p-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <h2 class="text-2xl font-black tracking-tight text-slate-800">Daftar Harga Sampah</h2>
+                            <p class="text-slate-500 mt-1 text-sm font-medium">Data harga kategori sampah yang tercatat
+                                di sistem</p>
+                        </div>
+                        <button onclick="bukaModal()"
+                            class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 hover:from-green-500 hover:to-emerald-500 text-white px-7 py-3.5 rounded-2xl font-bold shadow-xl hover:shadow-green-500/30 hover:-translate-y-1 active:scale-95 transition-all duration-300 flex items-center gap-3">
+                            <span>+</span> Tambah Data
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50/80 backdrop-blur-sm border-b border-slate-200">
+                                <tr class="text-slate-500 uppercase text-xs font-bold tracking-wider">
+                                    <th class="py-4 px-6">Kategori</th>
+                                    <th class="py-4 px-6">Nama Sampah</th>
+                                    <th class="py-4 px-6">Harga / KG</th>
+                                    <th class="py-4 px-6">Poin / KG</th>
+                                    <th class="py-4 px-6 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabel-harga" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-harga"
+        class="fixed inset-0 bg-slate-900/40 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="glass rounded-[36px] p-8 w-full max-w-md shadow-2xl border border-white/30 animate-fade">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-black tracking-tight text-slate-800">Tambah Harga Baru</h2>
+                <button onclick="tutupModal()"
+                    class="w-10 h-10 rounded-full bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center text-xl font-bold transition-colors">×</button>
+            </div>
+            <form id="form-harga" onsubmit="submitHarga(event)">
+                <div class="space-y-5">
+                    <div>
+                        <label class="font-semibold text-sm text-slate-700">Kategori</label>
+                        <input type="text" id="input-kategori" required placeholder="Misal: Plastik, Kertas..."
+                            class="w-full mt-2 bg-white/70 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl px-5 py-3.5 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all font-medium text-slate-700">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-sm text-slate-700">Nama Sampah</label>
+                        <input type="text" id="input-nama" required placeholder="Misal: Botol Plastik PET"
+                            class="w-full mt-2 bg-white/70 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl px-5 py-3.5 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all font-medium text-slate-700">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-sm text-slate-700">Harga / KG (Rp)</label>
+                        <input type="number" id="input-harga" required placeholder="0"
+                            class="w-full mt-2 bg-white/70 backdrop-blur-md border border-slate-200 shadow-sm rounded-2xl px-5 py-3.5 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all font-medium text-slate-700">
+                    </div>
+                </div>
+                <button type="submit"
+                    class="mt-8 w-full bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-600 hover:to-emerald-500 text-white py-4 rounded-2xl font-bold shadow-lg shadow-green-500/30 active:scale-95 transition-all duration-300">
+                    Simpan Harga
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api/harga';
+
+        async function getHarga() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                const tbody = document.getElementById('tabel-harga');
+                tbody.innerHTML = '';
+
+                if (data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-500">Belum ada data sampah.</td></tr>`;
+                    return;
+                }
+
+                data.forEach(item => {
+                    tbody.innerHTML += `
+                    <tr class="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                        <td class="p-4 font-medium text-slate-700">${item.kategori}</td>
+                        <td class="p-4 font-semibold text-slate-900">${item.nama_sampah}</td>
+                        <td class="p-4 text-emerald-600 font-bold">Rp ${parseInt(item.harga_per_kg).toLocaleString('id-ID')}/kg</td>
+                        <td class="p-4 text-amber-500 font-bold">⭐ ${item.poin_per_kg || 0} poin</td>
+                        <td class="p-4">
+                            <div class="flex gap-2">
+                                <button onclick="editHarga(${item.id}, '${item.kategori}', '${item.nama_sampah}', ${item.harga_per_kg})" class="px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 font-medium transition-colors">
+                                    <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                                </button>
+                                <button onclick="deleteHarga(${item.id})" class="px-3 py-1.5 bg-rose-50 text-rose-600 rounded-lg hover:bg-rose-100 font-medium transition-colors">
+                                    <i class="fa-solid fa-trash mr-1"></i> Hapus
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+                });
+                updateStats(data);
+            } catch (error) {
+                console.error('Gagal memuat data:', error);
+            }
+        }
+
+        function bukaModal() {
+            document.getElementById('modal-harga').classList.remove('hidden');
+            document.getElementById('modal-harga').classList.add('flex');
+        }
+
+        function tutupModal() {
+            document.getElementById('modal-harga').classList.add('hidden');
+            document.getElementById('modal-harga').classList.remove('flex');
+            document.getElementById('form-harga').reset();
+        }
+
+        async function submitHarga(e) {
+            e.preventDefault();
+            const kategori = document.getElementById('input-kategori').value;
+            const nama_sampah = document.getElementById('input-nama').value;
+            const harga_per_kg = document.getElementById('input-harga').value;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ kategori, nama_sampah, harga_per_kg: parseInt(harga_per_kg) })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Data sampah berhasil ditambahkan!');
+                    tutupModal();
+                    getHarga();
+                } else {
+                    alert('Gagal menambahkan data: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error saat tambah data:', error);
+                alert('Tidak bisa terhubung ke server backend.');
+            }
+        }
+
+        async function editHarga(id, kategori, nama, harga) {
+            const kategoriBaru = prompt('Ubah Kategori:', kategori);
+            const namaBaru = prompt('Ubah Nama Sampah:', nama);
+            const hargaBaru = prompt('Ubah Harga per Kg:', harga);
+            if (!kategoriBaru || !namaBaru || !hargaBaru) return;
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ kategori: kategoriBaru, nama_sampah: namaBaru, harga_per_kg: parseInt(hargaBaru) })
+                });
+                if (response.ok) { alert('Data berhasil diperbarui!'); getHarga(); }
+                else alert('Gagal memperbarui data.');
+            } catch (error) {
+                console.error('Error saat edit:', error);
+            }
+        }
+
+        async function deleteHarga(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
+            try {
+                const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                if (response.ok) { alert('Data berhasil dihapus!'); getHarga(); }
+                else alert('Gagal menghapus data.');
+            } catch (error) {
+                console.error('Error saat hapus:', error);
+            }
+        }
+
+        function updateStats(data) {
+            const unikKategori = new Set(data.map(item => item.kategori)).size;
+            const hargaTertinggi = Math.max(...data.map(item => Number(item.harga_per_kg)));
+            const hargaRataRata = data.reduce((sum, item) => sum + Number(item.harga_per_kg), 0) / data.length;
+            document.getElementById('total-kategori').innerText = unikKategori;
+            document.getElementById('harga-tertinggi').innerText = `Rp ${hargaTertinggi.toLocaleString('id-ID')}`;
+            document.getElementById('harga-rata').innerText = `Rp ${Math.round(hargaRataRata).toLocaleString('id-ID')}`;
+        }
+
+        function searchTable() {
+            const keyword = document.getElementById('search-input').value.toLowerCase();
+            const rows = document.querySelectorAll('#tabel-harga tr');
+            rows.forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(keyword) ? '' : 'none';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', getHarga);
+    </script>
 </body>
+
 </html>
