@@ -74,6 +74,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "dbus",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/dbus-0.7.13",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/fake_async-1.3.3",
       "packageUri": "lib/",
@@ -146,6 +152,12 @@
       "languageVersion": "3.6"
     },
     {
+      "name": "fixnum",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/fixnum-1.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///E:/src/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -156,6 +168,24 @@
       "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/flutter_lints-6.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.8"
+    },
+    {
+      "name": "flutter_local_notifications",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/flutter_local_notifications-18.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "flutter_local_notifications_linux",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/flutter_local_notifications_linux-5.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "flutter_local_notifications_platform_interface",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/flutter_local_notifications_platform_interface-8.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
     },
     {
       "name": "flutter_test",
@@ -170,6 +200,54 @@
       "languageVersion": "3.9"
     },
     {
+      "name": "geoclue",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/geoclue-0.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "geolocator",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/geolocator-14.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "geolocator_android",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/geolocator_android-5.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "geolocator_apple",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/geolocator_apple-2.3.13",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "geolocator_linux",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/geolocator_linux-0.2.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "geolocator_platform_interface",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/geolocator_platform_interface-4.2.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "geolocator_web",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/geolocator_web-4.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "geolocator_windows",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/geolocator_windows-0.2.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
       "name": "glob",
       "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/glob-2.1.3",
       "packageUri": "lib/",
@@ -180,6 +258,12 @@
       "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/google_fonts-8.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.9"
+    },
+    {
+      "name": "gsettings",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/gsettings-0.2.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "hooks",
@@ -290,6 +374,18 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "package_info_plus",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/package_info_plus-9.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "package_info_plus_platform_interface",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/package_info_plus_platform_interface-3.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "path",
       "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/path-1.9.1",
       "packageUri": "lib/",
@@ -330,6 +426,12 @@
       "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/path_provider_windows-2.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.2"
+    },
+    {
+      "name": "petitparser",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/petitparser-7.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
     },
     {
       "name": "platform",
@@ -404,10 +506,22 @@
       "languageVersion": "3.7"
     },
     {
+      "name": "timezone",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/timezone-0.10.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "typed_data",
       "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/typed_data-1.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
+    },
+    {
+      "name": "uuid",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/uuid-4.5.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "vector_math",
@@ -428,10 +542,22 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "win32",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/win32-5.15.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.8"
+    },
+    {
       "name": "xdg_directories",
       "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/xdg_directories-1.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
+    },
+    {
+      "name": "xml",
+      "rootUri": "file:///E:/dart_pub_cache/hosted/pub.dev/xml-7.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.11"
     },
     {
       "name": "yaml",
