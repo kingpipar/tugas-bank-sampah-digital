@@ -47,11 +47,14 @@ class FirestoreService {
     return _db
         .collection(AppConstants.pickupRequestsCollection)
         .where('user_id', isEqualTo: userId)
-        .orderBy('created_at', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => PickupRequestModel.fromFirestore(doc))
-            .toList());
+        .map((snapshot) {
+          final list = snapshot.docs
+              .map((doc) => PickupRequestModel.fromFirestore(doc))
+              .toList();
+          list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          return list;
+        });
   }
 
   /// Mengambil satu pickup request berdasarkan document ID.

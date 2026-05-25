@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:intl/date_symbol_data_local.dart';
 // TODO: Uncomment import di bawah saat Firebase sudah dikonfigurasi
 // import 'package:firebase_core/firebase_core.dart';
 
@@ -8,9 +11,11 @@ import 'providers/auth_provider.dart';
 import 'providers/dashboard_provider.dart';
 import 'providers/pickup_provider.dart';
 import 'screens/login_screen.dart';
+import 'screens/register_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/pickup_request_screen.dart';
 import 'screens/history_screen.dart';
+import 'screens/notification_screen.dart';
 
 /// ============================================================
 /// main.dart — Entry Point Aplikasi Bank Sampah Digital
@@ -35,6 +40,10 @@ import 'screens/history_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await initializeDateFormatting('id_ID', null);
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // ----------------------------------------------------------
   // INISIALISASI FIREBASE
@@ -83,9 +92,7 @@ class BankSampahApp extends StatelessWidget {
           textTheme: GoogleFonts.interTextTheme(),
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
 
@@ -103,9 +110,7 @@ class BankSampahApp extends StatelessWidget {
           ),
           inputDecorationTheme: InputDecorationTheme(
             filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
 
@@ -115,9 +120,11 @@ class BankSampahApp extends StatelessWidget {
         initialRoute: '/login',
         routes: {
           '/login': (context) => const LoginScreen(),
+          '/register': (context) => const RegisterScreen(),
           '/dashboard': (context) => const DashboardScreen(),
           '/pickup-request': (context) => const PickupRequestScreen(),
           '/history': (context) => const HistoryScreen(),
+          '/notifications_screen': (context) => const NotificationScreen(),
         },
       ),
     );

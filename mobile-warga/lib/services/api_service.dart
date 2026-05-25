@@ -101,7 +101,23 @@ class ApiService {
   // Response Handler
   // ----------------------------------------------------------
   dynamic _handleResponse(http.Response response) {
-    final body = jsonDecode(response.body);
+    final raw = response.body.trim();
+    if (raw.isEmpty) {
+      throw ApiException('Server mengembalikan respons kosong.');
+    }
+    if (raw.startsWith('<')) {
+      throw ApiException(
+        'Server mengembalikan HTML, bukan JSON. '
+        'Periksa baseUrl di app_constants.dart dan pastikan backend berjalan.',
+      );
+    }
+
+    final dynamic body;
+    try {
+      body = jsonDecode(raw);
+    } on FormatException {
+      throw ApiException('Respons server tidak valid (bukan JSON).');
+    }
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return body;
@@ -145,6 +161,60 @@ class ApiService {
       'password': password,
     });
     return Map<String, dynamic>.from(response);
+  }
+
+  Future<Map<String, dynamic>> register({
+    required String uid,
+    required String nama,
+    required String email,
+    required String password,
+  }) async {
+    final response = await post('/sync-user', {
+      'uid': uid,
+      'nama': nama,
+      'email': email,
+      'password': password,
+    });
+    return Map<String, dynamic>.from(response);
+  }
+
+  Future<Map<String, dynamic>> createPickupRequest({
+    required String namaWarga,
+    required String alamat,
+    required String jenisSampah,
+    required double estimasiBerat,
+    required int estimasiKantong,
+    required String tanggalJemput,
+    required String catatan,
+    required int userId,
+  }) async {
+    final response = await post('/request-jemput', {
+      'nama_warga': namaWarga,
+      'alamat': alamat,
+      'jenis_sampah': jenisSampah,
+      'estimasi_berat': estimasiBerat,
+      'estimasi_kantong': estimasiKantong,
+      'tanggal_jemput': tanggalJemput,
+      'catatan': catatan,
+      'user_id': userId,
+    });
+
+    return Map<String, dynamic>.from(response);
+  }
+
+  Future<double> tukarPoin({
+    required int userId,
+    required double jumlahPoin,
+    required String jenis,
+    required String keterangan,
+  }) async {
+    final response = await post('/tukar', {
+      'user_id': userId,
+      'jumlah_poin': jumlahPoin,
+      'jenis': jenis,
+      'keterangan': keterangan,
+    });
+    return (response['saldo_poin'] ?? 0).toDouble();
   }
 
   /// -----------------------------------------------------------
@@ -194,4 +264,14 @@ class ApiException implements Exception {
 
   @override
   String toString() => message;
+}
+
+Future<List<dynamic>> fetchNotifications(int userId) async {
+  final api = ApiService();
+  try {
+    final response = await api.get('/notifications/$userId');
+    return List<dynamic>.from(response);
+  } catch (e) {
+    throw ApiException('Gagal mengambil notifikasi: $e');
+  }
 }

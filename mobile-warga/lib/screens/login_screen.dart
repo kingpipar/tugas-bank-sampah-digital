@@ -22,8 +22,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'warga@banksampah.com');
-  final _passwordController = TextEditingController(text: 'password123');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
@@ -206,6 +206,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                       textStyle: GoogleFonts.inter(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  TextButton(
+                                    onPressed: auth.isLoading
+                                        ? null
+                                        : () {
+                                            auth.clearError();
+                                            Navigator.pushNamed(
+                                              context,
+                                              '/register',
+                                            );
+                                          },
+                                    child: Text(
+                                      'Belum punya akun? Daftar',
+                                      style: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w600,
+                                        color: colorScheme.primary,
                                       ),
                                     ),
                                   ),

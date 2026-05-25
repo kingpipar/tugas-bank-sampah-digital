@@ -16,8 +16,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userId = context.read<AuthProvider>().user?.id ?? '';
-      context.read<DashboardProvider>().fetchSaldo(userId);
+      final mysqlId = context.read<AuthProvider>().user?.mysqlUserId;
+      context.read<DashboardProvider>().fetchSaldo(mysqlId);
     });
   }
 
@@ -31,7 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          await dash.fetchSaldo(auth.user?.id ?? '');
+          await dash.fetchSaldo(auth.user?.mysqlUserId);
         },
         child: CustomScrollView(
           slivers: [
@@ -41,6 +41,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               backgroundColor: cs.primary,
               foregroundColor: cs.onPrimary,
               actions: [
+                IconButton(
+                  icon: const Icon(Icons.notifications_rounded),
+                  tooltip: 'Notifikasi',
+                  onPressed: () => Navigator.pushNamed(context, '/notifications_screen'),
+                ),
                 IconButton(
                   icon: const Icon(Icons.logout_rounded),
                   tooltip: 'Keluar',

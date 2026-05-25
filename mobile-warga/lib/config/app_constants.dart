@@ -16,11 +16,14 @@ class AppConstants {
   //       Atau jika menggunakan domain: 'https://api.banksampahdigi.com/api'
   //
   // Format endpoint yang diharapkan:
+  //   POST /api/sync-user         → Sync user Firebase → MySQL (setelah login)
   //   POST /api/auth/login        → Login warga
   //   GET  /api/saldo/:userId     → Ambil saldo poin warga
   //   GET  /api/transaksi/:userId → Ambil riwayat penukaran poin
   // ----------------------------------------------------------
-  static const String baseUrl = 'http://10.0.2.2:3000/api';
+  //static const String baseUrl = 'http://10.0.2.2:3000/api';
+  //static const String baseUrl = 'http://3.24.1.123:3000/api';
+  static const String baseUrl = 'http://localhost:3000/api';
   // ☝️ 10.0.2.2 adalah alias localhost untuk Android Emulator.
   //    Ganti dengan IP VM GCP saat deploy ke production.
 

@@ -6,8 +6,7 @@ import '../models/pickup_request_model.dart';
 import '../models/transaction_model.dart';
 import '../providers/auth_provider.dart';
 import '../providers/pickup_provider.dart';
-// TODO: Uncomment saat backend siap
-// import '../services/api_service.dart';
+import '../services/api_service.dart';
 import '../widgets/status_badge.dart';
 
 /// ============================================================
@@ -189,35 +188,16 @@ class _TransactionHistoryTabState extends State<_TransactionHistoryTab> {
   }
 
   Future<List<TransactionModel>> _fetchTransactions() async {
-    // ignore: unused_local_variable — akan dipakai saat API backend aktif
-    final userId = context.read<AuthProvider>().user?.id ?? '';
+    final mysqlUserId = context.read<AuthProvider>().user?.mysqlUserId;
+    if (mysqlUserId == null) {
+      throw ApiException('Akun belum tersinkron. Login ulang.');
+    }
 
-    // ======================================================
-    // 🔧 MOCK DATA — Hapus blok ini saat backend sudah siap
-    // ======================================================
-    await Future.delayed(const Duration(milliseconds: 600));
-    return [
-      TransactionModel(
-          id: '1', jenis: 'Setoran Sampah', jumlahPoin: 250,
-          keterangan: '5 kg plastik', tanggal: DateTime.now().subtract(const Duration(days: 1))),
-      TransactionModel(
-          id: '2', jenis: 'Tukar Sembako', jumlahPoin: -500,
-          keterangan: 'Tukar 500 poin → 1kg beras', tanggal: DateTime.now().subtract(const Duration(days: 3))),
-      TransactionModel(
-          id: '3', jenis: 'Setoran Sampah', jumlahPoin: 750,
-          keterangan: '10 kg kardus + 5 kg kaleng', tanggal: DateTime.now().subtract(const Duration(days: 7))),
-    ];
-    // ======================================================
-    // AKHIR MOCK DATA
-    // ======================================================
-
-    // ======================================================
-    // 🚀 API CALL — Uncomment blok ini saat backend siap
-    // ======================================================
-    // final api = ApiService();
-    // final data = await api.fetchRiwayatTransaksi(userId);
-    // return data.map((j) => TransactionModel.fromJson(j)).toList();
-    // ======================================================
+    final api = ApiService();
+    final data = await api.fetchRiwayatTransaksi(mysqlUserId.toString());
+    return data
+        .map((j) => TransactionModel.fromJson(Map<String, dynamic>.from(j)))
+        .toList();
   }
 
   @override
