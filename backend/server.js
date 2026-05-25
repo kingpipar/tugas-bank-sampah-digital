@@ -154,6 +154,50 @@ app.get('/api/request_jemput', (req, res) => {
     });
 });
 
+app.put('/api/request_jemput/:id', (req, res) => {
+    const { id } = req.params;
+    let updates = [];
+    let values = [];
+    
+    if (req.body.status) {
+        updates.push('status = ?');
+        values.push(req.body.status);
+    }
+    if (req.body.nama_warga) {
+        updates.push('nama_warga = ?');
+        values.push(req.body.nama_warga);
+    }
+    if (req.body.rt !== undefined) {
+        updates.push('rt = ?');
+        values.push(req.body.rt);
+    }
+    if (req.body.rw !== undefined) {
+        updates.push('rw = ?');
+        values.push(req.body.rw);
+    }
+    if (req.body.catatan !== undefined) {
+        updates.push('catatan = ?');
+        values.push(req.body.catatan);
+    }
+    
+    if (updates.length === 0) return res.json({ success: true });
+
+    values.push(id);
+    const sql = `UPDATE request_jemput SET ${updates.join(', ')} WHERE id = ?`;
+    
+    db.query(sql, values, (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true, message: 'Request berhasil diperbarui' });
+    });
+});
+
+app.delete('/api/request_jemput/:id', (req, res) => {
+    db.query('DELETE FROM request_jemput WHERE id = ?', [req.params.id], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true, message: 'Request dihapus' });
+    });
+});
+
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
     db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {

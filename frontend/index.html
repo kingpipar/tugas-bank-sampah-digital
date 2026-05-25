@@ -786,7 +786,7 @@
                 document.getElementById('stat-jemput').innerText = stats.total_jemput || 0;
 
                 try {
-                    const resWarga = await fetch('http://localhost:3000/api/warga_rt1/stats');
+                    const resWarga = await fetch('http://localhost:3000/api/users/stats');
                     const wargaStats = await resWarga.json();
                     document.getElementById('stat-warga').innerText = wargaStats.total || 0;
                 } catch (e) {
