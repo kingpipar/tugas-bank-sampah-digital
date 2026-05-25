@@ -9,10 +9,10 @@ app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'bank_sampah_digital',
+    host: '136.116.185.104',
+    user: 'admin',
+    password: 'password',
+    database: 'testlagi',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -213,46 +213,56 @@ app.get('/api/notif', (req, res) => {
     });
 });
 
-app.get('/api/warga_rt1', (req, res) => {
-    db.query('SELECT * FROM warga_rt1 ORDER BY id ASC', (err, results) => {
+app.get('/api/users', (req, res) => {
+    db.query('SELECT * FROM users WHERE role="warga" ORDER BY id ASC', (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
     });
 });
 
-app.get('/api/warga_rt1/stats', (req, res) => {
+app.get('/api/users/stats', (req, res) => {
     db.query(`
         SELECT 
             COUNT(*) AS total,
             SUM(jenis_kelamin = 'Laki-laki') AS laki,
             SUM(jenis_kelamin = 'Perempuan') AS perempuan
-        FROM warga_rt1
+        FROM users WHERE role="warga"
     `, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results[0]);
     });
 });
 
-app.post('/api/warga_rt1', (req, res) => {
-    const { nama, alamat, jenis_kelamin } = req.body;
-    db.query('INSERT INTO warga_rt1 (nama, alamat, jenis_kelamin) VALUES (?, ?, ?)',
-        [nama, alamat, jenis_kelamin], (err) => {
+app.post('/api/users', (req, res) => {
+    const { nama, email, password, rt, rw, jenis_kelamin } = req.body;
+    db.query('INSERT INTO users (nama, email, password, rt, rw, jenis_kelamin, role) VALUES (?, ?, ?, ?, ?, ?, "warga")',
+        [nama, email, password, rt, rw, jenis_kelamin], (err) => {
             if (err) return res.status(500).json({ error: err.message });
             res.status(201).json({ success: true });
         });
 });
 
-app.put('/api/warga_rt1/:id', (req, res) => {
-    const { nama, alamat, jenis_kelamin } = req.body;
-    db.query('UPDATE warga_rt1 SET nama=?, alamat=?, jenis_kelamin=? WHERE id=?',
-        [nama, alamat, jenis_kelamin, req.params.id], (err) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ success: true });
-        });
+app.put('/api/users/:id', (req, res) => {
+    const { nama, email, password, rt, rw, jenis_kelamin } = req.body;
+    let sql = 'UPDATE users SET nama=?, email=?, rt=?, rw=?, jenis_kelamin=?';
+    let params = [nama, email, rt, rw, jenis_kelamin];
+    
+    if (password) {
+        sql += ', password=?';
+        params.push(password);
+    }
+    
+    sql += ' WHERE id=? AND role="warga"';
+    params.push(req.params.id);
+
+    db.query(sql, params, (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true });
+    });
 });
 
-app.delete('/api/warga_rt1/:id', (req, res) => {
-    db.query('DELETE FROM warga_rt1 WHERE id=?', [req.params.id], (err) => {
+app.delete('/api/users/:id', (req, res) => {
+    db.query('DELETE FROM users WHERE id=? AND role="warga"', [req.params.id], (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ success: true });
     });

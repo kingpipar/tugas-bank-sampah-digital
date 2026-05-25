@@ -108,68 +108,47 @@
 
                         const response =
                             await fetch(
-                                'http://localhost:3000/api/auth/login',
+                                'http://localhost:3000/api/users',
                                 {
-
                                     method: 'POST',
-
                                     headers: {
                                         'Content-Type':
                                             'application/json'
                                     },
-
                                     body: JSON.stringify({
-
                                         email,
                                         password
-
                                     })
-
                                 }
                             );
-
                         const data =
                             await response.json();
-
                         if (data.success) {
-
                             localStorage.setItem(
                                 'admin',
                                 JSON.stringify(
                                     data.user
                                 )
                             );
-
                             alert(
                                 'Login berhasil'
                             );
-
                             window.location.href =
                                 'index.html';
-
                         }
-
                         else {
-
                             alert(
                                 data.message
                             );
-
                         }
-
                     } catch (error) {
-
                         console.log(error);
-
                         alert(
                             'Server Error'
                         );
-
                     }
-
                 }
             );
-
     </script>
 
 </body>

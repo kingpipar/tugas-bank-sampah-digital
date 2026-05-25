@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB4CQkEacJvFAZYLdOr8hsfj8NbfVMdg14',
-    appId: '1:50763550013:web:96400fc4101ce475844954',
-    messagingSenderId: '50763550013',
-    projectId: 'test-tcc-30329',
-    authDomain: 'test-tcc-30329.firebaseapp.com',
-    storageBucket: 'test-tcc-30329.firebasestorage.app',
-    measurementId: 'G-THNRXPVZR4',
+    apiKey: 'AIzaSyAgf-7D18TmBPWK6CewcfGV6VmHXFPvWA0',
+    appId: '1:650788702738:web:b35428409a61fbdff8a6cb',
+    messagingSenderId: '650788702738',
+    projectId: 'prak-tcc-b8332',
+    authDomain: 'prak-tcc-b8332.firebaseapp.com',
+    storageBucket: 'prak-tcc-b8332.firebasestorage.app',
+    measurementId: 'G-L9TRKQ4PR1',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCCPb21G1VBeWvjaUYM9t06rnsB88xTsTI',
-    appId: '1:50763550013:android:9d78b42b9f05d7cd844954',
-    messagingSenderId: '50763550013',
-    projectId: 'test-tcc-30329',
-    storageBucket: 'test-tcc-30329.firebasestorage.app',
+    apiKey: 'AIzaSyCQ55SbZTcpWymTqgnDk2eZhK3JmFUUNzI',
+    appId: '1:650788702738:android:7f79215e03cee118f8a6cb',
+    messagingSenderId: '650788702738',
+    projectId: 'prak-tcc-b8332',
+    storageBucket: 'prak-tcc-b8332.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBhUBrBq63eCte5ddQ1jBP7Pv9wh0Ks0q4',
-    appId: '1:50763550013:ios:00ef4e0fd83139ad844954',
-    messagingSenderId: '50763550013',
-    projectId: 'test-tcc-30329',
-    storageBucket: 'test-tcc-30329.firebasestorage.app',
+    apiKey: 'AIzaSyDxeFCyB1Slki6_y8mqJHpDPlx4U2ikgK4',
+    appId: '1:650788702738:ios:439c4b3b48a4fa8cf8a6cb',
+    messagingSenderId: '650788702738',
+    projectId: 'prak-tcc-b8332',
+    storageBucket: 'prak-tcc-b8332.firebasestorage.app',
     iosBundleId: 'com.example.mobile',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBhUBrBq63eCte5ddQ1jBP7Pv9wh0Ks0q4',
-    appId: '1:50763550013:ios:00ef4e0fd83139ad844954',
-    messagingSenderId: '50763550013',
-    projectId: 'test-tcc-30329',
-    storageBucket: 'test-tcc-30329.firebasestorage.app',
+    apiKey: 'AIzaSyDxeFCyB1Slki6_y8mqJHpDPlx4U2ikgK4',
+    appId: '1:650788702738:ios:439c4b3b48a4fa8cf8a6cb',
+    messagingSenderId: '650788702738',
+    projectId: 'prak-tcc-b8332',
+    storageBucket: 'prak-tcc-b8332.firebasestorage.app',
     iosBundleId: 'com.example.mobile',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyB4CQkEacJvFAZYLdOr8hsfj8NbfVMdg14',
-    appId: '1:50763550013:web:e416de3b9cd4287d844954',
-    messagingSenderId: '50763550013',
-    projectId: 'test-tcc-30329',
-    authDomain: 'test-tcc-30329.firebaseapp.com',
-    storageBucket: 'test-tcc-30329.firebasestorage.app',
-    measurementId: 'G-CNFDLR7QVX',
+    apiKey: 'AIzaSyAgf-7D18TmBPWK6CewcfGV6VmHXFPvWA0',
+    appId: '1:650788702738:web:87088ae8ef40b9e2f8a6cb',
+    messagingSenderId: '650788702738',
+    projectId: 'prak-tcc-b8332',
+    authDomain: 'prak-tcc-b8332.firebaseapp.com',
+    storageBucket: 'prak-tcc-b8332.firebasestorage.app',
+    measurementId: 'G-0XBVBQ6NJZ',
   );
+
 }

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "50763550013",
-    "project_id": "test-tcc-30329",
-    "storage_bucket": "test-tcc-30329.firebasestorage.app"
+    "project_number": "650788702738",
+    "project_id": "prak-tcc-b8332",
+    "storage_bucket": "prak-tcc-b8332.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:50763550013:android:9d78b42b9f05d7cd844954",
+        "mobilesdk_app_id": "1:650788702738:android:7f79215e03cee118f8a6cb",
         "android_client_info": {
           "package_name": "com.example.mobile"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCCPb21G1VBeWvjaUYM9t06rnsB88xTsTI"
+          "current_key": "AIzaSyCQ55SbZTcpWymTqgnDk2eZhK3JmFUUNzI"
         }
       ],
       "services": {
