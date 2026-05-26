@@ -306,7 +306,7 @@ app.post('/api/penukaran', (req, res) => {
 
             // 3. Masukkan transaksi penukaran ke MySQL
             const jenis = jenis_penukaran || (voucher.nama_voucher.toLowerCase().includes('dana') || voucher.nama_voucher.toLowerCase().includes('uang') ? 'Uang' : 'Sembako');
-            const namaWargaFix = nama_warga || user.nama;
+            const namaWargaFix = user.nama;
 
             db.query(
                 'INSERT INTO transaksi_penukaran (nama_warga, jenis_penukaran, id_voucher, poin_ditukar, id_warga) VALUES (?, ?, ?, ?, ?)',

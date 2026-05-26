@@ -199,12 +199,17 @@ class AuthProvider extends ChangeNotifier {
       // gunakan saldo dari sync response
     }
 
+    final mysqlNama = syncResult['nama']?.toString();
+    final effectiveNama = (mysqlNama != null && mysqlNama.isNotEmpty)
+        ? mysqlNama
+        : (userData['nama']?.toString() ?? 'Warga Baru');
+
     // Perbarui Firestore dengan data lengkap (termasuk saldo terbaru)
     await FirebaseFirestore.instance
         .collection('warga_realtime')
         .doc(firebaseUser.uid)
         .set({
-      'nama': userData['nama'] ?? 'Warga Baru',
+      'nama': effectiveNama,
       'email': firebaseUser.email ?? email,
       'rt': effectiveRt,
       'rw': effectiveRw,
@@ -216,7 +221,7 @@ class AuthProvider extends ChangeNotifier {
     _user = UserModel(
       id: firebaseUser.uid,
       mysqlUserId: mysqlUserId,
-      nama: userData['nama']?.toString() ?? 'Warga',
+      nama: effectiveNama,
       email: firebaseUser.email ?? email,
       saldoPoin: saldoPoin,
     );
