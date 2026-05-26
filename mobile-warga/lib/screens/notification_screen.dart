@@ -81,112 +81,234 @@ class _NotificationScreenState extends State<NotificationScreen> {
     }
   }
 
+  /// Manual: hapus semua notifikasi (tombol AppBar).
+  Future<void> _deleteAllNotifications(List<AppNotification> notifications) async {
+    if (notifications.isEmpty) return;
+
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          'Hapus Semua Notifikasi',
+          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin menghapus semua notifikasi? Tindakan ini tidak dapat dibatalkan.',
+          style: GoogleFonts.inter(),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(
+              'Batal',
+              style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.error,
+            ),
+            child: Text(
+              'Hapus',
+              style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    final batch = FirebaseFirestore.instance.batch();
+    for (final notif in notifications) {
+      final docRef =
+          FirebaseFirestore.instance.collection('notifikasi').doc(notif.docId);
+      batch.delete(docRef);
+    }
+
+    try {
+      await batch.commit();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Semua notifikasi berhasil dihapus'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('[NOTIF] Gagal hapus notifikasi: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal menghapus: $e'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final userId = context.read<AuthProvider>().user?.mysqlUserId;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Notifikasi',
-          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+    if (userId == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Notifikasi',
+            style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: cs.primary,
+          foregroundColor: cs.onPrimary,
         ),
-        centerTitle: true,
-        backgroundColor: cs.primary,
-        foregroundColor: cs.onPrimary,
-      ),
-      body: userId == null
-          ? _StateView(
-              icon: Icons.warning_amber_rounded,
-              title: 'Akun belum tersinkron',
-              message: 'Silakan login ulang untuk melihat notifikasi.',
+        body: _StateView(
+          icon: Icons.warning_amber_rounded,
+          title: 'Akun belum tersinkron',
+          message: 'Silakan login ulang untuk melihat notifikasi.',
+          color: cs.error,
+        ),
+      );
+    }
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('notifikasi')
+          .where('user_id', isEqualTo: userId)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Notifikasi',
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+              backgroundColor: cs.primary,
+              foregroundColor: cs.onPrimary,
+            ),
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Notifikasi',
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+              backgroundColor: cs.primary,
+              foregroundColor: cs.onPrimary,
+            ),
+            body: _StateView(
+              icon: Icons.error_outline_rounded,
+              title: 'Gagal memuat notifikasi',
+              message: snapshot.error.toString(),
               color: cs.error,
-            )
-          : StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('notifikasi')
-                  .where('user_id', isEqualTo: userId)
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            ),
+          );
+        }
 
-                if (snapshot.hasError) {
-                  return _StateView(
-                    icon: Icons.error_outline_rounded,
-                    title: 'Gagal memuat notifikasi',
-                    message: snapshot.error.toString(),
-                    color: cs.error,
-                  );
-                }
+        final docs = snapshot.data?.docs ?? [];
 
-                final docs = snapshot.data?.docs ?? [];
+        if (docs.isEmpty) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Notifikasi',
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+              backgroundColor: cs.primary,
+              foregroundColor: cs.onPrimary,
+            ),
+            body: _StateView(
+              icon: Icons.notifications_none_rounded,
+              title: 'Belum ada notifikasi',
+              message: 'Aktivitas penjemputan dan poin akan tampil di sini.',
+              color: cs.onSurface.withValues(alpha: 0.45),
+            ),
+          );
+        }
 
-                if (docs.isEmpty) {
-                  return _StateView(
-                    icon: Icons.notifications_none_rounded,
-                    title: 'Belum ada notifikasi',
-                    message:
-                        'Aktivitas penjemputan dan poin akan tampil di sini.',
-                    color: cs.onSurface.withValues(alpha: 0.45),
-                  );
-                }
+        final notifications = docs
+            .map((doc) => AppNotification.fromFirestore(doc))
+            .toList()
+          ..sort((a, b) => b.date.compareTo(a.date)); // terbaru di atas
 
-                final notifications = docs
-                    .map((doc) => AppNotification.fromFirestore(doc))
-                    .toList()
-                  ..sort((a, b) => b.date.compareTo(a.date)); // terbaru di atas
+        // Auto mark-as-read saat pertama kali data masuk
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _autoMarkAllRead(notifications);
+        });
 
-                // Auto mark-as-read saat pertama kali data masuk
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _autoMarkAllRead(notifications);
-                });
+        final hasUnread = notifications.any((n) => !n.isRead);
 
-                final hasUnread = notifications.any((n) => !n.isRead);
-
-                return Column(
-                  children: [
-                    // Tombol "Tandai Semua Dibaca" jika ada unread
-                    if (hasUnread)
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        child: TextButton.icon(
-                          onPressed: () => _markAllAsRead(notifications),
-                          icon: const Icon(Icons.done_all_rounded, size: 18),
-                          label: Text(
-                            'Tandai Semua Dibaca',
-                            style: GoogleFonts.inter(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          style: TextButton.styleFrom(
-                            foregroundColor: cs.primary,
-                          ),
-                        ),
-                      ),
-                    Expanded(
-                      child: ListView.separated(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-                        itemCount: notifications.length,
-                        separatorBuilder: (_, __) =>
-                            const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          return _NotificationCard(
-                            notification: notifications[index],
-                          );
-                        },
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Notifikasi',
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+            ),
+            centerTitle: true,
+            backgroundColor: cs.primary,
+            foregroundColor: cs.onPrimary,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.delete_sweep_rounded),
+                tooltip: 'Hapus Semua',
+                onPressed: () => _deleteAllNotifications(notifications),
+              ),
+            ],
+          ),
+          body: Column(
+            children: [
+              // Tombol "Tandai Semua Dibaca" jika ada unread
+              if (hasUnread)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 8),
+                  child: TextButton.icon(
+                    onPressed: () => _markAllAsRead(notifications),
+                    icon: const Icon(Icons.done_all_rounded, size: 18),
+                    label: Text(
+                      'Tandai Semua Dibaca',
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ],
-                );
-              },
-            ),
+                    style: TextButton.styleFrom(
+                      foregroundColor: cs.primary,
+                    ),
+                  ),
+                ),
+              Expanded(
+                child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                  itemCount: notifications.length,
+                  separatorBuilder: (_, __) =>
+                      const SizedBox(height: 10),
+                  itemBuilder: (context, index) {
+                    return _NotificationCard(
+                      notification: notifications[index],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
