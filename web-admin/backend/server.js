@@ -512,6 +512,17 @@ app.put('/api/request_jemput/:id', (req, res) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ success: true, message: 'Request berhasil diperbarui' });
 
+        // Sync status to Firestore
+        if (firestoreDb && req.body.status) {
+            firestoreDb.collection('request_jemput_realtime')
+                .doc(id.toString())
+                .update({
+                    status: req.body.status.toLowerCase()
+                })
+                .then(() => console.log(`✅ Berhasil menyinkronkan status request ${id} ke Firestore`))
+                .catch(fsErr => console.error('❌ Gagal sinkronisasi status request ke Firestore:', fsErr.message));
+        }
+
         // ── NOTIFIKASI + AUTO-LAPORAN ───────────────────────────────
         try {
             const statusBaru = (req.body.status || '').toLowerCase();

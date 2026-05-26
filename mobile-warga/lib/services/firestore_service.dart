@@ -33,6 +33,13 @@ class FirestoreService {
     return docRef.id;
   }
 
+  Future<void> createPickupRequestWithId(String docId, PickupRequestModel request) async {
+    await _db
+        .collection(AppConstants.pickupRequestsCollection)
+        .doc(docId)
+        .set(request.toFirestore());
+  }
+
   /// Stream untuk memantau semua pickup request milik [userId]
   /// secara real-time.
   ///

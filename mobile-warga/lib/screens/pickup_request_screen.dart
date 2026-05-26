@@ -155,7 +155,7 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
       catatan: catatan,
       latitude: lat,
       longitude: lng,
-      status: 'pending',
+      status: 'menunggu',
     );
 
     final success = await pickup.submitHybrid(

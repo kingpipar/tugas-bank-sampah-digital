@@ -128,9 +128,13 @@ class _PickupStatusTab extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Request #${r.id?.substring(0, 6) ?? '-'}',
-                            style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w700, fontSize: 14)),
+                        Text(
+                          'Request #${r.id != null && r.id!.length > 6 ? r.id!.substring(0, 6) : (r.id ?? '-')}',
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                          ),
+                        ),
                         StatusBadge(status: r.status),
                       ],
                     ),

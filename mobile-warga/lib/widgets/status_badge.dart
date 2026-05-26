@@ -25,22 +25,32 @@ class StatusBadge extends StatelessWidget {
 
     switch (status) {
       case 'pending':
+      case 'menunggu':
         backgroundColor = Colors.amber.shade100;
         textColor = Colors.amber.shade900;
         icon = Icons.hourglass_top_rounded;
         label = 'Menunggu';
         break;
       case 'on_the_way':
+      case 'diterima':
+      case 'proses_diantar':
         backgroundColor = Colors.blue.shade100;
         textColor = Colors.blue.shade900;
         icon = Icons.local_shipping_rounded;
-        label = 'Dalam Perjalanan';
+        label = status == 'diterima' ? 'Diterima' : 'Dalam Perjalanan';
         break;
       case 'completed':
+      case 'selesai':
         backgroundColor = colorScheme.primaryContainer;
         textColor = colorScheme.onPrimaryContainer;
         icon = Icons.check_circle_rounded;
         label = 'Selesai';
+        break;
+      case 'ditolak':
+        backgroundColor = Colors.red.shade100;
+        textColor = Colors.red.shade900;
+        icon = Icons.cancel_rounded;
+        label = 'Ditolak';
         break;
       default:
         backgroundColor = Colors.grey.shade200;

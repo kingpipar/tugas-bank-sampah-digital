@@ -28,16 +28,22 @@ class PickupProvider extends ChangeNotifier {
   /// Kirim ke MySQL lalu Firestore (hybrid).
   Future<bool> submitHybrid({
     required PickupRequestModel firestoreRequest,
-    required Future<void> Function() syncToMysql,
+    required Future<Map<String, dynamic>> Function() syncToMysql,
   }) async {
     _isSubmitting = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      await syncToMysql();
-      _lastCreatedDocId =
-          await _firestoreService.createPickupRequest(firestoreRequest);
+      final mysqlResult = await syncToMysql();
+      final mysqlId = mysqlResult['id']?.toString();
+
+      if (mysqlId == null || mysqlId.isEmpty) {
+        throw ApiException('Gagal mendapatkan ID request dari server MySQL.');
+      }
+
+      _lastCreatedDocId = mysqlId;
+      await _firestoreService.createPickupRequestWithId(mysqlId, firestoreRequest);
 
       _isSubmitting = false;
       notifyListeners();
@@ -57,10 +63,23 @@ class PickupProvider extends ChangeNotifier {
 
   /// Firestore saja (legacy).
   Future<bool> submitPickupRequest(PickupRequestModel request) async {
-    return submitHybrid(
-      firestoreRequest: request,
-      syncToMysql: () async {},
-    );
+    _isSubmitting = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      _lastCreatedDocId =
+          await _firestoreService.createPickupRequest(request);
+
+      _isSubmitting = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = 'Gagal mengirim request: $e';
+      _isSubmitting = false;
+      notifyListeners();
+      return false;
+    }
   }
 
   // ----------------------------------------------------------
