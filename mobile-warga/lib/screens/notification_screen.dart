@@ -412,6 +412,8 @@ class _NotificationCard extends StatelessWidget {
         return Icons.local_shipping_rounded;
       case 4:
         return Icons.add_circle_rounded;
+      case 5:
+        return Icons.card_giftcard_rounded;
       default:
         return Icons.notifications_rounded;
     }
@@ -427,6 +429,8 @@ class _NotificationCard extends StatelessWidget {
         return Colors.teal.shade700;
       case 4:
         return Colors.green.shade700;
+      case 5:
+        return Colors.purple.shade700;
       default:
         return Colors.grey.shade700;
     }

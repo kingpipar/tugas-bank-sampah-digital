@@ -673,6 +673,20 @@ app.post('/api/voucher_reward', (req, res) => {
             }).catch(fsErr => console.error('Gagal sync voucher ke Firestore:', fsErr.message));
         }
 
+        // Kirim notifikasi ke semua warga
+        db.query('SELECT id FROM users WHERE role = "warga"', (errUsers, wargaList) => {
+            if (!errUsers && wargaList) {
+                wargaList.forEach(w => {
+                    sendNotification({
+                        userId: w.id,
+                        judul: 'Voucher Baru Tersedia! 🎉',
+                        pesan: `Admin baru saja menambahkan voucher '${nama_voucher}'. Yuk tukarkan poinmu sebelum kehabisan!`,
+                        tipeTrigger: 5
+                    });
+                });
+            }
+        });
+
         res.status(201).json({ success: true, message: 'Voucher berhasil ditambahkan' });
     });
 });
