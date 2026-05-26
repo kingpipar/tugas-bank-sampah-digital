@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3000; 
+const PORT = 3000;
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
@@ -30,7 +30,7 @@ db.getConnection((err, connection) => {
 app.get('/api/stats', (req, res) => {
     const query = `
         SELECT 
-            (SELECT COUNT(DISTINCT nama_warga) FROM laporan_setoran) AS total_warga,
+            (SELECT COUNT(DISTINCT id_warga) FROM laporan_setoran) AS total_warga,
             (SELECT SUM(berat_kg) FROM laporan_setoran) AS total_berat,
             (SELECT SUM(total_harga) FROM laporan_setoran) AS total_kas,
             (SELECT COUNT(*) FROM request_jemput) AS total_jemput,
@@ -81,8 +81,9 @@ app.get('/api/harga/stats', (req, res) => {
 
 app.post('/api/harga', (req, res) => {
     const { kategori, nama_sampah, harga_per_kg } = req.body;
-    const sql = 'INSERT INTO harga_sampah (kategori, nama_sampah, harga_per_kg) VALUES (?, ?, ?)';
-    db.query(sql, [kategori, nama_sampah, harga_per_kg], (err, result) => {
+    const poin = Math.floor(harga_per_kg / 10);
+    const sql = 'INSERT INTO harga_sampah (kategori, nama_sampah, harga_per_kg, poin_per_kg) VALUES (?, ?, ?, ?)';
+    db.query(sql, [kategori, nama_sampah, harga_per_kg, poin], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json({ success: true, message: 'Data berhasil ditambahkan' });
     });
@@ -91,8 +92,9 @@ app.post('/api/harga', (req, res) => {
 app.put('/api/harga/:id', (req, res) => {
     const { id } = req.params;
     const { kategori, nama_sampah, harga_per_kg } = req.body;
-    const sql = 'UPDATE harga_sampah SET kategori = ?, nama_sampah = ?, harga_per_kg = ? WHERE id = ?';
-    db.query(sql, [kategori, nama_sampah, harga_per_kg, id], (err, result) => {
+    const poin = Math.floor(harga_per_kg / 10);
+    const sql = 'UPDATE harga_sampah SET kategori = ?, nama_sampah = ?, harga_per_kg = ?, poin_per_kg = ? WHERE id = ?';
+    db.query(sql, [kategori, nama_sampah, harga_per_kg, poin, id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ success: true, message: 'Data berhasil diperbarui' });
     });
@@ -108,10 +110,15 @@ app.delete('/api/harga/:id', (req, res) => {
 });
 
 app.get('/api/laporan', (req, res) => {
-    const sql = `SELECT l.id, l.nama_warga, h.kategori, h.nama_sampah, l.berat_kg, l.total_harga, l.tanggal_setor 
-                 FROM laporan_setoran l 
-                 JOIN harga_sampah h ON l.id_sampah = h.id 
-                 ORDER BY l.id DESC`;
+    const sql = `
+        SELECT l.id, COALESCE(u.nama, r.nama_warga) AS nama_warga, COALESCE(u.rt, r.rt) AS rt, COALESCE(u.rw, r.rw) AS rw,
+               h.kategori, h.nama_sampah, l.berat_kg, l.total_harga, l.poin_didapat, l.id_request, l.tanggal_setor, r.catatan
+        FROM laporan_setoran l
+        LEFT JOIN users u ON l.id_warga = u.id
+        LEFT JOIN request_jemput r ON l.id_request = r.id
+        LEFT JOIN harga_sampah h ON l.id_sampah = h.id
+        ORDER BY l.id DESC
+    `;
     db.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
@@ -119,20 +126,36 @@ app.get('/api/laporan', (req, res) => {
 });
 
 app.post('/api/laporan', (req, res) => {
-    const { nama_warga, id_sampah, berat_kg, total_harga } = req.body;
-    const sql = 'INSERT INTO laporan_setoran (nama_warga, id_sampah, berat_kg, total_harga) VALUES (?, ?, ?, ?)';
-    db.query(sql, [nama_warga, id_sampah, parseFloat(berat_kg), total_harga], (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.status(201).json({ success: true, message: 'Laporan berhasil ditambahkan!' });
+    const { id_warga, id_sampah, berat_kg, id_request } = req.body;
+    const berat = parseFloat(berat_kg) || 0;
+    db.query('SELECT harga_per_kg, poin_per_kg FROM harga_sampah WHERE id = ?', [id_sampah], (errH, rowsH) => {
+        if (errH) return res.status(500).json({ error: errH.message });
+        const harga = (rowsH && rowsH[0]) ? parseFloat(rowsH[0].harga_per_kg) || 0 : 0;
+        const poin_per_kg = (rowsH && rowsH[0]) ? parseFloat(rowsH[0].poin_per_kg) || 0 : 0;
+        const total_harga = Math.round(berat * harga);
+        const poin_didapat = Math.round(berat * poin_per_kg);
+
+        const insertSql = 'INSERT INTO laporan_setoran (id_sampah, berat_kg, total_harga, id_warga, id_request, poin_didapat) VALUES (?, ?, ?, ?, ?, ?)';
+        const params = [id_sampah, berat, total_harga, id_warga || null, id_request || null, poin_didapat];
+        db.query(insertSql, params, (errIns) => {
+            if (errIns) return res.status(500).json({ error: errIns.message });
+            // update user saldo_poin if we have id_warga
+            if (id_warga && poin_didapat > 0) {
+                db.query('UPDATE users SET saldo_poin = COALESCE(saldo_poin,0) + ? WHERE id = ?', [poin_didapat, id_warga], (errUpd) => {
+                    if (errUpd) console.error('update saldo error', errUpd.message);
+                });
+            }
+            res.status(201).json({ success: true, message: 'Laporan berhasil ditambahkan!' });
+        });
     });
 });
 
 app.get('/api/penukaran', (req, res) => {
     const query = `
         SELECT t.id, t.nama_warga, t.jenis_penukaran, t.poin_ditukar, t.tanggal_tukar,
-               v.nama_sembako
+               v.nama_voucher
         FROM transaksi_penukaran t
-        LEFT JOIN voucher_reward v ON t.id_sembako = v.id
+        LEFT JOIN voucher_reward v ON t.id_voucher = v.id
         ORDER BY t.id DESC
     `;
     db.query(query, (err, results) => {
@@ -148,7 +171,18 @@ app.get('/api/penukaran', (req, res) => {
 });
 
 app.get('/api/request_jemput', (req, res) => {
-    db.query('SELECT * FROM request_jemput ORDER BY id DESC', (err, results) => {
+    const sql = `
+        SELECT r.*, 
+               COALESCE(u.nama, r.nama_warga) AS nama_warga,
+               COALESCE(h.nama_sampah, r.jenis_sampah) AS jenis_sampah,
+               h.poin_per_kg,
+               (r.estimasi_berat * h.poin_per_kg) AS poin_didapat
+        FROM request_jemput r
+        LEFT JOIN users u ON r.id_warga = u.id
+        LEFT JOIN harga_sampah h ON r.id_sampah = h.id
+        ORDER BY r.id DESC
+    `;
+    db.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
     });
@@ -158,7 +192,7 @@ app.put('/api/request_jemput/:id', (req, res) => {
     const { id } = req.params;
     let updates = [];
     let values = [];
-    
+
     if (req.body.status) {
         updates.push('status = ?');
         values.push(req.body.status);
@@ -179,15 +213,68 @@ app.put('/api/request_jemput/:id', (req, res) => {
         updates.push('catatan = ?');
         values.push(req.body.catatan);
     }
-    
+
     if (updates.length === 0) return res.json({ success: true });
 
     values.push(id);
     const sql = `UPDATE request_jemput SET ${updates.join(', ')} WHERE id = ?`;
-    
+
     db.query(sql, values, (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ success: true, message: 'Request berhasil diperbarui' });
+
+        // If status changed to selesai, create laporan_setoran and update saldo_poin
+        try {
+            if (req.body.status && req.body.status.toLowerCase() === 'selesai') {
+                // avoid duplicate laporan for same request
+                db.query('SELECT COUNT(*) AS c FROM laporan_setoran WHERE id_request = ?', [id], (errCheck, rowsCheck) => {
+                    if (errCheck) return console.error('cek laporan error', errCheck.message);
+                    if (rowsCheck && rowsCheck[0] && rowsCheck[0].c > 0) return; // already created
+
+                    // fetch request detail
+                    db.query('SELECT * FROM request_jemput WHERE id = ?', [id], (errReq, rowsReq) => {
+                        if (errReq) return console.error('get request error', errReq.message);
+                        if (!rowsReq || !rowsReq.length) return console.error('request not found for laporan creation', id);
+
+                        const reqRow = rowsReq[0];
+                        const berat = parseFloat(reqRow.estimasi_berat) || 0;
+                        const id_sampah = reqRow.id_sampah || null;
+                        const id_warga = reqRow.id_warga || null;
+
+                        if (!id_sampah) {
+                            // if no linked sampah id, insert laporan with zero price/poin
+                            const insertSql0 = 'INSERT INTO laporan_setoran (id_sampah, berat_kg, total_harga, id_warga, id_request, poin_didapat) VALUES (?, ?, ?, ?, ?, ?)';
+                            db.query(insertSql0, [null, berat, 0, id_warga, id, 0], (errIns0) => {
+                                if (errIns0) return console.error('insert laporan error', errIns0.message);
+                            });
+                        } else {
+                            // get harga and poin
+                            db.query('SELECT harga_per_kg, poin_per_kg FROM harga_sampah WHERE id = ?', [id_sampah], (errH, rowsH) => {
+                                if (errH) return console.error('get harga error', errH.message);
+                                const harga = (rowsH && rowsH[0]) ? parseFloat(rowsH[0].harga_per_kg) || 0 : 0;
+                                const poin_per_kg = (rowsH && rowsH[0]) ? parseFloat(rowsH[0].poin_per_kg) || 0 : 0;
+                                const total_harga = Math.round(berat * harga);
+                                const poin_didapat = Math.round(berat * poin_per_kg);
+
+                                const insertSql = 'INSERT INTO laporan_setoran (id_sampah, berat_kg, total_harga, id_warga, id_request, poin_didapat) VALUES (?, ?, ?, ?, ?, ?)';
+                                const params = [id_sampah, berat, total_harga, id_warga, id, poin_didapat];
+                                db.query(insertSql, params, (errIns) => {
+                                    if (errIns) return console.error('insert laporan error', errIns.message);
+                                    // update user saldo_poin if we have id_warga
+                                    if (id_warga && poin_didapat > 0) {
+                                        db.query('UPDATE users SET saldo_poin = COALESCE(saldo_poin,0) + ? WHERE id = ?', [poin_didapat, id_warga], (errUpd) => {
+                                            if (errUpd) return console.error('update saldo error', errUpd.message);
+                                        });
+                                    }
+                                });
+                            });
+                        }
+                    });
+                });
+            }
+        } catch (e) {
+            console.error('post-update automation error', e.message);
+        }
     });
 });
 
@@ -204,6 +291,9 @@ app.post('/api/login', (req, res) => {
         if (err) return res.status(500).json({ error: err.message });
         if (results.length === 0 || results[0].password !== password) {
             return res.status(401).json({ success: false, message: 'Email atau password salah!' });
+        }
+        if (results[0].role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Akses ditolak! Hanya Admin yang bisa masuk.' });
         }
         res.json({ success: true, user: results[0] });
     });
@@ -238,8 +328,10 @@ const getSembakoHandler = (req, res) => {
 
         const mappedResults = results.map(item => ({
             id: item.id,
-            nama_sembako: item.nama_sembako || item.nama_reward || item.nama_voucher,
-            harga_poin: item.harga_poin || item.poin_dibutuhkan,
+            nama_voucher: item.nama_voucher,
+            min_poin: item.min_poin,
+            nama_sembako: item.nama_voucher,
+            harga_poin: item.min_poin,
             stok: item.stok
         }));
         res.json(mappedResults);
@@ -247,7 +339,35 @@ const getSembakoHandler = (req, res) => {
 };
 app.get('/api/sembako', getSembakoHandler);
 app.get('/api/voucher', getSembakoHandler);
-app.get('/api/voucher_reward', getSembakoHandler); 
+app.get('/api/voucher_reward', getSembakoHandler);
+
+app.post('/api/voucher_reward', (req, res) => {
+    const { nama_voucher, min_poin, stok } = req.body;
+    const sql = 'INSERT INTO voucher_reward (nama_voucher, min_poin, stok) VALUES (?, ?, ?)';
+    db.query(sql, [nama_voucher, parseInt(min_poin), parseInt(stok)], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(201).json({ success: true, message: 'Voucher berhasil ditambahkan' });
+    });
+});
+
+app.put('/api/voucher_reward/:id', (req, res) => {
+    const { id } = req.params;
+    const { nama_voucher, min_poin, stok } = req.body;
+    const sql = 'UPDATE voucher_reward SET nama_voucher = ?, min_poin = ?, stok = ? WHERE id = ?';
+    db.query(sql, [nama_voucher, parseInt(min_poin), parseInt(stok), id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true, message: 'Voucher berhasil diperbarui' });
+    });
+});
+
+app.delete('/api/voucher_reward/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM voucher_reward WHERE id = ?';
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true, message: 'Voucher berhasil dihapus' });
+    });
+});
 
 app.get('/api/notif', (req, res) => {
     res.json({
@@ -290,12 +410,12 @@ app.put('/api/users/:id', (req, res) => {
     const { nama, email, password, rt, rw, jenis_kelamin } = req.body;
     let sql = 'UPDATE users SET nama=?, email=?, rt=?, rw=?, jenis_kelamin=?';
     let params = [nama, email, rt, rw, jenis_kelamin];
-    
+
     if (password) {
         sql += ', password=?';
         params.push(password);
     }
-    
+
     sql += ' WHERE id=? AND role="warga"';
     params.push(req.params.id);
 

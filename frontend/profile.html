@@ -257,6 +257,16 @@
                                     </div>
                                     Informasi Personal
                                 </h3>
+                                <div class="flex gap-2">
+                                    <button onclick="bukaModalEditProfil()"
+                                        class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 font-semibold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all">
+                                        <i class="ph-bold ph-pencil-simple text-sm"></i> Edit Profil
+                                    </button>
+                                    <button onclick="bukaModalPassword()"
+                                        class="bg-blue-50 hover:bg-blue-100 text-blue-600 font-semibold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition-all">
+                                        <i class="ph-bold ph-key text-sm"></i> Ganti Password
+                                    </button>
+                                </div>
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
@@ -383,6 +393,67 @@
         </main>
     </div>
 
+    <!-- MODAL EDIT PROFIL -->
+    <div id="modal-edit-profil"
+        class="fixed inset-0 bg-slate-900/40 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="glass rounded-[32px] p-8 w-full max-w-md shadow-2xl border border-white/30 animate-fade">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-black text-slate-800">Edit Profil</h2>
+                <button onclick="tutupModalEditProfil()"
+                    class="w-10 h-10 rounded-full bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center text-xl font-bold transition-colors">×</button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="font-semibold text-sm text-slate-700">Nama Lengkap</label>
+                    <input type="text" id="input-nama-admin" placeholder="Nama Admin"
+                        class="w-full mt-2 bg-white/70 border border-slate-200 rounded-2xl px-5 py-3.5 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all font-medium text-slate-700">
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-slate-700">Alamat Email</label>
+                    <input type="email" id="input-email-admin" placeholder="admin@gmail.com"
+                        class="w-full mt-2 bg-white/70 border border-slate-200 rounded-2xl px-5 py-3.5 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all font-medium text-slate-700">
+                </div>
+            </div>
+            <button onclick="simpanProfil()"
+                class="mt-6 w-full bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-600 hover:to-emerald-500 text-white py-4 rounded-2xl font-bold shadow-lg active:scale-95 transition-all duration-300">
+                Simpan Perubahan
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL GANTI PASSWORD -->
+    <div id="modal-ganti-password"
+        class="fixed inset-0 bg-slate-900/40 hidden items-center justify-center z-50 backdrop-blur-sm">
+        <div class="glass rounded-[32px] p-8 w-full max-w-md shadow-2xl border border-white/30 animate-fade">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-black text-slate-800">Ganti Password</h2>
+                <button onclick="tutupModalPassword()"
+                    class="w-10 h-10 rounded-full bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center text-xl font-bold transition-colors">×</button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="font-semibold text-sm text-slate-700">Password Lama</label>
+                    <input type="password" id="input-password-lama" placeholder="••••••••"
+                        class="w-full mt-2 bg-white/70 border border-slate-200 rounded-2xl px-5 py-3.5 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all font-medium text-slate-700">
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-slate-700">Password Baru</label>
+                    <input type="password" id="input-password-baru" placeholder="••••••••"
+                        class="w-full mt-2 bg-white/70 border border-slate-200 rounded-2xl px-5 py-3.5 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all font-medium text-slate-700">
+                </div>
+                <div>
+                    <label class="font-semibold text-sm text-slate-700">Konfirmasi Password Baru</label>
+                    <input type="password" id="input-password-konfirmasi" placeholder="••••••••"
+                        class="w-full mt-2 bg-white/70 border border-slate-200 rounded-2xl px-5 py-3.5 outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all font-medium text-slate-700">
+                </div>
+            </div>
+            <button onclick="simpanPassword()"
+                class="mt-6 w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white py-4 rounded-2xl font-bold shadow-lg active:scale-95 transition-all duration-300">
+                Ganti Password
+            </button>
+        </div>
+    </div>
+
     <script>
         function updateClock() {
             const now = new Date();
@@ -433,6 +504,118 @@
                 window.location.href = 'login.html';
             }
         }
+
+        function bukaModalEditProfil() {
+            let admin = JSON.parse(localStorage.getItem('admin'));
+            if (!admin) return alert('Sesi tidak ditemukan, silakan login ulang.');
+            document.getElementById('input-nama-admin').value = admin.nama;
+            document.getElementById('input-email-admin').value = admin.email;
+            
+            const modal = document.getElementById('modal-edit-profil');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function tutupModalEditProfil() {
+            const modal = document.getElementById('modal-edit-profil');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function simpanProfil() {
+            let admin = JSON.parse(localStorage.getItem('admin'));
+            if (!admin) return alert('Sesi tidak ditemukan.');
+
+            const nama = document.getElementById('input-nama-admin').value.trim();
+            const email = document.getElementById('input-email-admin').value.trim();
+
+            if (!nama || !email) {
+                alert('Nama dan Email wajib diisi!');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/update-profile', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: admin.id, nama, email })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('Profil berhasil diperbarui!');
+                    admin.nama = nama;
+                    admin.email = email;
+                    localStorage.setItem('admin', JSON.stringify(admin));
+                    tutupModalEditProfil();
+                    initProfile();
+                } else {
+                    alert('Gagal: ' + data.message);
+                }
+            } catch (err) {
+                alert('Tidak bisa terhubung ke server.');
+            }
+        }
+
+        function bukaModalPassword() {
+            document.getElementById('input-password-lama').value = '';
+            document.getElementById('input-password-baru').value = '';
+            document.getElementById('input-password-konfirmasi').value = '';
+            
+            const modal = document.getElementById('modal-ganti-password');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function tutupModalPassword() {
+            const modal = document.getElementById('modal-ganti-password');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function simpanPassword() {
+            let admin = JSON.parse(localStorage.getItem('admin'));
+            if (!admin) return alert('Sesi tidak ditemukan.');
+
+            const oldPassword = document.getElementById('input-password-lama').value;
+            const newPassword = document.getElementById('input-password-baru').value;
+            const konfirmasi = document.getElementById('input-password-konfirmasi').value;
+
+            if (!oldPassword || !newPassword || !konfirmasi) {
+                alert('Semua bidang password wajib diisi!');
+                return;
+            }
+
+            if (newPassword !== konfirmasi) {
+                alert('Konfirmasi password baru tidak cocok!');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/change-password', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: admin.id, oldPassword, newPassword })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('Password berhasil diganti!');
+                    tutupModalPassword();
+                } else {
+                    alert('Gagal: ' + data.message);
+                }
+            } catch (err) {
+                alert('Tidak bisa terhubung ke server.');
+            }
+        }
+
+        document.getElementById('modal-edit-profil').addEventListener('click', function(e) {
+            if (e.target === this) tutupModalEditProfil();
+        });
+        document.getElementById('modal-ganti-password').addEventListener('click', function(e) {
+            if (e.target === this) tutupModalPassword();
+        });
 
         window.onload = initProfile;
     </script>

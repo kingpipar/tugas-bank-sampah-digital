@@ -241,17 +241,13 @@
                             <input type="date" id="filter-tanggal" onchange="filterTabel()"
                                 class="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all">
                         </div>
-                        <div class="w-full sm:w-[200px]">
+                        <div class="w-full sm:w-[200px] hidden">
                             <label
                                 class="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Filter
                                 Status</label>
                             <select id="filter-status" onchange="filterTabel()"
                                 class="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white text-slate-700 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all cursor-pointer">
-                                <option value="">Semua Status</option>
-                                <option value="diterima">Diterima</option>
-                                <option value="proses_diantar">Proses Diantar</option>
-                                <option value="selesai">Selesai</option>
-                                <option value="ditolak">Ditolak</option>
+                                <option value="selesai" selected>Selesai</option>
                             </select>
                         </div>
                         <div class="w-full sm:w-[280px]">
@@ -324,18 +320,18 @@
 
         async function getLaporan() {
             const tbody = document.getElementById('tabel-laporan');
-            tbody.innerHTML = '<tr><td colspan="7" class="p-10 text-center text-slate-500 font-medium animate-pulse">Memuat data laporan...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-slate-500 font-medium animate-pulse">Memuat data laporan...</td></tr>';
 
             try {
-                const res = await fetch('http://localhost:3000/api/request_jemput');
+                const res = await fetch('http://localhost:3000/api/laporan');
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
 
-                allData = data.filter(item => ['diterima', 'selesai'].includes(item.status.toLowerCase()));
+                allData = data || [];
                 renderTabel(allData);
             } catch (err) {
                 console.error(err);
-                tbody.innerHTML = `<tr><td colspan="7" class="py-10 text-center text-red-500 font-bold bg-red-50/50 rounded-xl">Gagal terhubung ke database. Pastikan backend berjalan.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-red-500 font-bold bg-red-50/50 rounded-xl">Gagal terhubung ke database. Pastikan backend berjalan.</td></tr>`;
             }
         }
 
@@ -344,16 +340,16 @@
             tbody.innerHTML = '';
 
             if (!data.length) {
-                tbody.innerHTML = `<tr><td colspan="7" class="py-16 px-8 text-center text-slate-400 font-bold text-base">Belum ada data yang diproses.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="py-16 px-8 text-center text-slate-400 font-bold text-base">Belum ada data yang diproses.</td></tr>`;
                 return;
             }
 
             data.forEach(item => {
-                const status = item.status.toLowerCase();
-                const badge = STATUS_BADGE[status] || 'bg-slate-50 text-slate-600 border-slate-200';
-                const label = STATUS_LABEL[status] || status;
+                const status = 'selesai';
+                const badge = STATUS_BADGE[status] || 'bg-emerald-50 text-emerald-600 border-emerald-200';
+                const label = STATUS_LABEL[status] || 'Selesai';
 
-                const tglRaw = item.updated_at || item.created_at || null;
+                const tglRaw = item.tanggal_setor || item.updated_at || item.created_at || null;
                 let tanggalTampil = '-';
                 let tanggalFilter = '';
                 if (tglRaw) {
@@ -362,17 +358,21 @@
                     tanggalFilter = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
                 }
 
-                const estimasi = item.estimasi_berat ? `${item.estimasi_berat} Kg` : '-';
                 const catatan = item.catatan || '-';
+                const detailSampah = (item.kategori && item.nama_sampah)
+                    ? `<span class="font-bold text-slate-700">${item.kategori} - ${item.nama_sampah}</span>`
+                    : `<span class="font-bold text-slate-700">${item.jenis_sampah || '-'}</span>`;
 
                 tbody.innerHTML += `
                 <tr class="table-row group" data-tanggal="${tanggalFilter}" data-nama="${(item.nama_warga || '').toLowerCase()}" data-status="${status}">
                     <td class="py-4 px-6 font-semibold text-slate-500 text-sm group-hover:text-emerald-600 transition-colors">${tanggalTampil}</td>
-                    <td class="py-4 px-6 font-bold text-slate-800 text-sm">${item.nama_warga}</td>
-                    <td class="py-4 px-6 text-sm text-slate-600">${item.rt} / ${item.rw}</td>
+                    <td class="py-4 px-6 font-bold text-slate-800 text-sm">${item.nama_warga || '-'}</td>
+                    <td class="py-4 px-6 text-sm text-slate-600">${item.rt || '-'} / ${item.rw || '-'}</td>
                     <td class="py-4 px-6 text-sm text-slate-600">
-                        <span class="font-bold text-slate-700">${item.jenis_sampah || '-'}</span><br>
-                        <span class="text-[11px] text-slate-400">Poin: ${item.poin_didapat || 0}</span>
+                        ${detailSampah}<br>
+                        <span class="text-xs text-slate-500">Berat: <span class="font-semibold text-slate-700">${item.berat_kg || 0} Kg</span></span><br>
+                        <span class="text-xs text-slate-500">Harga: <span class="font-semibold text-emerald-600">Rp ${(item.total_harga || 0).toLocaleString('id-ID')}</span></span><br>
+                        <span class="text-[11px] font-medium text-amber-600">Poin: +${item.poin_didapat || 0} Poin</span>
                     </td>
                     <td class="py-4 px-6 text-sm text-slate-500 italic max-w-xs truncate" title="${catatan}">${catatan}</td>
                     <td class="py-4 px-6 text-center">
@@ -405,7 +405,7 @@
 
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(18);
-            doc.text('Laporan Penjemputan Bank Sampah RT 1', 14, 22);
+            doc.text('Laporan Penjemputan Bank Sampah Tambak Bayan', 14, 22);
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
             doc.text(`Dicetak: ${new Date().toLocaleString('id-ID')}`, 14, 30);
@@ -421,18 +421,17 @@
                 const cells = row.querySelectorAll('td');
                 return [
                     i + 1,
-                    cells[0].innerText,
+                    cells[0].innerText.replace(/\n/g, ' '),
                     cells[1].innerText,
                     cells[2].innerText,
-                    cells[3].innerText,
+                    cells[3].innerText.replace(/\n/g, ' '),
                     cells[4].innerText,
                     cells[5].innerText,
-                    cells[6].innerText,
                 ];
             });
 
             doc.autoTable({
-                head: [['No', 'Tgl Aksi', 'Nama Warga', 'Alamat', 'Sampah', 'Est. Berat', 'Catatan', 'Status']],
+                head: [['No', 'Tgl Aksi', 'Nama Warga', 'RT/RW', 'Detail Sampah', 'Catatan', 'Status']],
                 body: tableRows,
                 startY,
                 theme: 'grid',
@@ -441,7 +440,7 @@
                 alternateRowStyles: { fillColor: [248, 250, 252] },
             });
 
-            doc.save(`Laporan_Penjemputan_RT1_${Date.now()}.pdf`);
+            doc.save(`Laporan_Penjemputan_TambakBayan_${Date.now()}.pdf`);
         }
 
         document.addEventListener('DOMContentLoaded', getLaporan);
