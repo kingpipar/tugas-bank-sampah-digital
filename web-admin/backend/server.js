@@ -558,12 +558,18 @@ app.delete('/api/voucher_reward/:id', (req, res) => {
     });
 });
 
-app.get('/api/notif', (req, res) => {
-    res.json({
-        success: true,
-        message: 'Data notifikasi berhasil diambil',
-        data: []
-    });
+// app.get('/api/notif', (req, res) => {
+//     res.json({
+//         success: true,
+//         message: 'Data notifikasi berhasil diambil',
+//         data: []
+//     });
+// });
+
+app.get('/api/notifikasi', (req, res) => {
+    const {userId} = req.params;
+
+    res.json([]);
 });
 
 app.get('/api/users', (req, res) => {

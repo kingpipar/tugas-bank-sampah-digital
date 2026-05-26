@@ -280,9 +280,11 @@ class ApiException implements Exception {
 
 Future<List<dynamic>> fetchNotifications(int userId) async {
   final api = ApiService();
+
   try {
-    final response = await api.get('/notifications/$userId');
-    return List<dynamic>.from(response);
+    final response = await api.get('/notif');
+
+    return List<dynamic>.from(response['data'] ?? []);
   } catch (e) {
     throw ApiException('Gagal mengambil notifikasi: $e');
   }
