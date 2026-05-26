@@ -18,7 +18,7 @@ class AppConstants {
   // ----------------------------------------------------------
   // Nama collection di Firestore.
   static const String pickupRequestsCollection = 'request_jemput_realtime';
-  static const String notificationsCollection = 'notifications';
+  static const String notificationsCollection = 'notifikasi';
   static const String hargaSampahCollection = 'harga_sampah_realtime';
   static const String voucherRewardCollection = 'voucher_reward_realtime';
 

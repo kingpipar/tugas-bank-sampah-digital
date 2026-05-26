@@ -1,50 +1,73 @@
-// 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AppNotification {
-  final String id;
-  final String type;
+  final String docId; // Firestore document ID (untuk mark-as-read)
   final String title;
   final String message;
-  final String status;
-  final double points;
+  final int tipeTrigger;
+  final int userId;
+  final bool isRead;
   final DateTime date;
-  final Map<String, dynamic> metadata;
 
   const AppNotification({
-    required this.id,
-    required this.type,
+    required this.docId,
     required this.title,
     required this.message,
-    required this.status,
-    required this.points,
+    required this.tipeTrigger,
+    required this.userId,
+    required this.isRead,
     required this.date,
-    required this.metadata,
   });
 
-  factory AppNotification.fromJson(Map<String, dynamic> json) {
+  /// Factory utama — dari Firestore DocumentSnapshot.
+  /// Field Firestore: judul, pesan, tipe_trigger, user_id, isRead, created_at
+  factory AppNotification.fromFirestore(DocumentSnapshot doc) {
+    final json = doc.data() as Map<String, dynamic>? ?? {};
+
     DateTime parsedDate = DateTime.now();
-
     final rawDate = json['created_at'] ?? json['date'];
-
     if (rawDate is Timestamp) {
       parsedDate = rawDate.toDate();
     } else if (rawDate is String) {
-      parsedDate =
-          DateTime.tryParse(rawDate) ?? DateTime.now();
+      parsedDate = DateTime.tryParse(rawDate) ?? DateTime.now();
     }
 
     return AppNotification(
-      id: json['id']?.toString() ?? '',
-      type: json['type']?.toString() ?? 'general',
-      title: json['title']?.toString() ?? 'Notifikasi',
-      message: json['message']?.toString() ?? '',
-      status: json['status']?.toString() ?? '',
-      points: (json['points'] ?? 0).toDouble(),
+      docId: doc.id,
+      title: json['judul']?.toString() ?? 'Notifikasi',
+      message: json['pesan']?.toString() ?? '',
+      tipeTrigger: _parseInt(json['tipe_trigger']),
+      userId: _parseInt(json['user_id']),
+      isRead: json['isRead'] == true,
       date: parsedDate,
-      metadata: Map<String, dynamic>.from(
-        json['metadata'] ?? {},
-      ),
     );
+  }
+
+  /// Backward-compat factory dari plain Map (misal dari REST API).
+  factory AppNotification.fromJson(Map<String, dynamic> json) {
+    DateTime parsedDate = DateTime.now();
+    final rawDate = json['created_at'] ?? json['date'];
+    if (rawDate is Timestamp) {
+      parsedDate = rawDate.toDate();
+    } else if (rawDate is String) {
+      parsedDate = DateTime.tryParse(rawDate) ?? DateTime.now();
+    }
+
+    return AppNotification(
+      docId: json['docId']?.toString() ?? '',
+      title: json['judul']?.toString() ?? json['title']?.toString() ?? 'Notifikasi',
+      message: json['pesan']?.toString() ?? json['message']?.toString() ?? '',
+      tipeTrigger: _parseInt(json['tipe_trigger']),
+      userId: _parseInt(json['user_id']),
+      isRead: json['isRead'] == true,
+      date: parsedDate,
+    );
+  }
+
+  static int _parseInt(dynamic value) {
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
   }
 }

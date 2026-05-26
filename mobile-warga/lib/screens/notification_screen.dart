@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/auth_provider.dart';
-import '../services/api_service.dart';
 import '../models/notification_model.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -14,101 +13,180 @@ class NotificationScreen extends StatefulWidget {
   State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-  class _NotificationScreenState extends State<NotificationScreen> {
-    // late Future<List<AppNotification>> _notificationsFuture;
+class _NotificationScreenState extends State<NotificationScreen> {
+  bool _hasAutoMarked = false;
 
-    // @override
-    // void initState() {
-    //   super.initState();
-    //   _notificationsFuture = _fetchNotifications();
-    // }
+  /// Otomatis tandai semua notifikasi sebagai sudah dibaca
+  /// saat pertama kali halaman dibuka.
+  void _autoMarkAllRead(List<AppNotification> notifications) {
+    if (_hasAutoMarked) return;
+    _hasAutoMarked = true;
 
-    // Future<List<AppNotification>> _fetchNotifications() async {
-    //   final userId = context.read<AuthProvider>().user?.mysqlUserId;
-    //   if (userId == null) {
-    //     throw ApiException('Akun belum tersinkron. Login ulang.');
-    //   }
+    final unread = notifications.where((n) => !n.isRead).toList();
+    if (unread.isEmpty) return;
 
-    //   final data = await fetchNotifications(userId);
-    //   return data
-    //       .map(
-    //         (json) => AppNotification.fromJson(Map<String, dynamic>.from(json)),
-    //       )
-    //       .toList();
-    // }
-
-    // Future<void> _refresh() async {
-    //   setState(() {
-    //     _notificationsFuture = _fetchNotifications();
-    //   });
-    //   await _notificationsFuture;
-    //}
-
-    @override
-    Widget build(BuildContext context) {
-      final cs = Theme.of(context).colorScheme;
-
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Notifikasi',
-            style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+    final batch = FirebaseFirestore.instance.batch();
+    for (final notif in unread) {
+      final docRef =
+          FirebaseFirestore.instance.collection('notifikasi').doc(notif.docId);
+      batch.update(docRef, {'isRead': true});
+    }
+    batch.commit().catchError((e) {
+      debugPrint('[NOTIF] Gagal auto-mark-read: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal update status baca: $e'),
+            backgroundColor: Colors.red.shade700,
+            duration: const Duration(seconds: 4),
           ),
-          centerTitle: true,
-          backgroundColor: cs.primary,
-          foregroundColor: cs.onPrimary,
+        );
+      }
+    });
+  }
+
+  /// Manual: tandai semua sebagai dibaca (tombol AppBar).
+  Future<void> _markAllAsRead(List<AppNotification> notifications) async {
+    final unread = notifications.where((n) => !n.isRead).toList();
+    if (unread.isEmpty) return;
+
+    final batch = FirebaseFirestore.instance.batch();
+    for (final notif in unread) {
+      final docRef =
+          FirebaseFirestore.instance.collection('notifikasi').doc(notif.docId);
+      batch.update(docRef, {'isRead': true});
+    }
+
+    try {
+      await batch.commit();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Semua notifikasi telah ditandai dibaca'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('[NOTIF] Gagal mark all read: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal: $e'),
+            backgroundColor: Colors.red.shade700,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final userId = context.read<AuthProvider>().user?.mysqlUserId;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Notifikasi',
+          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
         ),
-        body: StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance
-        .collection('notifikasi_realtime')
-        .orderBy('created_at', descending: true)
-        .snapshots(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
+        centerTitle: true,
+        backgroundColor: cs.primary,
+        foregroundColor: cs.onPrimary,
+      ),
+      body: userId == null
+          ? _StateView(
+              icon: Icons.warning_amber_rounded,
+              title: 'Akun belum tersinkron',
+              message: 'Silakan login ulang untuk melihat notifikasi.',
+              color: cs.error,
+            )
+          : StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('notifikasi')
+                  .where('user_id', isEqualTo: userId)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-      if (snapshot.hasError) {
-        return _StateView(
-          icon: Icons.error_outline_rounded,
-          title: 'Gagal memuat notifikasi',
-          message: snapshot.error.toString(),
-          color: cs.error,
-        );
-      }
+                if (snapshot.hasError) {
+                  return _StateView(
+                    icon: Icons.error_outline_rounded,
+                    title: 'Gagal memuat notifikasi',
+                    message: snapshot.error.toString(),
+                    color: cs.error,
+                  );
+                }
 
-      final docs = snapshot.data?.docs ?? [];
+                final docs = snapshot.data?.docs ?? [];
 
-      if (docs.isEmpty) {
-        return _StateView(
-          icon: Icons.notifications_none_rounded,
-          title: 'Belum ada notifikasi',
-          message: 'Aktivitas penjemputan dan poin akan tampil di sini.',
-          color: cs.onSurface.withValues(alpha: 0.45),
-        );
-      }
+                if (docs.isEmpty) {
+                  return _StateView(
+                    icon: Icons.notifications_none_rounded,
+                    title: 'Belum ada notifikasi',
+                    message:
+                        'Aktivitas penjemputan dan poin akan tampil di sini.',
+                    color: cs.onSurface.withValues(alpha: 0.45),
+                  );
+                }
 
-      final notifications = docs.map((doc) {
-        return AppNotification.fromJson(
-          doc.data() as Map<String, dynamic>,
-        );
-      }).toList();
+                final notifications = docs
+                    .map((doc) => AppNotification.fromFirestore(doc))
+                    .toList()
+                  ..sort((a, b) => b.date.compareTo(a.date)); // terbaru di atas
 
-      return ListView.separated(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(16),
-        itemCount: notifications.length,
-        separatorBuilder: (_, _) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          return _NotificationCard(
-            notification: notifications[index],
-          );
-        },
-      );
-    },
-  ),
+                // Auto mark-as-read saat pertama kali data masuk
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _autoMarkAllRead(notifications);
+                });
+
+                final hasUnread = notifications.any((n) => !n.isRead);
+
+                return Column(
+                  children: [
+                    // Tombol "Tandai Semua Dibaca" jika ada unread
+                    if (hasUnread)
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: TextButton.icon(
+                          onPressed: () => _markAllAsRead(notifications),
+                          icon: const Icon(Icons.done_all_rounded, size: 18),
+                          label: Text(
+                            'Tandai Semua Dibaca',
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          style: TextButton.styleFrom(
+                            foregroundColor: cs.primary,
+                          ),
+                        ),
+                      ),
+                    Expanded(
+                      child: ListView.separated(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                        itemCount: notifications.length,
+                        separatorBuilder: (_, __) =>
+                            const SizedBox(height: 10),
+                        itemBuilder: (context, index) {
+                          return _NotificationCard(
+                            notification: notifications[index],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
     );
   }
 }
@@ -122,16 +200,20 @@ class _NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final df = DateFormat('dd MMM yyyy, HH:mm', 'id_ID');
-    final nf = NumberFormat('#,###', 'id_ID');
-    final accent = _accentColor(notification.type);
-    final hasPoints =
-        notification.type == 'points_received' ||
-        notification.type == 'points_redeemed';
+    final accent = _accentColor(notification.tipeTrigger);
 
     return Card(
-      elevation: 1,
+      elevation: notification.isRead ? 0.5 : 2,
       margin: EdgeInsets.zero,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      color: notification.isRead
+          ? null
+          : cs.primary.withValues(alpha: 0.06),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: notification.isRead
+            ? BorderSide.none
+            : BorderSide(color: cs.primary.withValues(alpha: 0.18)),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Row(
@@ -140,7 +222,7 @@ class _NotificationCard extends StatelessWidget {
             CircleAvatar(
               radius: 22,
               backgroundColor: accent.withValues(alpha: 0.12),
-              child: Icon(_icon(notification.type), color: accent),
+              child: Icon(_icon(notification.tipeTrigger), color: accent),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -148,24 +230,26 @@ class _NotificationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Text(
                           notification.title,
                           style: GoogleFonts.inter(
                             fontSize: 14,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: notification.isRead
+                                ? FontWeight.w600
+                                : FontWeight.w700,
                           ),
                         ),
                       ),
-                      if (hasPoints)
-                        Text(
-                          '${notification.points >= 0 ? '+' : ''}${nf.format(notification.points)}',
-                          style: GoogleFonts.outfit(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: accent,
+                      if (!notification.isRead)
+                        Container(
+                          width: 8,
+                          height: 8,
+                          margin: const EdgeInsets.only(left: 6),
+                          decoration: BoxDecoration(
+                            color: cs.primary,
+                            shape: BoxShape.circle,
                           ),
                         ),
                     ],
@@ -179,17 +263,6 @@ class _NotificationCard extends StatelessWidget {
                       color: cs.onSurface.withValues(alpha: 0.72),
                     ),
                   ),
-                  if (_detailText(notification).isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    Text(
-                      _detailText(notification),
-                      style: GoogleFonts.inter(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: accent,
-                      ),
-                    ),
-                  ],
                   const SizedBox(height: 8),
                   Text(
                     df.format(notification.date),
@@ -207,50 +280,34 @@ class _NotificationCard extends StatelessWidget {
     );
   }
 
-  IconData _icon(String type) {
-    switch (type) {
-      case 'pickup_request':
+  IconData _icon(int tipeTrigger) {
+    switch (tipeTrigger) {
+      case 1:
+        return Icons.check_circle_outline_rounded;
+      case 2:
         return Icons.assignment_turned_in_rounded;
-      case 'pickup_completed':
+      case 3:
         return Icons.local_shipping_rounded;
-      case 'points_received':
+      case 4:
         return Icons.add_circle_rounded;
-      case 'points_redeemed':
-        return Icons.remove_circle_rounded;
       default:
         return Icons.notifications_rounded;
     }
   }
 
-  Color _accentColor(String type) {
-    switch (type) {
-      case 'pickup_request':
+  Color _accentColor(int tipeTrigger) {
+    switch (tipeTrigger) {
+      case 1:
+        return Colors.orange.shade700;
+      case 2:
         return Colors.blue.shade700;
-      case 'pickup_completed':
+      case 3:
         return Colors.teal.shade700;
-      case 'points_received':
+      case 4:
         return Colors.green.shade700;
-      case 'points_redeemed':
-        return Colors.red.shade700;
       default:
         return Colors.grey.shade700;
     }
-  }
-
-  String _detailText(AppNotification notification) {
-    if (notification.type != 'pickup_request' &&
-        notification.type != 'pickup_completed') {
-      return notification.status;
-    }
-
-    final berat = (notification.metadata['estimasi_berat'] ?? 0).toDouble();
-    final kantong = notification.metadata['estimasi_kantong'] ?? 0;
-    final parts = <String>[
-      if (notification.status.isNotEmpty) 'Status: ${notification.status}',
-      if (berat > 0) '${NumberFormat('#,###.##', 'id_ID').format(berat)} kg',
-      if (kantong > 0) '$kantong kantong',
-    ];
-    return parts.join(' - ');
   }
 }
 

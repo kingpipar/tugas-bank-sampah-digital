@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/auth_provider.dart';
 import '../providers/dashboard_provider.dart';
 
@@ -40,10 +41,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
               backgroundColor: cs.primary,
               foregroundColor: cs.onPrimary,
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.notifications_rounded),
-                  tooltip: 'Notifikasi',
-                  onPressed: () => Navigator.pushNamed(context, '/notifications_screen'),
+                StreamBuilder<QuerySnapshot>(
+                  stream: auth.user?.mysqlUserId != null
+                      ? FirebaseFirestore.instance
+                            .collection('notifikasi')
+                            .where('user_id', isEqualTo: auth.user!.mysqlUserId)
+                            .snapshots()
+                      : const Stream.empty(),
+                  builder: (context, snapshot) {
+                    // Hitung unread di client-side (tidak butuh composite index)
+                    final docs = snapshot.data?.docs ?? [];
+                    final unreadCount = docs
+                        .where((d) => (d.data() as Map<String, dynamic>?)?['isRead'] != true)
+                        .length;
+                    return IconButton(
+                      icon: Badge(
+                        isLabelVisible: unreadCount > 0,
+                        label: Text(
+                          unreadCount > 9 ? '9+' : '$unreadCount',
+                          style: const TextStyle(fontSize: 10),
+                        ),
+                        child: const Icon(Icons.notifications_rounded),
+                      ),
+                      tooltip: 'Notifikasi',
+                      onPressed: () => Navigator.pushNamed(context, '/notifications_screen'),
+                    );
+                  },
                 ),
                 IconButton(
                   icon: const Icon(Icons.logout_rounded),
