@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Notifikasi | Bank Sampah Digital
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1041/1041916.png">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+
+            background:
+                radial-gradient(circle at top left, #d1fae5 0%, transparent 20%),
+                radial-gradient(circle at bottom right, #dcfce7 0%, transparent 25%),
+                #f8fafc;
+
+            color: #0f172a;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+
+        .sidebar-menu {
+            transition: all .3s ease;
+        }
+
+        .sidebar-menu:hover {
+            transform: translateX(5px);
+        }
+
+        .active-sidebar {
+            background: linear-gradient(135deg, #10b981, #34d399);
+
+            box-shadow:
+                0 20px 40px rgba(16, 185, 129, .28);
+
+            position: relative;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, .76);
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border: 1px solid rgba(255, 255, 255, .6);
+        }
+
+        .hover-card {
+            transition: all .35s ease;
+        }
+
+        .hover-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .notif-card {
+            transition: all .3s ease;
+        }
+
+        .notif-card:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 20px 40px rgba(15, 23, 42, .06);
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="flex h-screen overflow-hidden">
+
+        <aside
+            class="w-[250px] min-w-[250px] bg-[#f3f5f4] border-r border-[#e5e7eb] flex flex-col justify-between px-5 py-7 shadow-sm overflow-y-auto">
+
+            <div>
+
+                <div class="flex items-center gap-4 mb-14 px-2">
+
+                    <div class="w-[58px] h-[58px] rounded-[20px]
+                bg-gradient-to-br from-[#22c55e] to-[#4ade80]
+                flex items-center justify-center
+                shadow-[0_16px_35px_rgba(34,197,94,.25)] shrink-0">
+
+                        <span class="text-[26px]">
+                            ♻️
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <h1 class="text-[16px] font-black leading-5 text-[#0f172a]">
+                            Bank
+                            <br>
+                            Sampah
+                        </h1>
+
+                        <p class="text-[#94a3b8] text-[13px] font-semibold mt-1">
+                            Digital System
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <nav class="space-y-4">
+
+                    <a href="index.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
+hover:bg-white transition-all duration-300">
+
+                        <div class="w-[48px] h-[48px] rounded-[16px]
+        bg-[#eef2f7]
+        flex items-center justify-center
+        text-[22px]
+        shadow-inner shrink-0">
+
+                            📊
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
+                                Dashboard
+                            </h3>
+
+                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
+                                Ringkasan sistem
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="warga.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
+                            👥
+                        </div>
+                        <div class="mobile-hide">
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Warga</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Data warga</p>
+                        </div>
+                    </a>
+
+                    <a href="harga.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
+                hover:bg-white transition-all duration-300">
+
+                        <div class="w-[48px] h-[48px] rounded-[16px]
+                    bg-[#eef2f7]
+                    flex items-center justify-center
+                    text-[22px] shadow-inner shrink-0">
+
+                            💰
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
+                                Harga
+                                <br>
+                                Sampah
+                            </h3>
+
+                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
+                                Kelola harga
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="request_jemput.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
+                hover:bg-white transition-all duration-300">
+
+                        <div class="w-[48px] h-[48px] rounded-[16px]
+                    bg-[#eef2f7]
+                    flex items-center justify-center
+                    text-[22px] shadow-inner shrink-0">
+
+                            🚚
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
+                                Penjemputan
+                            </h3>
+
+                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
+                                Request warga
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="transaksi_penukaran.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
+                hover:bg-white transition-all duration-300">
+
+                        <div class="w-[48px] h-[48px] rounded-[16px]
+                    bg-[#eef2f7]
+                    flex items-center justify-center
+                    text-[22px] shadow-inner shrink-0">
+
+                            🤝
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
+                                Penukaran
+                                <br>
+                                Poin
+                            </h3>
+
+                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
+                                Riwayat klaim
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="voucher_reward.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
+                hover:bg-white transition-all duration-300">
+
+                        <div class="w-[48px] h-[48px] rounded-[16px]
+                    bg-[#eef2f7]
+                    flex items-center justify-center
+                    text-[22px] shadow-inner shrink-0">
+
+                            🎟️
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
+                                Voucher
+                                <br>
+                                Reward
+                            </h3>
+
+                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
+                                Data reward
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="laporan.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
+                hover:bg-white transition-all duration-300">
+
+                        <div class="w-[48px] h-[48px] rounded-[16px]
+                    bg-[#eef2f7]
+                    flex items-center justify-center
+                    text-[22px] shadow-inner shrink-0">
+
+                            📄
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
+                                Laporan
+                            </h3>
+
+                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
+                                Statistik data
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                    <a href="notifikasi.html" class="group flex items-center gap-4 px-5 py-4 rounded-[30px]
+bg-gradient-to-r from-[#22c55e] to-[#34d399]
+shadow-[0_18px_35px_rgba(34,197,94,.25)]
+relative">
+
+                        <div class="w-[48px] h-[48px] rounded-[16px]
+        bg-white/20 border border-white/20
+        flex items-center justify-center
+        text-[22px] text-white shrink-0">
+
+                            🔔
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="text-white font-extrabold text-[15px] leading-5">
+                                Notifikasi
+                            </h3>
+
+                            <p class="text-[#dcfce7] text-[13px] font-medium mt-1 leading-4">
+                                Update terbaru
+                            </p>
+
+                        </div>
+
+                        <div class="absolute right-5 top-1/2 -translate-y-1/2
+        w-7 h-7 rounded-full
+        bg-[#fca5a5]
+        text-white text-[12px] font-black
+        flex items-center justify-center">
+
+                            4
+
+                        </div>
+
+                    </a>
+
+                </nav>
+
+            </div>
+
+        </aside>
+
+        <main class="flex-1 h-full overflow-y-auto relative scroll-smooth">
+
+            <header
+                class="glass-card px-10 py-5 flex items-center justify-between sticky top-0 z-30 border-b border-white/40 shadow-[0_10px_40px_rgba(0,0,0,.04)] backdrop-blur-2xl">
+
+                <div>
+
+                    <h1 class="text-3xl font-black text-slate-800 tracking-tight">
+                        Notifikasi Admin
+                    </h1>
+
+                    <p class="text-sm text-slate-500 mt-1 font-medium">
+                        Monitoring aktivitas realtime sistem Bank Sampah.
+                    </p>
+
+                </div>
+
+                <div class="hidden md:flex items-center gap-4 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 hover-card cursor-pointer"
+                    onclick="window.location.href='profile.html'">
+
+                    <div class="text-right">
+
+                        <p class="text-sm font-bold text-slate-800">
+                            Administrator
+                        </p>
+
+                        <div class="flex items-center justify-end gap-1.5 mt-0.5">
+
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+
+                            <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">
+                                Petugas Aktif
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-xl border border-slate-200 shadow-inner">
+                        👨‍💼
+                    </div>
+
+                </div>
+
+            </header>
+
+            <div class="p-10 max-w-[1400px] mx-auto">
+
+                <section
+                    class="bg-gradient-to-r from-green-500 to-emerald-400 rounded-[36px] p-10 text-white shadow-[0_20px_60px_rgba(16,185,129,.25)] mb-10 relative overflow-hidden">
+
+                    <div class="absolute -right-20 -top-20 w-72 h-72 bg-white/10 rounded-full blur-3xl">
+                    </div>
+
+                    <div class="flex justify-between items-center relative z-10">
+
+                        <div>
+
+                            <h2 class="text-5xl font-black leading-tight">
+                                Pusat
+                                <br>
+                                Notifikasi 🔔
+                            </h2>
+
+                            <p class="mt-4 text-green-50 text-lg">
+                                Semua aktivitas terbaru sistem akan muncul realtime di sini.
+                            </p>
+
+                        </div>
+
+                        <div class="hidden md:block text-8xl">
+                            🔔
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+                    <div class="glass-card rounded-[30px] p-7 shadow-sm notif-card">
+
+                        <p class="text-slate-500 font-medium">
+                            Total Notifikasi
+                        </p>
+
+                        <h3 id="totalNotif" class="text-5xl font-black mt-4 text-slate-800">
+                            0
+                        </h3>
+
+                    </div>
+
+                    <div class="glass-card rounded-[30px] p-7 shadow-sm notif-card">
+
+                        <p class="text-slate-500 font-medium">
+                            Firebase Status
+                        </p>
+
+                        <h3 class="text-3xl font-black mt-4 text-green-600">
+                            Connected
+                        </h3>
+
+                    </div>
+
+                    <div class="glass-card rounded-[30px] p-7 shadow-sm notif-card">
+
+                        <p class="text-slate-500 font-medium">
+                            Realtime Service
+                        </p>
+
+                        <h3 class="text-3xl font-black mt-4 text-emerald-500">
+                            Active
+                        </h3>
+
+                    </div>
+
+                </section>
+
+                <section id="notif-container" class="space-y-6">
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <script type="module">
+
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+        import {
+            getFirestore,
+            collection,
+            getDocs,
+            addDoc
+        }
+            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+
+            apiKey: "AIzaSyAg7ygGtORKF8gcKUT6Ltiu3o3_sCCFvrE",
+
+            authDomain: "bank-sampah-digital-ec305.firebaseapp.com",
+
+            projectId: "bank-sampah-digital-ec305",
+
+            storageBucket: "bank-sampah-digital-ec305.firebasestorage.app",
+
+            messagingSenderId: "950551990138",
+
+            appId: "1:950551990138:web:a40af9463d7353dacc50c3",
+
+            measurementId: "G-P4XG9TJ2G3"
+
+        };
+
+        const app =
+            initializeApp(firebaseConfig);
+
+        const db =
+            getFirestore(app);
+
+        setTimeout(() => {
+
+            const toast = document.createElement("div");
+
+            toast.innerHTML = `
+    
+    <div class="
+    fixed top-6 right-6
+    bg-emerald-500 text-white
+    px-6 py-4 rounded-2xl
+    shadow-2xl z-[9999]
+    font-bold
+    flex items-center gap-3
+    animate-bounce">
+
+        ✅ Firebase Connected
+
+    </div>
+    
+    `;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+
+        }, 500);
+
+        async function seedNotif() {
+
+            const snapshot =
+                await getDocs(
+                    collection(db, "notifikasi")
+                );
+
+            if (snapshot.empty) {
+
+                await addDoc(
+                    collection(db, "notifikasi"),
+                    {
+
+                        title:
+                            "Setoran Baru",
+
+                        message:
+                            "Budi Santoso melakukan setoran sampah plastik 5KG.",
+
+                        type:
+                            "success",
+
+                        time:
+                            "2 menit lalu"
+
+                    }
+                );
+
+                await addDoc(
+                    collection(db, "notifikasi"),
+                    {
+
+                        title:
+                            "Pickup Request",
+
+                        message:
+                            "Ada request penjemputan sampah baru dari warga.",
+
+                        type:
+                            "info",
+
+                        time:
+                            "10 menit lalu"
+
+                    }
+                );
+
+                await addDoc(
+                    collection(db, "notifikasi"),
+                    {
+
+                        title:
+                            "Harga Sampah Update",
+
+                        message:
+                            "Harga Botol Plastik PET berhasil diperbarui.",
+
+                        type:
+                            "warning",
+
+                        time:
+                            "1 jam lalu"
+
+                    }
+                );
+
+            }
+
+        }
+
+        async function loadNotif() {
+
+            const container =
+                document.getElementById(
+                    "notif-container"
+                );
+
+            container.innerHTML = "";
+
+            const snapshot =
+                await getDocs(
+                    collection(db, "notifikasi")
+                );
+
+            let total = 0;
+
+            snapshot.forEach((doc) => {
+
+                total++;
+
+                const data =
+                    doc.data();
+
+                let bg =
+                    "bg-green-100";
+
+                let text =
+                    "text-green-600";
+
+                let emoji =
+                    "♻️";
+
+                if (data.type === "info") {
+
+                    bg = "bg-blue-100";
+
+                    text = "text-blue-600";
+
+                    emoji = "🚛";
+
+                }
+
+                if (data.type === "warning") {
+
+                    bg = "bg-yellow-100";
+
+                    text = "text-yellow-600";
+
+                    emoji = "💰";
+
+                }
+
+                container.innerHTML += `
+
+                    <div class="glass-card rounded-[32px] p-8 notif-card flex items-start gap-5">
+
+                        <div class="w-16 h-16 rounded-2xl ${bg} flex items-center justify-center text-3xl shrink-0">
+
+                            ${emoji}
+
+                        </div>
+
+                        <div class="flex-1">
+
+                            <div class="flex justify-between items-start gap-5">
+
+                                <div>
+
+                                    <h3 class="text-2xl font-bold text-slate-800">
+
+                                        ${data.title}
+
+                                    </h3>
+
+                                    <p class="text-slate-500 mt-2 leading-relaxed">
+
+                                        ${data.message}
+
+                                    </p>
+
+                                </div>
+
+                                <span class="${bg} ${text} px-4 py-2 rounded-xl text-sm font-semibold">
+
+                                    Baru
+
+                                </span>
+
+                            </div>
+
+                            <p class="text-sm text-slate-400 mt-5">
+
+                                ${data.time}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            });
+
+            document.getElementById(
+                "totalNotif"
+            ).innerText = total;
+
+        }
+
+        await seedNotif();
+
+        await loadNotif();
+
+    </script>
+
+</body>
+
+</html>
