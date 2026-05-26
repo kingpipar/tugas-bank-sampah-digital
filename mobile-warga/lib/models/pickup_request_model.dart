@@ -9,6 +9,7 @@ class PickupRequestModel {
   final String kategoriSampah;
   final double hargaPerKg;
   final double poinPerKg;
+  final String tanggalJemput;
   final String catatan;
   final double latitude;
   final double longitude;
@@ -24,6 +25,7 @@ class PickupRequestModel {
     this.kategoriSampah = '',
     this.hargaPerKg = 0,
     this.poinPerKg = 0,
+    this.tanggalJemput = '',
     this.catatan = '',
     required this.latitude,
     required this.longitude,
@@ -40,6 +42,7 @@ class PickupRequestModel {
       'kategori_sampah': kategoriSampah,
       'harga_per_kg': hargaPerKg,
       'poin_per_kg': poinPerKg,
+      'tanggal_jemput': tanggalJemput,
       'catatan': catatan,
       'koordinat': {
         'lat': latitude,
@@ -65,6 +68,7 @@ class PickupRequestModel {
       kategoriSampah: data['kategori_sampah']?.toString() ?? '',
       hargaPerKg: (data['harga_per_kg'] ?? 0).toDouble(),
       poinPerKg: (data['poin_per_kg'] ?? 0).toDouble(),
+      tanggalJemput: data['tanggal_jemput']?.toString() ?? '',
       catatan: data['catatan'] ?? '',
       latitude: (koordinat['lat'] ?? 0).toDouble(),
       longitude: (koordinat['lng'] ?? 0).toDouble(),

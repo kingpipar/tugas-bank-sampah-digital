@@ -27,6 +27,7 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
 
   String? _selectedHargaSampahId;
   HargaSampahModel? _selectedHargaSampah;
+  DateTime? _tanggalJemput;
   double? _latitude;
   double? _longitude;
   bool _isLoadingLocation = false;
@@ -72,12 +73,46 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
     return '${_latitude!.toStringAsFixed(6)}, ${_longitude!.toStringAsFixed(6)}';
   }
 
+  String get _tanggalJemputApiText {
+    final tanggal = _tanggalJemput;
+    if (tanggal == null) return '';
+    return DateFormat('yyyy-MM-dd').format(tanggal);
+  }
+
+  String get _tanggalJemputDisplayText {
+    final tanggal = _tanggalJemput;
+    if (tanggal == null) return 'Belum dipilih';
+    return DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(tanggal);
+  }
+
+  Future<void> _pickTanggalJemput() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _tanggalJemput ?? today,
+      firstDate: today,
+      lastDate: today.add(const Duration(days: 30)),
+      helpText: 'Pilih tanggal penjemputan',
+      cancelText: 'Batal',
+      confirmText: 'Pilih',
+    );
+
+    if (picked == null || !mounted) return;
+    setState(() => _tanggalJemput = picked);
+  }
+
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
 
     final selectedSampah = _selectedHargaSampah;
     if (selectedSampah == null) {
       _showError('Pilih jenis sampah terlebih dahulu');
+      return;
+    }
+
+    if (_tanggalJemput == null) {
+      _showError('Pilih tanggal penjemputan terlebih dahulu');
       return;
     }
 
@@ -116,6 +151,7 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
       kategoriSampah: selectedSampah.kategori,
       hargaPerKg: selectedSampah.hargaPerKg,
       poinPerKg: selectedSampah.poinPerKg,
+      tanggalJemput: _tanggalJemputApiText,
       catatan: catatan,
       latitude: lat,
       longitude: lng,
@@ -130,7 +166,7 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
         jenisSampah: selectedSampah.namaSampah,
         estimasiBerat: berat,
         // estimasiKantong: kantong,
-        tanggalJemput: DateTime.now().toIso8601String().split('T')[0],
+        tanggalJemput: _tanggalJemputApiText,
         catatan: catatan,
         userId: mysqlUserId,
         idSampah: int.tryParse(selectedSampah.id),
@@ -551,28 +587,37 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
                   ),
 
                   const SizedBox(height: 24),
-                  Text('Pilih tanggal penjemputan anda'),
+                  Text(
+                    'Tanggal Penjemputan',
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   const SizedBox(height: 8),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 30)),
-                      );
-                    },
-                    icon: const Icon(Icons.calendar_today_rounded),
-                    label: const Text('Pilih Tanggal'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    onTap: pickup.isSubmitting ? null : _pickTanggalJemput,
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.calendar_month_rounded),
+                        suffixIcon: const Icon(Icons.expand_more_rounded),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                      ),
+                      child: Text(
+                        _tanggalJemputDisplayText,
+                        style: GoogleFonts.inter(
+                          fontSize: 14,
+                          color: _tanggalJemput == null
+                              ? cs.onSurfaceVariant
+                              : cs.onSurface,
+                        ),
                       ),
                     ),
                   ),
-
-
 
                   const SizedBox(height: 24),
                   FilledButton.icon(
