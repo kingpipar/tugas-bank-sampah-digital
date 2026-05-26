@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/services/api_service.dart';
 import 'package:provider/provider.dart';
+import '../config/app_constants.dart';
+import '../models/harga_sampah_model.dart';
 import '../models/pickup_request_model.dart';
 import '../providers/auth_provider.dart';
 import '../providers/pickup_provider.dart';
@@ -17,17 +21,19 @@ class PickupRequestScreen extends StatefulWidget {
 
 class _PickupRequestScreenState extends State<PickupRequestScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _kantongController = TextEditingController(text: '1');
+  // final _kantongController = TextEditingController(text: '1');
   final _beratController = TextEditingController();
   final _catatanController = TextEditingController();
 
+  String? _selectedHargaSampahId;
+  HargaSampahModel? _selectedHargaSampah;
   double? _latitude;
   double? _longitude;
   bool _isLoadingLocation = false;
 
   @override
   void dispose() {
-    _kantongController.dispose();
+    // _kantongController.dispose();
     _beratController.dispose();
     _catatanController.dispose();
     super.dispose();
@@ -69,6 +75,12 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final selectedSampah = _selectedHargaSampah;
+    if (selectedSampah == null) {
+      _showError('Pilih jenis sampah terlebih dahulu');
+      return;
+    }
+
     if (_latitude == null || _longitude == null) {
       _showError('Pilih lokasi saat ini terlebih dahulu');
       return;
@@ -89,7 +101,7 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
       return;
     }
 
-    final kantong = int.parse(_kantongController.text);
+    // final kantong = int.parse(_kantongController.text);
     final berat = double.parse(_beratController.text);
     final catatan = _catatanController.text.trim();
     final api = ApiService();
@@ -98,8 +110,12 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
 
     final firestoreRequest = PickupRequestModel(
       userId: user.id,
-      estimasiKantong: kantong,
+      // estimasiKantong: kantong,
       estimasiBerat: berat,
+      jenisSampah: selectedSampah.namaSampah,
+      kategoriSampah: selectedSampah.kategori,
+      hargaPerKg: selectedSampah.hargaPerKg,
+      poinPerKg: selectedSampah.poinPerKg,
       catatan: catatan,
       latitude: lat,
       longitude: lng,
@@ -111,12 +127,13 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
       syncToMysql: () => api.createPickupRequest(
         namaWarga: user.nama,
         alamat: _alamatText,
-        jenisSampah: 'Campuran',
+        jenisSampah: selectedSampah.namaSampah,
         estimasiBerat: berat,
-        estimasiKantong: kantong,
+        // estimasiKantong: kantong,
         tanggalJemput: DateTime.now().toIso8601String().split('T')[0],
         catatan: catatan,
         userId: mysqlUserId,
+        idSampah: int.tryParse(selectedSampah.id),
       ),
     );
 
@@ -151,6 +168,12 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
     final cs = Theme.of(context).colorScheme;
     final pickup = context.watch<PickupProvider>();
     final hasLocation = _latitude != null && _longitude != null;
+    final currencyFormat = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    );
+    final numberFormat = NumberFormat('#,###', 'id_ID');
 
     return Scaffold(
       appBar: AppBar(
@@ -199,32 +222,188 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Estimasi Jumlah Kantong',
+                    'Pilih Jenis Sampah',
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _kantongController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: 'Contoh: 3',
-                      prefixIcon: const Icon(Icons.shopping_bag_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      filled: true,
-                    ),
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Wajib diisi';
-                      if (int.tryParse(v) == null || int.parse(v) < 1) {
-                        return 'Masukkan angka valid (min. 1)';
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection(AppConstants.hargaSampahCollection)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return InputDecorator(
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.category_outlined),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            filled: true,
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: cs.primary,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'Memuat data sampah...',
+                                style: GoogleFonts.inter(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        );
                       }
-                      return null;
+
+                      if (snapshot.hasError) {
+                        return Text(
+                          'Gagal memuat data sampah: ${snapshot.error}',
+                          style: GoogleFonts.inter(color: cs.error),
+                        );
+                      }
+
+                      final items = ((snapshot.data?.docs ?? [])
+                            .map(HargaSampahModel.fromFirestore)
+                            .toList())
+                        ..sort((a, b) {
+                          final categoryCompare =
+                              a.kategori.compareTo(b.kategori);
+                          if (categoryCompare != 0) return categoryCompare;
+                          return a.namaSampah.compareTo(b.namaSampah);
+                        });
+
+                      if (items.isEmpty) {
+                        return InputDecorator(
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.category_outlined),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            filled: true,
+                          ),
+                          child: Text(
+                            'Belum ada data harga sampah',
+                            style: GoogleFonts.inter(
+                              color: cs.onSurfaceVariant,
+                            ),
+                          ),
+                        );
+                      }
+
+                      final selectedId = items.any(
+                        (item) => item.id == _selectedHargaSampahId,
+                      )
+                          ? _selectedHargaSampahId
+                          : null;
+
+                      return DropdownButtonFormField<String>(
+                        value: selectedId,
+                        isExpanded: true,
+                        menuMaxHeight: 420,
+                        decoration: InputDecoration(
+                          hintText: 'Pilih sampah dari daftar harga',
+                          prefixIcon: const Icon(Icons.category_outlined),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          filled: true,
+                        ),
+                        items: items.map((item) {
+                          return DropdownMenuItem<String>(
+                            value: item.id,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.namaSampah,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  '${item.kategori} - ${currencyFormat.format(item.hargaPerKg)} / kg - ${numberFormat.format(item.poinPerKg)} poin/kg',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    color: cs.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                        selectedItemBuilder: (context) {
+                          return items.map((item) {
+                            return Text(
+                              '${item.namaSampah} - ${currencyFormat.format(item.hargaPerKg)} / kg - ${numberFormat.format(item.poinPerKg)} poin/kg',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(fontSize: 14),
+                            );
+                          }).toList();
+                        },
+                        onChanged: pickup.isSubmitting
+                            ? null
+                            : (value) {
+                                final selected = items.firstWhere(
+                                  (item) => item.id == value,
+                                );
+                                setState(() {
+                                  _selectedHargaSampahId = selected.id;
+                                  _selectedHargaSampah = selected;
+                                });
+                              },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Pilih jenis sampah';
+                          }
+                          return null;
+                        },
+                      );
                     },
                   ),
+                  // const SizedBox(height: 20),
+                  // Text(
+                  //   'Estimasi Kantong',
+                  //   style: GoogleFonts.inter(
+                  //     fontSize: 14,
+                  //     fontWeight: FontWeight.w600,
+                  //   ),
+                  // ),
+                  const SizedBox(height: 8),
+                  // TextFormField(
+                  //   // controller: _kantongController,
+                  //   keyboardType: TextInputType.number,
+                  //   decoration: InputDecoration(
+                  //     hintText: 'Contoh: 3',
+                  //     prefixIcon: const Icon(Icons.shopping_bag_outlined),
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(12),
+                  //     ),
+                  //     filled: true,
+                  //   ),
+                  //   validator: (v) {
+                  //     if (v == null || v.isEmpty) return 'Wajib diisi';
+                  //     if (int.tryParse(v) == null || int.parse(v) < 1) {
+                  //       return 'Masukkan angka valid (min. 1)';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
                   const SizedBox(height: 20),
                   Text(
                     'Estimasi Berat (kg)',
@@ -355,7 +534,9 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
                               _isLoadingLocation
                                   ? 'Mengambil lokasi...'
                                   : 'Pilih Lokasi Saat Ini',
-                              style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -368,6 +549,31 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 24),
+                  Text('Pilih tanggal penjemputan anda'),
+                  const SizedBox(height: 8),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(const Duration(days: 30)),
+                      );
+                    },
+                    icon: const Icon(Icons.calendar_today_rounded),
+                    label: const Text('Pilih Tanggal'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+
+
+
                   const SizedBox(height: 24),
                   FilledButton.icon(
                     onPressed: pickup.isSubmitting ? null : _handleSubmit,

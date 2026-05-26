@@ -11,7 +11,15 @@ class AppConstants {
   //   GET  /api/saldo/:userId     → Ambil saldo poin warga
   //   GET  /api/transaksi/:userId → Ambil riwayat penukaran poin
   // ----------------------------------------------------------
-  static const String baseUrl = 'http://localhost:3000/api';
+  static const String _configuredBaseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+  );
+
+  // Default untuk Android emulator. Untuk HP fisik, jalankan dengan:
+  // flutter run --dart-define=API_BASE_URL=http://IP_LAPTOP:3000/api
+  static String get baseUrl => _configuredBaseUrl.isNotEmpty
+      ? _configuredBaseUrl
+      : 'http://10.0.2.2:3000/api';
 
   // ----------------------------------------------------------
   // FIREBASE FIRESTORE COLLECTIONS

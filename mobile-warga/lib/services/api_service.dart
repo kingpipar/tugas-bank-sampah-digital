@@ -74,6 +74,8 @@ class ApiService {
       return _handleResponse(response);
     } on TimeoutException {
       throw ApiException('Request timeout. Periksa koneksi internet Anda.');
+    } on ApiException {
+      rethrow;
     } catch (e) {
       throw ApiException('Gagal menghubungi server: $e');
     }
@@ -92,6 +94,8 @@ class ApiService {
       return _handleResponse(response);
     } on TimeoutException {
       throw ApiException('Request timeout. Periksa koneksi internet Anda.');
+    } on ApiException {
+      rethrow;
     } catch (e) {
       throw ApiException('Gagal menghubungi server: $e');
     }
@@ -189,20 +193,22 @@ class ApiService {
     required String alamat,
     required String jenisSampah,
     required double estimasiBerat,
-    required int estimasiKantong,
+    // required int estimasiKantong,
     required String tanggalJemput,
     required String catatan,
     required int userId,
+    int? idSampah,
   }) async {
-    final response = await post('/request-jemput', {
+    final response = await post('/request_jemput', {
       'nama_warga': namaWarga,
       'alamat': alamat,
       'jenis_sampah': jenisSampah,
       'estimasi_berat': estimasiBerat,
-      'estimasi_kantong': estimasiKantong,
+      // 'estimasi_kantong': estimasiKantong,
       'tanggal_jemput': tanggalJemput,
       'catatan': catatan,
       'user_id': userId,
+      'id_sampah': idSampah,
     });
 
     return Map<String, dynamic>.from(response);

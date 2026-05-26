@@ -4,9 +4,9 @@
     "build_asset_types": [],
     "linking_enabled": false
   },
-  "out_dir_shared": "D:\\Coolyeah\\Semester 6\\Praktikum\\TCC\\Projek\\mobile-warga\\.dart_tool\\hooks_runner\\shared\\objective_c\\build\\",
-  "out_file": "D:\\Coolyeah\\Semester 6\\Praktikum\\TCC\\Projek\\mobile-warga\\.dart_tool\\hooks_runner\\objective_c\\337ce265dc\\output.json",
+  "out_dir_shared": "C:\\prak mobile\\tugas-tcc-bank-sampah\\tugas-bank-sampah-digital\\mobile-warga\\.dart_tool\\hooks_runner\\shared\\objective_c\\build\\",
+  "out_file": "C:\\prak mobile\\tugas-tcc-bank-sampah\\tugas-bank-sampah-digital\\mobile-warga\\.dart_tool\\hooks_runner\\objective_c\\337ce265dc\\output.json",
   "package_name": "objective_c",
-  "package_root": "E:\\dart_pub_cache\\hosted\\pub.dev\\objective_c-9.3.0\\",
+  "package_root": "C:\\Users\\M S I\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\objective_c-9.3.0\\",
   "user_defines": {}
 }
