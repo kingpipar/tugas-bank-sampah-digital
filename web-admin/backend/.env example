@@ -1,0 +1,12 @@
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASS=your_database_password
+DB_HOST=your_database_host
+PORT=your_port_number
+
+# example
+# DB_NAME=users_sequelize
+# DB_USER=root
+# DB_PASS=
+# DB_HOST=localhost
+# PORT=3000
