@@ -16,6 +16,8 @@ import 'screens/dashboard_screen.dart';
 import 'screens/pickup_request_screen.dart';
 import 'screens/history_screen.dart';
 import 'screens/notification_screen.dart';
+import 'screens/harga_sampah_screen.dart';
+import 'screens/katalog_voucher_screen.dart';
 
 /// ============================================================
 /// main.dart — Entry Point Aplikasi Bank Sampah Digital
@@ -125,6 +127,8 @@ class BankSampahApp extends StatelessWidget {
           '/pickup-request': (context) => const PickupRequestScreen(),
           '/history': (context) => const HistoryScreen(),
           '/notifications_screen': (context) => const NotificationScreen(),
+          '/harga-sampah': (context) => const HargaSampahScreen(),
+          '/katalog-voucher': (context) => const KatalogVoucherScreen(),
         },
       ),
     );

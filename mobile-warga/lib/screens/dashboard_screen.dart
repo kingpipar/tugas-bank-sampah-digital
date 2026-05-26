@@ -64,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Text('Halo, ${auth.user?.nama ?? 'Warga'} 👋',
                         style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold, color: cs.onPrimary)),
                     Text('Selamat datang di Bank Sampah Digital',
-                        style: GoogleFonts.inter(fontSize: 11, color: cs.onPrimary.withValues(alpha: 0.8))),
+                        style: GoogleFonts.inter(fontSize: 12, color: cs.onPrimary.withValues(alpha: 0.8))),
                   ],
                 ),
               ),
@@ -82,24 +82,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const SizedBox(height: 12),
                   // -- MENU GRID --
                   Row(children: [
-                    Expanded(child: _menuCard(Icons.local_shipping_rounded, 'Request\nJemput Sampah', cs.primary, () => Navigator.pushNamed(context, '/pickup-request'))),
-                    const SizedBox(width: 12),
+                    Expanded(child: _menuCard(Icons.local_shipping_rounded, 'Request\nJemput', cs.primary, () => Navigator.pushNamed(context, '/pickup-request'))),
+                    const SizedBox(width: 8),
+                    Expanded(child: _menuCard(Icons.scale_rounded, 'Daftar\nHarga', cs.secondary, () => Navigator.pushNamed(context, '/harga-sampah'))),
+                    const SizedBox(width: 8),
                     Expanded(child: _menuCard(Icons.history_rounded, 'Riwayat\n& Status', cs.tertiary, () => Navigator.pushNamed(context, '/history'))),
                   ]),
                   const SizedBox(height: 24),
-                  // -- INFO --
-                  Card(
-                    elevation: 0, color: cs.secondaryContainer,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(children: [
-                        Icon(Icons.info_outline_rounded, color: cs.onSecondaryContainer),
-                        const SizedBox(width: 12),
-                        Expanded(child: Text('Kumpulkan sampah anorganik dan tukarkan menjadi poin!', style: GoogleFonts.inter(fontSize: 13, color: cs.onSecondaryContainer))),
-                      ]),
-                    ),
-                  ),
                 ]),
               ),
             ),
@@ -123,13 +112,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(width: 8),
           Text('Total Saldo Poin', style: GoogleFonts.inter(fontSize: 14, color: cs.onPrimary.withValues(alpha: 0.8))),
         ]),
-        const SizedBox(height: 12),
-        if (dash.isLoading)
-          SizedBox(height: 40, child: Center(child: CircularProgressIndicator(color: cs.onPrimary, strokeWidth: 2)))
-        else if (dash.errorMessage != null)
-          Text(dash.errorMessage!, style: GoogleFonts.inter(fontSize: 14, color: cs.onPrimary))
-        else
-          Text('${nf.format(dash.saldoPoin)} Poin', style: GoogleFonts.outfit(fontSize: 36, fontWeight: FontWeight.bold, color: cs.onPrimary)),
+        const SizedBox(height: 4),
+        Text(
+          'Kumpulkan sampah anorganik dan tukarkan menjadi poin!',
+          style: GoogleFonts.inter(fontSize: 11, color: cs.onPrimary.withValues(alpha: 0.7)),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: dash.isLoading
+                  ? const SizedBox(
+                      height: 40,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                      ),
+                    )
+                  : Text(
+                      '${nf.format(dash.saldoPoin)} Poin',
+                      style: GoogleFonts.outfit(fontSize: 32, fontWeight: FontWeight.bold, color: cs.onPrimary),
+                    ),
+            ),
+            const SizedBox(width: 12),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pushNamed(context, '/katalog-voucher'),
+              icon: Icon(Icons.card_giftcard_rounded, color: cs.primary, size: 18),
+              label: Text(
+                'Tukar',
+                style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 13),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: cs.onPrimary,
+                foregroundColor: cs.primary,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                elevation: 0,
+              ),
+            ),
+          ],
+        ),
       ]),
     );
   }

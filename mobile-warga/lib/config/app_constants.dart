@@ -31,8 +31,10 @@ class AppConstants {
   // FIREBASE FIRESTORE COLLECTIONS
   // ----------------------------------------------------------
   // Nama collection di Firestore. Sesuaikan jika berbeda.
-  static const String pickupRequestsCollection = 'pickup_requests';
-  static const String notificationsCollection = 'notifications';
+  static const String pickupRequestsCollection = 'request_jemput_realtime';
+  static const String notificationsCollection = 'notifikasi';
+  static const String hargaSampahCollection = 'harga_sampah_realtime';
+  static const String voucherRewardCollection = 'voucher_reward_realtime';
 
   // ----------------------------------------------------------
   // MOCK KOORDINAT GPS (Yogyakarta)

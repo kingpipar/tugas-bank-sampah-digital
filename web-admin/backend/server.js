@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const { db: firestoreDb } = require('./config/firebaseConfig');
 
 const app = express();
 const PORT = 3000;
@@ -18,12 +19,63 @@ const db = mysql.createPool({
     queueLimit: 0
 });
 
+function syncExistingPricesToFirestore() {
+    if (!firestoreDb) return;
+    
+    db.query('SELECT * FROM harga_sampah', (err, results) => {
+        if (err) return console.error('Gagal membaca data harga sampah dari MySQL:', err.message);
+        
+        const batch = firestoreDb.batch();
+        results.forEach(row => {
+            const docRef = firestoreDb.collection('harga_sampah_realtime').doc(row.id.toString());
+            batch.set(docRef, {
+                id: row.id,
+                kategori: row.kategori,
+                nama_sampah: row.nama_sampah,
+                harga_per_kg: row.harga_per_kg,
+                poin_per_kg: row.poin_per_kg || 0,
+                updated_at: new Date().toISOString()
+            });
+        });
+        
+        batch.commit()
+            .then(() => console.log(`✅ Berhasil menyinkronkan ${results.length} data harga sampah ke Firestore`))
+            .catch(fsErr => console.error('Gagal menyinkronkan data harga sampah ke Firestore:', fsErr.message));
+    });
+}
+
+function syncExistingVouchersToFirestore() {
+    if (!firestoreDb) return;
+    
+    db.query('SELECT * FROM voucher_reward', (err, results) => {
+        if (err) return console.error('Gagal membaca data voucher dari MySQL:', err.message);
+        
+        const batch = firestoreDb.batch();
+        results.forEach(row => {
+            const docRef = firestoreDb.collection('voucher_reward_realtime').doc(row.id.toString());
+            batch.set(docRef, {
+                id: row.id,
+                nama_voucher: row.nama_voucher,
+                min_poin: row.min_poin,
+                stok: row.stok,
+                updated_at: new Date().toISOString()
+            });
+        });
+        
+        batch.commit()
+            .then(() => console.log(`✅ Berhasil menyinkronkan ${results.length} data voucher ke Firestore`))
+            .catch(fsErr => console.error('Gagal menyinkronkan data voucher ke Firestore:', fsErr.message));
+    });
+}
+
 db.getConnection((err, connection) => {
     if (err) {
         console.error('❌ Gagal konek ke database:', err.message);
     } else {
         console.log(`✅ Database terhubung (bank_sampah_digital) di Port ${PORT}`);
         connection.release();
+        syncExistingPricesToFirestore();
+        syncExistingVouchersToFirestore();
     }
 });
 
@@ -85,6 +137,19 @@ app.post('/api/harga', (req, res) => {
     const sql = 'INSERT INTO harga_sampah (kategori, nama_sampah, harga_per_kg, poin_per_kg) VALUES (?, ?, ?, ?)';
     db.query(sql, [kategori, nama_sampah, harga_per_kg, poin], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
+        
+        // Sync to Firestore
+        if (firestoreDb) {
+            firestoreDb.collection('harga_sampah_realtime').doc(result.insertId.toString()).set({
+                id: result.insertId,
+                kategori,
+                nama_sampah,
+                harga_per_kg: parseInt(harga_per_kg),
+                poin_per_kg: poin,
+                updated_at: new Date().toISOString()
+            }).catch(fsErr => console.error('Gagal sync ke Firestore:', fsErr.message));
+        }
+
         res.status(201).json({ success: true, message: 'Data berhasil ditambahkan' });
     });
 });
@@ -96,6 +161,19 @@ app.put('/api/harga/:id', (req, res) => {
     const sql = 'UPDATE harga_sampah SET kategori = ?, nama_sampah = ?, harga_per_kg = ?, poin_per_kg = ? WHERE id = ?';
     db.query(sql, [kategori, nama_sampah, harga_per_kg, poin, id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
+        
+        // Sync to Firestore
+        if (firestoreDb) {
+            firestoreDb.collection('harga_sampah_realtime').doc(id.toString()).set({
+                id: parseInt(id),
+                kategori,
+                nama_sampah,
+                harga_per_kg: parseInt(harga_per_kg),
+                poin_per_kg: poin,
+                updated_at: new Date().toISOString()
+            }, { merge: true }).catch(fsErr => console.error('Gagal sync ke Firestore:', fsErr.message));
+        }
+
         res.json({ success: true, message: 'Data berhasil diperbarui' });
     });
 });
@@ -105,6 +183,13 @@ app.delete('/api/harga/:id', (req, res) => {
     const sql = 'DELETE FROM harga_sampah WHERE id = ?';
     db.query(sql, [id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
+        
+        // Sync to Firestore
+        if (firestoreDb) {
+            firestoreDb.collection('harga_sampah_realtime').doc(id.toString()).delete()
+                .catch(fsErr => console.error('Gagal delete sync ke Firestore:', fsErr.message));
+        }
+
         res.json({ success: true, message: 'Data berhasil dihapus' });
     });
 });
@@ -346,6 +431,18 @@ app.post('/api/voucher_reward', (req, res) => {
     const sql = 'INSERT INTO voucher_reward (nama_voucher, min_poin, stok) VALUES (?, ?, ?)';
     db.query(sql, [nama_voucher, parseInt(min_poin), parseInt(stok)], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
+        
+        // Sync to Firestore
+        if (firestoreDb) {
+            firestoreDb.collection('voucher_reward_realtime').doc(result.insertId.toString()).set({
+                id: result.insertId,
+                nama_voucher,
+                min_poin: parseInt(min_poin),
+                stok: parseInt(stok),
+                updated_at: new Date().toISOString()
+            }).catch(fsErr => console.error('Gagal sync voucher ke Firestore:', fsErr.message));
+        }
+
         res.status(201).json({ success: true, message: 'Voucher berhasil ditambahkan' });
     });
 });
@@ -356,6 +453,18 @@ app.put('/api/voucher_reward/:id', (req, res) => {
     const sql = 'UPDATE voucher_reward SET nama_voucher = ?, min_poin = ?, stok = ? WHERE id = ?';
     db.query(sql, [nama_voucher, parseInt(min_poin), parseInt(stok), id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
+        
+        // Sync to Firestore
+        if (firestoreDb) {
+            firestoreDb.collection('voucher_reward_realtime').doc(id.toString()).set({
+                id: parseInt(id),
+                nama_voucher,
+                min_poin: parseInt(min_poin),
+                stok: parseInt(stok),
+                updated_at: new Date().toISOString()
+            }, { merge: true }).catch(fsErr => console.error('Gagal sync voucher ke Firestore:', fsErr.message));
+        }
+
         res.json({ success: true, message: 'Voucher berhasil diperbarui' });
     });
 });
@@ -365,6 +474,13 @@ app.delete('/api/voucher_reward/:id', (req, res) => {
     const sql = 'DELETE FROM voucher_reward WHERE id = ?';
     db.query(sql, [id], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
+        
+        // Sync to Firestore
+        if (firestoreDb) {
+            firestoreDb.collection('voucher_reward_realtime').doc(id.toString()).delete()
+                .catch(fsErr => console.error('Gagal delete sync voucher ke Firestore:', fsErr.message));
+        }
+
         res.json({ success: true, message: 'Voucher berhasil dihapus' });
     });
 });
@@ -394,6 +510,50 @@ app.get('/api/users/stats', (req, res) => {
     `, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results[0]);
+    });
+});
+
+app.post('/api/sync-user', (req, res) => {
+    const { nama, email, password, rt, rw, jenis_kelamin } = req.body;
+    
+    if (!email) {
+        return res.status(400).json({ success: false, message: 'Email wajib diisi' });
+    }
+
+    db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        
+        if (results.length > 0) {
+            // User sudah ada di database MySQL, kembalikan data user tersebut
+            const user = results[0];
+            return res.json({
+                success: true,
+                id: user.id,
+                nama: user.nama,
+                email: user.email,
+                saldo_poin: user.saldo_poin || 0
+            });
+        } else {
+            // User belum ada di MySQL, tambahkan baru
+            const namaUser = nama || 'Warga Baru';
+            const passUser = password || '123456'; // Default password jika kosong
+            
+            db.query(
+                'INSERT INTO users (nama, email, password, role, rt, rw, jenis_kelamin, saldo_poin) VALUES (?, ?, ?, "warga", ?, ?, ?, 0)',
+                [namaUser, email, passUser, rt || null, rw || null, jenis_kelamin || null],
+                (errIns, resultIns) => {
+                    if (errIns) return res.status(500).json({ error: errIns.message });
+                    
+                    res.status(201).json({
+                        success: true,
+                        id: resultIns.insertId,
+                        nama: namaUser,
+                        email: email,
+                        saldo_poin: 0
+                    });
+                }
+            );
+        }
     });
 });
 

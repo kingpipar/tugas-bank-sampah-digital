@@ -168,12 +168,18 @@ class ApiService {
     required String nama,
     required String email,
     required String password,
+    required String rt,
+    required String rw,
+    required String jenisKelamin,
   }) async {
     final response = await post('/sync-user', {
       'uid': uid,
       'nama': nama,
       'email': email,
       'password': password,
+      'rt': rt,
+      'rw': rw,
+      'jenis_kelamin': jenisKelamin,
     });
     return Map<String, dynamic>.from(response);
   }
