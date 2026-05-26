@@ -61,7 +61,14 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> register(String email, String password) async {
+  Future<bool> register(
+    String email, 
+    String password, {
+    required String nama,
+    required String rt,
+    required String rw,
+    required String jenisKelamin,
+    }) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -79,18 +86,29 @@ class AuthProvider extends ChangeNotifier {
       }
 
       final userData = {
-        'nama': 'Warga Baru',
+        'nama': nama,
         'email': email,
+        'rt': rt,
+        'rw': rw,
+        'jenisKelamin': jenisKelamin,
         'saldoPoin': 0,
         'createdAt': FieldValue.serverTimestamp(),
       };
 
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('warga_realtime')
           .doc(firebaseUser.uid)
           .set(userData);
 
-      await _finishAuth(firebaseUser, email, password, userData);
+      await _finishAuth(
+        firebaseUser, 
+        email, 
+        password,
+        userData,
+        rt: rt,
+        rw: rw, 
+        jenisKelamin: jenisKelamin,
+      );
       return true;
     } on FirebaseAuthException catch (e) {
       _errorMessage = _mapFirebaseAuthError(e, isRegister: true);
@@ -115,7 +133,7 @@ class AuthProvider extends ChangeNotifier {
     String email,
   ) async {
     final userDoc = await FirebaseFirestore.instance
-        .collection('users')
+        .collection('warga_realtime')
         .doc(firebaseUser.uid)
         .get();
 
@@ -130,7 +148,7 @@ class AuthProvider extends ChangeNotifier {
     };
 
     await FirebaseFirestore.instance
-        .collection('users')
+        .collection('warga_realtime')
         .doc(firebaseUser.uid)
         .set(userData);
 
@@ -141,13 +159,26 @@ class AuthProvider extends ChangeNotifier {
     User firebaseUser,
     String email,
     String password,
-    Map<String, dynamic> userData,
-  ) async {
+    Map<String, dynamic> userData, {
+    String? rt,
+    String? rw,
+    String? jenisKelamin,
+  }) async {
+    // Bug fix #1: saat login, rt/rw/jenisKelamin diambil dari Firestore
+    // (userData sudah berisi field tsb dari _ensureFirestoreUser).
+    // Hanya pakai parameter jika memang dikirim (registrasi baru).
+    final effectiveRt = rt ?? userData['rt']?.toString() ?? '';
+    final effectiveRw = rw ?? userData['rw']?.toString() ?? '';
+    final effectiveJk = jenisKelamin ?? userData['jenisKelamin']?.toString() ?? '';
+
     final syncResult = await _apiService.register(
       uid: firebaseUser.uid,
       nama: userData['nama']?.toString() ?? 'Warga Baru',
       email: firebaseUser.email ?? email,
       password: password,
+      rt: effectiveRt,
+      rw: effectiveRw,
+      jenisKelamin: effectiveJk,
     );
 
     final mysqlUserId = syncResult['id'] is int
@@ -160,20 +191,24 @@ class AuthProvider extends ChangeNotifier {
       );
     }
 
+    // Bug fix #2: ambil saldo aktual dari MySQL
     double saldoPoin = (syncResult['saldo_poin'] ?? 0).toDouble();
     try {
-      saldoPoin =
-          await _apiService.fetchUserSaldo(mysqlUserId.toString());
+      saldoPoin = await _apiService.fetchUserSaldo(mysqlUserId.toString());
     } on ApiException {
       // gunakan saldo dari sync response
     }
 
+    // Perbarui Firestore dengan data lengkap (termasuk saldo terbaru)
     await FirebaseFirestore.instance
-        .collection('users')
+        .collection('warga_realtime')
         .doc(firebaseUser.uid)
         .set({
       'nama': userData['nama'] ?? 'Warga Baru',
       'email': firebaseUser.email ?? email,
+      'rt': effectiveRt,
+      'rw': effectiveRw,
+      'jenisKelamin': effectiveJk,
       'saldoPoin': saldoPoin,
     }, SetOptions(merge: true));
 
@@ -189,6 +224,26 @@ class AuthProvider extends ChangeNotifier {
     _apiService.setToken(_token!);
     _isLoading = false;
     notifyListeners();
+  }
+
+  /// Refresh saldo dari MySQL dan update _user + notifyListeners.
+  /// Dipanggil dari DashboardScreen agar tidak ada race condition.
+  Future<void> refreshSaldo() async {
+    final mysqlId = _user?.mysqlUserId;
+    if (mysqlId == null) return;
+    try {
+      final saldo = await _apiService.fetchUserSaldo(mysqlId.toString());
+      _user = UserModel(
+        id: _user!.id,
+        mysqlUserId: mysqlId,
+        nama: _user!.nama,
+        email: _user!.email,
+        saldoPoin: saldo,
+      );
+      notifyListeners();
+    } catch (_) {
+      // biarkan saldo lama
+    }
   }
 
   String _mapFirebaseAuthError(FirebaseAuthException e,

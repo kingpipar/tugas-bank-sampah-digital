@@ -1,14 +1,5 @@
-// ============================================================
-// Model: UserModel
-// ============================================================
-// Merepresentasikan data warga yang login.
-// Data ini di-fetch dari REST API (MySQL) via endpoint login
-// dan endpoint saldo.
-
 class UserModel {
-  /// Firebase UID — dipakai untuk Firestore (history, dll).
   final String id;
-  /// ID numerik di tabel MySQL `users` — dipakai untuk REST API.
   final int? mysqlUserId;
   final String nama;
   final String email;
@@ -22,18 +13,6 @@ class UserModel {
     this.saldoPoin = 0,
   });
 
-  /// Factory constructor untuk parsing JSON response dari API.
-  ///
-  /// Contoh JSON yang diharapkan dari endpoint login:
-  /// ```json
-  /// {
-  ///   "id": "1",
-  ///   "nama": "Budi Santoso",
-  ///   "email": "budi@email.com"
-  /// }
-  /// ```
-  ///
-  /// TODO: Sesuaikan key JSON dengan response API backend Anda.
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['firebase_uid']?.toString() ?? json['id']?.toString() ?? '',

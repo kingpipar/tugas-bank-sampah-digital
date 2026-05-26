@@ -592,6 +592,69 @@ app.delete('/api/users/:id', (req, res) => {
     });
 });
 
+// ── GET /api/saldo/:userId ─────────────────────────────────────
+// Ambil saldo poin warga berdasarkan MySQL user ID
+app.get('/api/saldo/:userId', (req, res) => {
+    const { userId } = req.params;
+    db.query('SELECT saldo_poin FROM users WHERE id = ?', [userId], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (results.length === 0) return res.status(404).json({ message: 'User tidak ditemukan' });
+        res.json({ saldo_poin: results[0].saldo_poin || 0 });
+    });
+});
+
+// ── GET /api/transaksi/:userId ─────────────────────────────────
+// Ambil riwayat poin warga: setoran sampah + penukaran voucher
+app.get('/api/transaksi/:userId', (req, res) => {
+    const { userId } = req.params;
+
+    // Gabungkan setoran sampah (poin masuk) dan penukaran (poin keluar)
+    const sql = `
+        SELECT
+            id,
+            'Setor Sampah' AS jenis,
+            poin_didapat AS jumlah_poin,
+            CONCAT('Setor ', berat_kg, 'kg sampah') AS keterangan,
+            tanggal_setor AS tanggal
+        FROM laporan_setoran
+        WHERE id_warga = ? AND poin_didapat > 0
+
+        UNION ALL
+
+        SELECT
+            t.id,
+            'Tukar Voucher' AS jenis,
+            -(t.poin_ditukar) AS jumlah_poin,
+            CONCAT('Tukar ', t.poin_ditukar, ' poin → ', COALESCE(v.nama_voucher, t.jenis_penukaran)) AS keterangan,
+            t.tanggal_tukar AS tanggal
+        FROM transaksi_penukaran t
+        LEFT JOIN voucher_reward v ON t.id_voucher = v.id
+        WHERE t.id_warga = ?
+
+        ORDER BY tanggal DESC
+        LIMIT 50
+    `;
+
+    db.query(sql, [userId, userId], (err, results) => {
+        if (err) {
+            // Fallback: hanya setoran jika tabel transaksi_penukaran belum ada id_warga
+            const fallbackSql = `
+                SELECT id, 'Setor Sampah' AS jenis, poin_didapat AS jumlah_poin,
+                       CONCAT('Setor ', berat_kg, 'kg sampah') AS keterangan, tanggal_setor AS tanggal
+                FROM laporan_setoran
+                WHERE id_warga = ?
+                ORDER BY tanggal_setor DESC LIMIT 50
+            `;
+            db.query(fallbackSql, [userId], (err2, results2) => {
+                if (err2) return res.status(500).json({ error: err2.message });
+                res.json(results2);
+            });
+            return;
+        }
+        res.json(results);
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`🚀 Server Backend berjalan mulus di http://localhost:${PORT}`);
 });

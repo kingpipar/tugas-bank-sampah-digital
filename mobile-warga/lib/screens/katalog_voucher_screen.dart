@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../config/app_constants.dart';
 import '../providers/auth_provider.dart';
-import '../providers/dashboard_provider.dart';
 import '../models/voucher_reward_model.dart';
 
 class KatalogVoucherScreen extends StatelessWidget {
@@ -31,8 +30,7 @@ class KatalogVoucherScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final auth = context.watch<AuthProvider>();
-    final dash = context.watch<DashboardProvider>();
-    final userPoints = dash.saldoPoin;
+    final userPoints = auth.user?.saldoPoin ?? 0;
     final numberFormat = NumberFormat('#,###', 'id_ID');
 
     return Scaffold(
@@ -87,9 +85,7 @@ class KatalogVoucherScreen extends StatelessWidget {
                   ],
                 ),
                 TextButton.icon(
-                  onPressed: () {
-                    dash.fetchSaldo(auth.user?.mysqlUserId);
-                  },
+                  onPressed: () => auth.refreshSaldo(),
                   icon: const Icon(Icons.refresh_rounded, size: 18),
                   label: Text('Refresh', style: GoogleFonts.inter(fontSize: 12)),
                 )
@@ -165,7 +161,6 @@ class KatalogVoucherScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(16),
                         child: Row(
                           children: [
-                            // Icon Voucher
                             Container(
                               width: 60,
                               height: 60,
@@ -202,7 +197,6 @@ class KatalogVoucherScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 8),
-                                  // Badge Poin Dibutuhkan
                                   Row(
                                     children: [
                                       Container(

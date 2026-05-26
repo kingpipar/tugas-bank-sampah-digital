@@ -9,12 +9,6 @@ import '../providers/pickup_provider.dart';
 import '../services/api_service.dart';
 import '../widgets/status_badge.dart';
 
-/// ============================================================
-/// HistoryScreen — Riwayat & Status (Kombinasi API + Firebase)
-/// ============================================================
-/// Tab 1: Status Penjemputan (Real-time via StreamBuilder/Firestore)
-/// Tab 2: Riwayat Penukaran Poin (FutureBuilder/REST API MySQL)
-
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
   @override

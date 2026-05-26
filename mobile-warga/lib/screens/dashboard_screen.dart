@@ -15,9 +15,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    // Bug fix #2: panggil refreshSaldo melalui AuthProvider
+    // agar saldo langsung tersedia dari _user yang sudah terisi saat login.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final mysqlId = context.read<AuthProvider>().user?.mysqlUserId;
-      context.read<DashboardProvider>().fetchSaldo(mysqlId);
+      context.read<AuthProvider>().refreshSaldo();
     });
   }
 
@@ -31,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          await dash.fetchSaldo(auth.user?.mysqlUserId);
+          await context.read<AuthProvider>().refreshSaldo();
         },
         child: CustomScrollView(
           slivers: [
@@ -76,7 +77,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   // -- SALDO CARD --
-                  _saldoCard(cs, dash, nf),
+                  _saldoCard(cs, auth, nf),
                   const SizedBox(height: 24),
                   Text('Menu Pintasan', style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),
@@ -98,7 +99,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _saldoCard(ColorScheme cs, DashboardProvider dash, NumberFormat nf) {
+  Widget _saldoCard(ColorScheme cs, AuthProvider auth, NumberFormat nf) {
     return Container(
       width: double.infinity, padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -122,7 +123,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: dash.isLoading
+              child: auth.isLoading
                   ? const SizedBox(
                       height: 40,
                       child: Align(
@@ -131,7 +132,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     )
                   : Text(
-                      '${nf.format(dash.saldoPoin)} Poin',
+                      '${nf.format(auth.user?.saldoPoin ?? 0)} Poin',
                       style: GoogleFonts.outfit(fontSize: 32, fontWeight: FontWeight.bold, color: cs.onPrimary),
                     ),
             ),
