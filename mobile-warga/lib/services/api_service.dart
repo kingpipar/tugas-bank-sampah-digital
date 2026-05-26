@@ -229,6 +229,21 @@ class ApiService {
     return (response['saldo_poin'] ?? 0).toDouble();
   }
 
+  Future<Map<String, dynamic>> redeemVoucher({
+    required int userId,
+    required String namaWarga,
+    required int idVoucher,
+    required int poinDitukar,
+  }) async {
+    final response = await post('/penukaran', {
+      'id_warga': userId,
+      'nama_warga': namaWarga,
+      'id_voucher': idVoucher,
+      'poin_ditukar': poinDitukar,
+    });
+    return Map<String, dynamic>.from(response);
+  }
+
   /// -----------------------------------------------------------
   /// FETCH SALDO POIN WARGA
   /// -----------------------------------------------------------

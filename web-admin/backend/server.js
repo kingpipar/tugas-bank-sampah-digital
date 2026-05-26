@@ -276,6 +276,108 @@ app.get('/api/penukaran', (req, res) => {
     });
 });
 
+app.post('/api/penukaran', (req, res) => {
+    const { id_warga, nama_warga, id_voucher, poin_ditukar, jenis_penukaran } = req.body;
+
+    if (!id_warga || !id_voucher || !poin_ditukar) {
+        return res.status(400).json({ success: false, message: 'Data penukaran tidak lengkap' });
+    }
+
+    // 1. Cek saldo poin warga terlebih dahulu
+    db.query('SELECT saldo_poin, nama, email FROM users WHERE id = ?', [id_warga], (errUser, users) => {
+        if (errUser) return res.status(500).json({ success: false, error: errUser.message });
+        if (users.length === 0) return res.status(404).json({ success: false, message: 'Warga tidak ditemukan' });
+
+        const user = users[0];
+        const currentPoin = user.saldo_poin || 0;
+        if (currentPoin < poin_ditukar) {
+            return res.status(400).json({ success: false, message: 'Saldo poin Anda tidak mencukupi' });
+        }
+
+        // 2. Cek stok voucher
+        db.query('SELECT stok, nama_voucher FROM voucher_reward WHERE id = ?', [id_voucher], (errVouch, vouchers) => {
+            if (errVouch) return res.status(500).json({ success: false, error: errVouch.message });
+            if (vouchers.length === 0) return res.status(404).json({ success: false, message: 'Voucher tidak ditemukan' });
+
+            const voucher = vouchers[0];
+            if (voucher.stok <= 0) {
+                return res.status(400).json({ success: false, message: 'Stok voucher ini sudah habis' });
+            }
+
+            // 3. Masukkan transaksi penukaran ke MySQL
+            const jenis = jenis_penukaran || (voucher.nama_voucher.toLowerCase().includes('dana') || voucher.nama_voucher.toLowerCase().includes('uang') ? 'Uang' : 'Sembako');
+            const namaWargaFix = nama_warga || user.nama;
+
+            db.query(
+                'INSERT INTO transaksi_penukaran (nama_warga, jenis_penukaran, id_voucher, poin_ditukar, id_warga) VALUES (?, ?, ?, ?, ?)',
+                [namaWargaFix, jenis, id_voucher, poin_ditukar, id_warga],
+                (errIns, resultIns) => {
+                    if (errIns) return res.status(500).json({ success: false, error: errIns.message });
+
+                    // 4. Potong saldo poin warga di MySQL
+                    db.query(
+                        'UPDATE users SET saldo_poin = saldo_poin - ? WHERE id = ?',
+                        [poin_ditukar, id_warga],
+                        (errUpdUser) => {
+                            if (errUpdUser) console.error('Gagal memotong poin warga:', errUpdUser.message);
+                        }
+                    );
+
+                    // 5. Potong stok voucher di MySQL
+                    const newStock = voucher.stok - 1;
+                    db.query(
+                        'UPDATE voucher_reward SET stok = ? WHERE id = ?',
+                        [newStock, id_voucher],
+                        (errUpdVouch) => {
+                            if (errUpdVouch) {
+                                console.error('Gagal mengurangi stok voucher di MySQL:', errUpdVouch.message);
+                            } else {
+                                // 6. Sync stok voucher ke Firestore
+                                if (firestoreDb) {
+                                    firestoreDb.collection('voucher_reward_realtime').doc(id_voucher.toString()).update({
+                                        stok: newStock,
+                                        updated_at: new Date().toISOString()
+                                    }).then(() => {
+                                        console.log(`✅ Berhasil menyinkronkan stok voucher ${id_voucher} ke Firestore`);
+                                    }).catch(fsErr => {
+                                        console.error('❌ Gagal sinkronisasi stok voucher ke Firestore:', fsErr.message);
+                                    });
+                                }
+                            }
+                        }
+                    );
+
+                    // 7. Sync saldo poin warga ke Firestore
+                    if (firestoreDb && user.email) {
+                        firestoreDb.collection('warga_realtime')
+                            .where('email', '==', user.email)
+                            .get()
+                            .then(snapshot => {
+                                if (!snapshot.empty) {
+                                    snapshot.docs[0].ref.update({
+                                        saldoPoin: currentPoin - poin_ditukar
+                                    }).then(() => {
+                                        console.log(`✅ Berhasil menyinkronkan saldo poin user ${id_warga} ke Firestore`);
+                                    });
+                                }
+                            })
+                            .catch(fsErr => {
+                                console.error('❌ Gagal sinkronisasi saldo user ke Firestore:', fsErr.message);
+                            });
+                    }
+
+                    res.status(201).json({
+                        success: true,
+                        message: `Berhasil menukarkan voucher "${voucher.nama_voucher}"!`,
+                        transactionId: resultIns.insertId,
+                        newSaldoPoin: currentPoin - poin_ditukar
+                    });
+                }
+            );
+        });
+    });
+});
+
 const createRequestJemputHandler = (req, res) => {
     const {
         nama_warga,

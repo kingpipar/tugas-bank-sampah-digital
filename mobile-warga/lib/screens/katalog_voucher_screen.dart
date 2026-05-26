@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../config/app_constants.dart';
 import '../providers/auth_provider.dart';
 import '../models/voucher_reward_model.dart';
+import '../services/api_service.dart';
 
 class KatalogVoucherScreen extends StatelessWidget {
   const KatalogVoucherScreen({super.key});
@@ -245,7 +246,7 @@ class KatalogVoucherScreen extends StatelessWidget {
                                 else if (hasEnoughPoints)
                                   ElevatedButton(
                                     onPressed: () {
-                                      _showExchangeDialog(context, name, minPoin, cs);
+                                      _showExchangeDialog(context, model, cs);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: cs.primary,
@@ -296,33 +297,89 @@ class KatalogVoucherScreen extends StatelessWidget {
     );
   }
 
-  void _showExchangeDialog(BuildContext context, String voucherName, int points, ColorScheme cs) {
+  void _showExchangeDialog(BuildContext context, VoucherRewardModel voucher, ColorScheme cs) {
+    final auth = context.read<AuthProvider>();
+    final user = auth.user;
+    if (user == null) return;
+
+    final mysqlUserId = user.mysqlUserId;
+    if (mysqlUserId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('ID User tidak ditemukan. Silakan login ulang.'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogCtx) => AlertDialog(
         title: Text(
           'Konfirmasi Penukaran',
           style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
         ),
         content: Text(
-          'Apakah Anda yakin ingin menukarkan $points poin dengan "$voucherName"? Silakan tunjukkan ke petugas bank sampah untuk verifikasi.',
+          'Apakah Anda yakin ingin menukarkan ${voucher.minPoin.toInt()} poin dengan "${voucher.namaVoucher}"?',
           style: GoogleFonts.inter(),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogCtx),
             child: const Text('Batal'),
           ),
           FilledButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Permintaan penukaran "$voucherName" diajukan! Harap hubungi petugas admin.'),
-                  behavior: SnackBarBehavior.floating,
-                  backgroundColor: cs.primary,
+            onPressed: () async {
+              Navigator.pop(dialogCtx); // Close confirm dialog
+
+              // Show loading dialog
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (loadingCtx) => const Center(
+                  child: CircularProgressIndicator(),
                 ),
               );
+
+              try {
+                final apiService = ApiService();
+                final result = await apiService.redeemVoucher(
+                  userId: mysqlUserId,
+                  namaWarga: user.nama,
+                  idVoucher: int.parse(voucher.id),
+                  poinDitukar: voucher.minPoin.toInt(),
+                );
+
+                if (context.mounted) {
+                  Navigator.pop(context); // Close loading dialog
+
+                  // Refresh points locally
+                  await auth.refreshSaldo();
+
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(result['message'] ?? 'Penukaran berhasil!'),
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.green.shade700,
+                      ),
+                    );
+                  }
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  Navigator.pop(context); // Close loading dialog
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Gagal menukarkan voucher: $e'),
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.red.shade700,
+                    ),
+                  );
+                }
+              }
             },
             child: const Text('Tukar Sekarang'),
           ),
