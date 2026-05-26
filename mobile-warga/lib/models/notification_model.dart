@@ -1,3 +1,6 @@
+// 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AppNotification {
   final String id;
   final String type;
@@ -20,6 +23,17 @@ class AppNotification {
   });
 
   factory AppNotification.fromJson(Map<String, dynamic> json) {
+    DateTime parsedDate = DateTime.now();
+
+    final rawDate = json['created_at'] ?? json['date'];
+
+    if (rawDate is Timestamp) {
+      parsedDate = rawDate.toDate();
+    } else if (rawDate is String) {
+      parsedDate =
+          DateTime.tryParse(rawDate) ?? DateTime.now();
+    }
+
     return AppNotification(
       id: json['id']?.toString() ?? '',
       type: json['type']?.toString() ?? 'general',
@@ -27,8 +41,10 @@ class AppNotification {
       message: json['message']?.toString() ?? '',
       status: json['status']?.toString() ?? '',
       points: (json['points'] ?? 0).toDouble(),
-      date: DateTime.tryParse(json['date']?.toString() ?? '') ?? DateTime.now(),
-      metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
+      date: parsedDate,
+      metadata: Map<String, dynamic>.from(
+        json['metadata'] ?? {},
+      ),
     );
   }
 }

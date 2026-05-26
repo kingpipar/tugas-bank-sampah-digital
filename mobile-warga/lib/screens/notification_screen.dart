@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/auth_provider.dart';
 import '../services/api_service.dart';
 import '../models/notification_model.dart';
@@ -14,90 +14,101 @@ class NotificationScreen extends StatefulWidget {
   State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
-  late Future<List<AppNotification>> _notificationsFuture;
+  class _NotificationScreenState extends State<NotificationScreen> {
+    // late Future<List<AppNotification>> _notificationsFuture;
 
-  @override
-  void initState() {
-    super.initState();
-    _notificationsFuture = _fetchNotifications();
-  }
+    // @override
+    // void initState() {
+    //   super.initState();
+    //   _notificationsFuture = _fetchNotifications();
+    // }
 
-  Future<List<AppNotification>> _fetchNotifications() async {
-    final userId = context.read<AuthProvider>().user?.mysqlUserId;
-    if (userId == null) {
-      throw ApiException('Akun belum tersinkron. Login ulang.');
-    }
+    // Future<List<AppNotification>> _fetchNotifications() async {
+    //   final userId = context.read<AuthProvider>().user?.mysqlUserId;
+    //   if (userId == null) {
+    //     throw ApiException('Akun belum tersinkron. Login ulang.');
+    //   }
 
-    final data = await fetchNotifications(userId);
-    return data
-        .map(
-          (json) => AppNotification.fromJson(Map<String, dynamic>.from(json)),
-        )
-        .toList();
-  }
+    //   final data = await fetchNotifications(userId);
+    //   return data
+    //       .map(
+    //         (json) => AppNotification.fromJson(Map<String, dynamic>.from(json)),
+    //       )
+    //       .toList();
+    // }
 
-  Future<void> _refresh() async {
-    setState(() {
-      _notificationsFuture = _fetchNotifications();
-    });
-    await _notificationsFuture;
-  }
+    // Future<void> _refresh() async {
+    //   setState(() {
+    //     _notificationsFuture = _fetchNotifications();
+    //   });
+    //   await _notificationsFuture;
+    //}
 
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    @override
+    Widget build(BuildContext context) {
+      final cs = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Notifikasi',
-          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Notifikasi',
+            style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: cs.primary,
+          foregroundColor: cs.onPrimary,
         ),
-        centerTitle: true,
-        backgroundColor: cs.primary,
-        foregroundColor: cs.onPrimary,
-      ),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: FutureBuilder<List<AppNotification>>(
-          future: _notificationsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        body: StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance
+        .collection('notifikasi_realtime')
+        .orderBy('created_at', descending: true)
+        .snapshots(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
 
-            if (snapshot.hasError) {
-              return _StateView(
-                icon: Icons.error_outline_rounded,
-                title: 'Gagal memuat notifikasi',
-                message: snapshot.error.toString(),
-                color: cs.error,
-              );
-            }
+      if (snapshot.hasError) {
+        return _StateView(
+          icon: Icons.error_outline_rounded,
+          title: 'Gagal memuat notifikasi',
+          message: snapshot.error.toString(),
+          color: cs.error,
+        );
+      }
 
-            final notifications = snapshot.data ?? [];
-            if (notifications.isEmpty) {
-              return _StateView(
-                icon: Icons.notifications_none_rounded,
-                title: 'Belum ada notifikasi',
-                message: 'Aktivitas penjemputan dan poin akan tampil di sini.',
-                color: cs.onSurface.withValues(alpha: 0.45),
-              );
-            }
+      final docs = snapshot.data?.docs ?? [];
 
-            return ListView.separated(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(16),
-              itemCount: notifications.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 10),
-              itemBuilder: (context, index) {
-                return _NotificationCard(notification: notifications[index]);
-              },
-            );
-          },
-        ),
-      ),
+      if (docs.isEmpty) {
+        return _StateView(
+          icon: Icons.notifications_none_rounded,
+          title: 'Belum ada notifikasi',
+          message: 'Aktivitas penjemputan dan poin akan tampil di sini.',
+          color: cs.onSurface.withValues(alpha: 0.45),
+        );
+      }
+
+      final notifications = docs.map((doc) {
+        return AppNotification.fromJson(
+          doc.data() as Map<String, dynamic>,
+        );
+      }).toList();
+
+      return ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        itemCount: notifications.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 10),
+        itemBuilder: (context, index) {
+          return _NotificationCard(
+            notification: notifications[index],
+          );
+        },
+      );
+    },
+  ),
     );
   }
 }

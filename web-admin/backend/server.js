@@ -255,6 +255,79 @@ app.get('/api/penukaran', (req, res) => {
     });
 });
 
+const createRequestJemputHandler = (req, res) => {
+    const {
+        nama_warga,
+        jenis_sampah,
+        estimasi_berat,
+        tanggal_jemput,
+        catatan,
+        user_id,
+        id_sampah
+    } = req.body;
+
+    if (!user_id) {
+        return res.status(400).json({ success: false, message: 'User wajib diisi' });
+    }
+
+    if (!jenis_sampah) {
+        return res.status(400).json({ success: false, message: 'Jenis sampah wajib diisi' });
+    }
+
+    const berat = parseFloat(estimasi_berat);
+    if (!berat || berat <= 0) {
+        return res.status(400).json({ success: false, message: 'Estimasi berat tidak valid' });
+    }
+
+    const insertRequest = (user, sampahId) => {
+        const sql = `
+            INSERT INTO request_jemput
+                (nama_warga, rt, rw, jenis_sampah, estimasi_berat, tanggal_jemput, catatan, status, id_warga, id_sampah)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'menunggu', ?, ?)
+        `;
+        const values = [
+            nama_warga || user.nama || '',
+            user.rt || null,
+            user.rw || null,
+            jenis_sampah,
+            berat,
+            tanggal_jemput || new Date().toISOString().slice(0, 10),
+            catatan || '',
+            user.id,
+            sampahId || null
+        ];
+
+        db.query(sql, values, (err, result) => {
+            if (err) return res.status(500).json({ success: false, message: err.message });
+            res.status(201).json({
+                success: true,
+                message: 'Request jemput berhasil dibuat',
+                id: result.insertId
+            });
+        });
+    };
+
+    db.query('SELECT id, nama, rt, rw FROM users WHERE id = ?', [user_id], (errUser, users) => {
+        if (errUser) return res.status(500).json({ success: false, message: errUser.message });
+        if (!users || users.length === 0) {
+            return res.status(404).json({ success: false, message: 'User tidak ditemukan' });
+        }
+
+        const user = users[0];
+        if (id_sampah) {
+            return insertRequest(user, id_sampah);
+        }
+
+        db.query('SELECT id FROM harga_sampah WHERE nama_sampah = ? LIMIT 1', [jenis_sampah], (errSampah, sampahRows) => {
+            if (errSampah) return res.status(500).json({ success: false, message: errSampah.message });
+            insertRequest(user, sampahRows && sampahRows[0] ? sampahRows[0].id : null);
+        });
+    });
+};
+
+app.post('/api/request_jemput', createRequestJemputHandler);
+app.post('/api/request-jemput', createRequestJemputHandler);
+
 app.get('/api/request_jemput', (req, res) => {
     const sql = `
         SELECT r.*, 
@@ -485,12 +558,18 @@ app.delete('/api/voucher_reward/:id', (req, res) => {
     });
 });
 
-app.get('/api/notif', (req, res) => {
-    res.json({
-        success: true,
-        message: 'Data notifikasi berhasil diambil',
-        data: []
-    });
+// app.get('/api/notif', (req, res) => {
+//     res.json({
+//         success: true,
+//         message: 'Data notifikasi berhasil diambil',
+//         data: []
+//     });
+// });
+
+app.get('/api/notifikasi', (req, res) => {
+    const {userId} = req.params;
+
+    res.json([]);
 });
 
 app.get('/api/users', (req, res) => {

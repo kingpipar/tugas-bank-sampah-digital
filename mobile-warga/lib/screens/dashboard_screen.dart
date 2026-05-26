@@ -15,8 +15,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    // Bug fix #2: panggil refreshSaldo melalui AuthProvider
-    // agar saldo langsung tersedia dari _user yang sudah terisi saat login.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AuthProvider>().refreshSaldo();
     });

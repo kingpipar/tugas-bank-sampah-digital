@@ -136,7 +136,7 @@ class _PickupStatusTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     _infoRow(Icons.shopping_bag_outlined,
-                        '${r.estimasiKantong} kantong · ${r.estimasiBerat} kg'),
+                        '${r.estimasiBerat} kg'),
                     if (r.catatan.isNotEmpty)
                       _infoRow(Icons.notes_outlined, r.catatan),
                     _infoRow(Icons.access_time_outlined, df.format(r.createdAt)),

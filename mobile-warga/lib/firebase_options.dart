@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '650788702738',
     projectId: 'prak-tcc-b8332',
     authDomain: 'prak-tcc-b8332.firebaseapp.com',
+    databaseURL: 'https://prak-tcc-b8332-default-rtdb.firebaseio.com',
     storageBucket: 'prak-tcc-b8332.firebasestorage.app',
     measurementId: 'G-L9TRKQ4PR1',
   );
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:650788702738:android:7f79215e03cee118f8a6cb',
     messagingSenderId: '650788702738',
     projectId: 'prak-tcc-b8332',
+    databaseURL: 'https://prak-tcc-b8332-default-rtdb.firebaseio.com',
     storageBucket: 'prak-tcc-b8332.firebasestorage.app',
   );
 
@@ -63,6 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:650788702738:ios:439c4b3b48a4fa8cf8a6cb',
     messagingSenderId: '650788702738',
     projectId: 'prak-tcc-b8332',
+    databaseURL: 'https://prak-tcc-b8332-default-rtdb.firebaseio.com',
     storageBucket: 'prak-tcc-b8332.firebasestorage.app',
     iosBundleId: 'com.example.mobile',
   );
@@ -72,6 +75,7 @@ class DefaultFirebaseOptions {
     appId: '1:650788702738:ios:439c4b3b48a4fa8cf8a6cb',
     messagingSenderId: '650788702738',
     projectId: 'prak-tcc-b8332',
+    databaseURL: 'https://prak-tcc-b8332-default-rtdb.firebaseio.com',
     storageBucket: 'prak-tcc-b8332.firebasestorage.app',
     iosBundleId: 'com.example.mobile',
   );
@@ -82,6 +86,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '650788702738',
     projectId: 'prak-tcc-b8332',
     authDomain: 'prak-tcc-b8332.firebaseapp.com',
+    databaseURL: 'https://prak-tcc-b8332-default-rtdb.firebaseio.com',
     storageBucket: 'prak-tcc-b8332.firebasestorage.app',
     measurementId: 'G-0XBVBQ6NJZ',
   );
