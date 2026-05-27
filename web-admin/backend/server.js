@@ -1,25 +1,26 @@
+require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const { db: firestoreDb } = require('./config/firebaseConfig');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 const db = mysql.createPool({
-    host: '136.116.185.104',
-    user: 'admin',
-    password: 'password',
-    database: 'testlagi',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
 
-// ── HELPER: Kirim notifikasi ke Firestore ──────────────────────
+// ── Mengirim notifikasi ke Firestore ──────────────────────
 // Menulis dokumen baru ke collection 'notifikasi' untuk ditampilkan
 // secara real-time di aplikasi mobile warga.
 function sendNotification({ userId, judul, pesan, tipeTrigger }) {
@@ -283,7 +284,7 @@ app.post('/api/penukaran', (req, res) => {
         return res.status(400).json({ success: false, message: 'Data penukaran tidak lengkap' });
     }
 
-    // 1. Cek saldo poin warga terlebih dahulu
+    // 1. Cek saldo poin warga
     db.query('SELECT saldo_poin, nama, email FROM users WHERE id = ?', [id_warga], (errUser, users) => {
         if (errUser) return res.status(500).json({ success: false, error: errUser.message });
         if (users.length === 0) return res.status(404).json({ success: false, message: 'Warga tidak ditemukan' });
@@ -545,7 +546,6 @@ app.put('/api/request_jemput/:id', (req, res) => {
 
                 // tipe_trigger 3 + 4: Penjemputan Selesai + Poin
                 if (statusBaru === 'selesai') {
-                    // Kirim notifikasi selesai
                     if (id_warga) {
                         sendNotification({
                             userId: id_warga,
@@ -740,14 +740,6 @@ app.delete('/api/voucher_reward/:id', (req, res) => {
     });
 });
 
-// app.get('/api/notif', (req, res) => {
-//     res.json({
-//         success: true,
-//         message: 'Data notifikasi berhasil diambil',
-//         data: []
-//     });
-// });
-
 app.get('/api/notifikasi', (req, res) => {
     const { userId } = req.params;
 
@@ -853,7 +845,6 @@ app.delete('/api/users/:id', (req, res) => {
     });
 });
 
-// ── GET /api/saldo/:userId ─────────────────────────────────────
 // Ambil saldo poin warga berdasarkan MySQL user ID
 app.get('/api/saldo/:userId', (req, res) => {
     const { userId } = req.params;
@@ -864,7 +855,6 @@ app.get('/api/saldo/:userId', (req, res) => {
     });
 });
 
-// ── GET /api/transaksi/:userId ─────────────────────────────────
 // Ambil riwayat poin warga: setoran sampah + penukaran voucher
 app.get('/api/transaksi/:userId', (req, res) => {
     const { userId } = req.params;

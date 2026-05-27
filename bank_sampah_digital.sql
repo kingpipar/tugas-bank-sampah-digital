@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 136.116.185.104
--- Generation Time: May 26, 2026 at 12:17 AM
+-- Generation Time: May 27, 2026 at 12:52 AM
 -- Server version: 10.6.23-MariaDB-0ubuntu0.22.04.1
 -- PHP Version: 7.0.33-0ubuntu0.16.04.16
 
@@ -75,16 +75,6 @@ CREATE TABLE `laporan_setoran` (
   `poin_didapat` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `laporan_setoran`
---
-
-INSERT INTO `laporan_setoran` (`id`, `id_sampah`, `berat_kg`, `total_harga`, `tanggal_setor`, `id_warga`, `id_request`, `poin_didapat`) VALUES
-(1, NULL, '2.20', 0, '2026-05-15 09:17:15', NULL, 1, 0),
-(2, 3, '2.50', 7500, '2026-05-26 00:08:16', 2, NULL, 750),
-(3, 3, '4.00', 12000, '2026-05-26 00:08:19', 2, NULL, 1200),
-(4, 5, '2.00', 8000, '2026-05-26 00:12:10', 3, 4, 800);
-
 -- --------------------------------------------------------
 
 --
@@ -105,16 +95,6 @@ CREATE TABLE `request_jemput` (
   `id_warga` int(11) DEFAULT NULL,
   `id_sampah` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `request_jemput`
---
-
-INSERT INTO `request_jemput` (`id`, `nama_warga`, `rt`, `rw`, `jenis_sampah`, `estimasi_berat`, `tanggal_jemput`, `catatan`, `status`, `created_at`, `id_warga`, `id_sampah`) VALUES
-(1, 'cece', '10', '02', 'Plastik', '2.20', '0000-00-00', 'Tolong pagi', 'selesai', '2026-05-15 09:17:15', NULL, NULL),
-(2, 'fufufafa', '04', '04', 'Plastik', '2.00', '2026-05-26', 'test', 'selesai', '2026-05-26 06:27:10', 2, 4),
-(3, '', '04', '04', 'Plastik', '2.00', '2026-05-26', 'test', 'selesai', '2026-05-26 06:27:10', 3, 5),
-(4, '', '04', '04', 'Plastik', '2.00', '2026-05-26', 'test', 'selesai', '2026-05-26 06:27:10', 3, 5);
 
 -- --------------------------------------------------------
 
@@ -157,8 +137,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role`, `rt`, `rw`, `jenis_kelamin`, `saldo_poin`, `created_at`) VALUES
 (1, 'Admin', 'admin@gmail.com', 'admin123', 'admin', NULL, NULL, NULL, 0, '2026-05-12 08:27:55'),
-(2, 'fare', 'fare@gmail.com', 'reroll12', 'warga', '04', '04', 'Laki-laki', 7350, '2026-05-25 14:11:06'),
-(3, 'ariel', 'ariel@gmail.com', 'reroll12', 'warga', '04', '04', 'Laki-laki', 800, '2026-05-25 20:37:22');
+(2, 'fare', 'fare@gmail.com', 'tccseru', 'warga', '02', '04', 'Laki-laki', 15000, '2026-05-25 14:11:06'),
+(3, 'ariel', 'ariel@gmail.com', 'akusukatcc', 'warga', '08', '07', 'Laki-laki', 75800, '2026-05-25 20:37:22'),
+(4, 'suci', 'suci@gmail.com', 'tcckeren', 'warga', '03', '10', 'Perempuan', 30500, '2026-05-26 03:16:13'),
+(5, 'cece', 'cece@gmail.com', 'tccasik', 'warga', '10', '09', 'Perempuan', 7000, '2026-05-26 03:23:06');
 
 -- --------------------------------------------------------
 
@@ -179,11 +161,13 @@ CREATE TABLE `voucher_reward` (
 --
 
 INSERT INTO `voucher_reward` (`id`, `nama_voucher`, `min_poin`, `stok`, `updated_at`) VALUES
-(1, 'Minyak Goreng 1 Liter', 1500, 50, '2026-05-19 14:29:11'),
-(2, 'Beras Premium 1 Kg', 1200, 100, '2026-05-19 14:29:11'),
-(3, 'Gula Pasir 1 Kg', 1400, 40, '2026-05-19 14:29:11'),
-(4, 'Telur Ayam 1 Kg', 2000, 30, '2026-05-19 16:03:44'),
-(5, 'Saldo Dana 10k', 10000, 200, '2026-05-25 23:29:37');
+(1, 'Minyak Goreng 1 Liter', 1500, 50, '2026-05-26 15:33:43'),
+(2, 'Beras Premium 1 Kg', 1200, 100, '2026-05-26 15:35:06'),
+(3, 'Gula Pasir 1 Kg', 1400, 40, '2026-05-26 15:29:57'),
+(4, 'Telur Ayam 1 Kg', 2000, 30, '2026-05-26 15:32:36'),
+(5, 'Saldo Dana 10k', 10000, 200, '2026-05-26 02:29:51'),
+(6, 'Uang Tunai 5k', 5000, 100, '2026-05-26 15:32:07'),
+(7, 'Saldo Gopay 15k', 15000, 30, '2026-05-26 15:03:09');
 
 --
 -- Indexes for dumped tables
@@ -246,12 +230,12 @@ ALTER TABLE `harga_sampah`
 -- AUTO_INCREMENT for table `laporan_setoran`
 --
 ALTER TABLE `laporan_setoran`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `request_jemput`
 --
 ALTER TABLE `request_jemput`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `transaksi_penukaran`
 --
@@ -261,12 +245,12 @@ ALTER TABLE `transaksi_penukaran`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `voucher_reward`
 --
 ALTER TABLE `voucher_reward`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- Constraints for dumped tables
 --
