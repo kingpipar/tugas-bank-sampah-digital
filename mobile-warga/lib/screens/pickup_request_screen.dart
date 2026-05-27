@@ -12,7 +12,6 @@ import '../providers/pickup_provider.dart';
 import '../services/location_service.dart';
 import '../widgets/loading_overlay.dart';
 
-/// Form request penjemputan — koordinat dari GPS (geolocator).
 class PickupRequestScreen extends StatefulWidget {
   const PickupRequestScreen({super.key});
   @override
@@ -21,7 +20,6 @@ class PickupRequestScreen extends StatefulWidget {
 
 class _PickupRequestScreenState extends State<PickupRequestScreen> {
   final _formKey = GlobalKey<FormState>();
-  // final _kantongController = TextEditingController(text: '1');
   final _beratController = TextEditingController();
   final _catatanController = TextEditingController();
 
@@ -34,7 +32,6 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
 
   @override
   void dispose() {
-    // _kantongController.dispose();
     _beratController.dispose();
     _catatanController.dispose();
     super.dispose();
@@ -136,7 +133,6 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
       return;
     }
 
-    // final kantong = int.parse(_kantongController.text);
     final berat = double.parse(_beratController.text);
     final catatan = _catatanController.text.trim();
     final api = ApiService();
@@ -145,7 +141,6 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
 
     final firestoreRequest = PickupRequestModel(
       userId: user.id,
-      // estimasiKantong: kantong,
       estimasiBerat: berat,
       jenisSampah: selectedSampah.namaSampah,
       kategoriSampah: selectedSampah.kategori,
@@ -165,7 +160,6 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
         alamat: _alamatText,
         jenisSampah: selectedSampah.namaSampah,
         estimasiBerat: berat,
-        // estimasiKantong: kantong,
         tanggalJemput: _tanggalJemputApiText,
         catatan: catatan,
         userId: mysqlUserId,
@@ -412,34 +406,6 @@ class _PickupRequestScreenState extends State<PickupRequestScreen> {
                       );
                     },
                   ),
-                  // const SizedBox(height: 20),
-                  // Text(
-                  //   'Estimasi Kantong',
-                  //   style: GoogleFonts.inter(
-                  //     fontSize: 14,
-                  //     fontWeight: FontWeight.w600,
-                  //   ),
-                  // ),
-                  const SizedBox(height: 8),
-                  // TextFormField(
-                  //   // controller: _kantongController,
-                  //   keyboardType: TextInputType.number,
-                  //   decoration: InputDecoration(
-                  //     hintText: 'Contoh: 3',
-                  //     prefixIcon: const Icon(Icons.shopping_bag_outlined),
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //     filled: true,
-                  //   ),
-                  //   validator: (v) {
-                  //     if (v == null || v.isEmpty) return 'Wajib diisi';
-                  //     if (int.tryParse(v) == null || int.parse(v) < 1) {
-                  //       return 'Masukkan angka valid (min. 1)';
-                  //     }
-                  //     return null;
-                  //   },
-                  // ),
                   const SizedBox(height: 20),
                   Text(
                     'Estimasi Berat (kg)',

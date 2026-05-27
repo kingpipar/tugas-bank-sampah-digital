@@ -4,9 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:intl/date_symbol_data_local.dart';
-// TODO: Uncomment import di bawah saat Firebase sudah dikonfigurasi
-// import 'package:firebase_core/firebase_core.dart';
-
 import 'providers/auth_provider.dart';
 import 'providers/dashboard_provider.dart';
 import 'providers/pickup_provider.dart';
@@ -19,49 +16,10 @@ import 'screens/notification_screen.dart';
 import 'screens/harga_sampah_screen.dart';
 import 'screens/katalog_voucher_screen.dart';
 
-/// ============================================================
-/// main.dart — Entry Point Aplikasi Bank Sampah Digital
-/// ============================================================
-///
-/// CATATAN PENTING:
-/// 1. Firebase HARUS diinisialisasi sebelum runApp().
-///    Pastikan file konfigurasi sudah ada:
-///    - Android: android/app/google-services.json
-///    - iOS: ios/Runner/GoogleService-Info.plist
-///
-/// 2. Jika menggunakan FlutterFire CLI, jalankan:
-///    ```
-///    dart pub global activate flutterfire_cli
-///    flutterfire configure
-///    ```
-///    Ini akan otomatis generate file firebase_options.dart.
-///
-/// 3. Jika belum setup Firebase, COMMENT OUT baris
-///    `await Firebase.initializeApp()` agar app tetap bisa jalan
-///    (fitur Firestore tidak akan berfungsi).
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await initializeDateFormatting('id_ID', null);
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // ----------------------------------------------------------
-  // INISIALISASI FIREBASE
-  // ----------------------------------------------------------
-  // TODO: Uncomment baris di bawah setelah konfigurasi Firebase selesai.
-  //
-  // Opsi 1: Tanpa FlutterFire CLI (manual google-services.json)
-  // await Firebase.initializeApp();
-  //
-  // Opsi 2: Dengan FlutterFire CLI (recommended)
-  // import 'firebase_options.dart';
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-  // ----------------------------------------------------------
-
   runApp(const BankSampahApp());
 }
 
@@ -79,12 +37,6 @@ class BankSampahApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Bank Sampah Digital',
         debugShowCheckedModeBanner: false,
-
-        // ============================================
-        // TEMA MATERIAL DESIGN 3
-        // ============================================
-        // Menggunakan warna hijau sebagai primary (tema
-        // "lingkungan" / "daur ulang"). Bisa disesuaikan.
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
@@ -97,10 +49,6 @@ class BankSampahApp extends StatelessWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
-
-        // ============================================
-        // DARK THEME (opsional)
-        // ============================================
         darkTheme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
@@ -115,10 +63,8 @@ class BankSampahApp extends StatelessWidget {
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
-
-        // ============================================
+        
         // ROUTING
-        // ============================================
         initialRoute: '/login',
         routes: {
           '/login': (context) => const LoginScreen(),

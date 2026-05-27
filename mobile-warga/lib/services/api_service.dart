@@ -3,31 +3,13 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import '../config/app_constants.dart';
 
-/// ============================================================
-/// ApiService — HTTP Client untuk REST API (MySQL via Express.js)
-/// ============================================================
-/// Singleton class yang mengelola semua request HTTP ke backend.
-///
-/// CARA PENGGUNAAN:
-///   final api = ApiService();
-///   api.setToken('jwt_token_dari_login');
-///   final saldo = await api.fetchUserSaldo('userId');
-///
-/// TODO: Ganti [AppConstants.baseUrl] di file config/app_constants.dart
-///       dengan IP publik VM GCP Anda.
-///       Contoh: 'http://34.101.xxx.xxx:3000/api'
-
 class ApiService {
-  // ----------------------------------------------------------
   // Singleton Pattern
-  // ----------------------------------------------------------
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
   ApiService._internal();
 
-  // ----------------------------------------------------------
   // Token JWT — di-set setelah login berhasil
-  // ----------------------------------------------------------
   String? _token;
 
   void setToken(String token) {
@@ -38,9 +20,7 @@ class ApiService {
     _token = null;
   }
 
-  // ----------------------------------------------------------
   // Headers Builder — otomatis menyisipkan token Authorization
-  // ----------------------------------------------------------
   Map<String, String> get _headers {
     final headers = <String, String>{
       'Content-Type': 'application/json',
@@ -56,13 +36,7 @@ class ApiService {
     return headers;
   }
 
-  // ============================================================
   // GENERIC HTTP METHODS
-  // ============================================================
-
-  /// GET request ke [endpoint].
-  /// [endpoint] adalah path relatif, contoh: '/saldo/1'
-  /// Return: decoded JSON body.
   Future<dynamic> get(String endpoint) async {
     final url = Uri.parse('${AppConstants.baseUrl}$endpoint');
 
@@ -81,8 +55,6 @@ class ApiService {
     }
   }
 
-  /// POST request ke [endpoint] dengan [body].
-  /// [body] akan di-encode ke JSON secara otomatis.
   Future<dynamic> post(String endpoint, Map<String, dynamic> body) async {
     final url = Uri.parse('${AppConstants.baseUrl}$endpoint');
 
@@ -101,9 +73,7 @@ class ApiService {
     }
   }
 
-  // ----------------------------------------------------------
   // Response Handler
-  // ----------------------------------------------------------
   dynamic _handleResponse(http.Response response) {
     final raw = response.body.trim();
     if (raw.isEmpty) {
@@ -135,30 +105,7 @@ class ApiService {
     }
   }
 
-  // ============================================================
-  // ENDPOINT-SPECIFIC METHODS
-  // ============================================================
-  // Setiap method di bawah memanggil endpoint spesifik di backend.
-  // TODO: Sesuaikan path endpoint dan struktur response JSON
-  //       dengan API backend Anda.
-
-  /// -----------------------------------------------------------
-  /// LOGIN
-  /// -----------------------------------------------------------
-  /// Endpoint: POST /auth/login
-  /// Body:     { "email": "...", "password": "..." }
-  /// Response yang diharapkan:
-  /// ```json
-  /// {
-  ///   "token": "eyJhbGciOiJIUzI1NiIs...",
-  ///   "user": {
-  ///     "id": "1",
-  ///     "nama": "Budi Santoso",
-  ///     "email": "budi@email.com"
-  ///   }
-  /// }
-  /// ```
-  /// TODO: Ganti '/auth/login' dengan path endpoint login Anda.
+  // ENDPOINT
   Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await post('/auth/login', {
       'email': email,
@@ -193,7 +140,6 @@ class ApiService {
     required String alamat,
     required String jenisSampah,
     required double estimasiBerat,
-    // required int estimasiKantong,
     required String tanggalJemput,
     required String catatan,
     required int userId,
@@ -204,7 +150,6 @@ class ApiService {
       'alamat': alamat,
       'jenis_sampah': jenisSampah,
       'estimasi_berat': estimasiBerat,
-      // 'estimasi_kantong': estimasiKantong,
       'tanggal_jemput': tanggalJemput,
       'catatan': catatan,
       'user_id': userId,
@@ -244,40 +189,11 @@ class ApiService {
     return Map<String, dynamic>.from(response);
   }
 
-  /// -----------------------------------------------------------
-  /// FETCH SALDO POIN WARGA
-  /// -----------------------------------------------------------
-  /// Endpoint: GET /saldo/:userId
-  /// Response yang diharapkan:
-  /// ```json
-  /// {
-  ///   "saldo_poin": 1500.0
-  /// }
-  /// ```
-  /// TODO: Ganti '/saldo/$userId' dengan path endpoint saldo Anda.
   Future<double> fetchUserSaldo(String userId) async {
     final response = await get('/saldo/$userId');
     return (response['saldo_poin'] ?? 0).toDouble();
   }
 
-  /// -----------------------------------------------------------
-  /// FETCH RIWAYAT PENUKARAN POIN
-  /// -----------------------------------------------------------
-  /// Endpoint: GET /transaksi/:userId
-  /// Response yang diharapkan:
-  /// ```json
-  /// [
-  ///   {
-  ///     "id": 1,
-  ///     "jenis": "Tukar Sembako",
-  ///     "jumlah_poin": 500,
-  ///     "keterangan": "Tukar 500 poin → 1kg beras",
-  ///     "tanggal": "2026-05-10T10:30:00Z"
-  ///   }
-  /// ]
-  /// ```
-  /// TODO: Ganti '/transaksi/$userId' dengan path endpoint
-  ///       riwayat transaksi Anda.
   Future<List<dynamic>> fetchRiwayatTransaksi(String userId) async {
     final response = await get('/transaksi/$userId');
     return List<dynamic>.from(response);

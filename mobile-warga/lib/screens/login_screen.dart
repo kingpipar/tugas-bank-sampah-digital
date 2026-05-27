@@ -4,15 +4,6 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/loading_overlay.dart';
 
-/// ============================================================
-/// LoginScreen — Layar Login Warga
-/// ============================================================
-/// Form login sederhana dengan email dan password.
-/// Saat ini menggunakan mock data (lihat AuthProvider).
-///
-/// TODO: Setelah backend siap, cukup update AuthProvider.login()
-///       dan screen ini tidak perlu diubah.
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -56,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
         builder: (context, auth, child) {
           return Stack(
             children: [
-              // ---- Background Gradient ----
+              // Background Gradient
               Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -72,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              // ---- Content ----
+              // Content
               SafeArea(
                 child: Center(
                   child: SingleChildScrollView(
@@ -80,7 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // ---- Logo / Icon ----
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -111,8 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         const SizedBox(height: 40),
-
-                        // ---- Form Card ----
+                        // Form Card
                         Card(
                           elevation: 8,
                           shadowColor: Colors.black26,
@@ -126,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  // ---- Email ----
+                                  // Email
                                   TextFormField(
                                     controller: _emailController,
                                     keyboardType: TextInputType.emailAddress,
@@ -145,8 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     },
                                   ),
                                   const SizedBox(height: 16),
-
-                                  // ---- Password ----
+                                  // Password
                                   TextFormField(
                                     controller: _passwordController,
                                     obscureText: _obscurePassword,
@@ -177,8 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     },
                                   ),
                                   const SizedBox(height: 8),
-
-                                  // ---- Error Message ----
+                                  // Error Message
                                   if (auth.errorMessage != null)
                                     Padding(
                                       padding: const EdgeInsets.only(bottom: 8),
@@ -192,8 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
 
                                   const SizedBox(height: 16),
-
-                                  // ---- Login Button ----
+                                  // Login Button
                                   FilledButton.icon(
                                     onPressed: auth.isLoading ? null : _handleLogin,
                                     icon: const Icon(Icons.login_rounded),
@@ -238,8 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-
-              // ---- Loading Overlay ----
+              // Loading Overlay
               if (auth.isLoading)
                 const LoadingOverlay(message: 'Sedang masuk...'),
             ],

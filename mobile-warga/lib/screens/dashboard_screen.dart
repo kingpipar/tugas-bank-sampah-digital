@@ -49,7 +49,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             .snapshots()
                       : const Stream.empty(),
                   builder: (context, snapshot) {
-                    // Hitung unread di client-side (tidak butuh composite index)
                     final docs = snapshot.data?.docs ?? [];
                     final unreadCount = docs
                         .where((d) => (d.data() as Map<String, dynamic>?)?['isRead'] != true)

@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class PickupRequestModel {
   final String? id;
   final String userId;
-  // final int estimasiKantong;
   final double estimasiBerat;
   final String jenisSampah;
   final String kategoriSampah;
@@ -19,7 +18,6 @@ class PickupRequestModel {
   PickupRequestModel({
     this.id,
     required this.userId,
-    // required this.estimasiKantong,
     required this.estimasiBerat,
     this.jenisSampah = 'Campuran',
     this.kategoriSampah = '',
@@ -36,7 +34,6 @@ class PickupRequestModel {
   Map<String, dynamic> toFirestore() {
     return {
       'user_id': userId,
-      // 'estimasi_kantong': estimasiKantong,
       'estimasi_berat': estimasiBerat,
       'jenis_sampah': jenisSampah,
       'kategori_sampah': kategoriSampah,
@@ -62,7 +59,6 @@ class PickupRequestModel {
     return PickupRequestModel(
       id: doc.id,
       userId: data['user_id']?.toString() ?? '',
-      // estimasiKantong: (data['estimasi_kantong'] ?? 0) as int,
       estimasiBerat: (data['estimasi_berat'] ?? 0).toDouble(),
       jenisSampah: data['jenis_sampah']?.toString() ?? 'Campuran',
       kategoriSampah: data['kategori_sampah']?.toString() ?? '',
