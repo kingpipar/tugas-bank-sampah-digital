@@ -61,9 +61,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   }
 }
 
-// ================================================================
 // TAB 1: Status Penjemputan (Real-time Firestore StreamBuilder)
-// ================================================================
 class _PickupStatusTab extends StatelessWidget {
   const _PickupStatusTab();
 
@@ -167,9 +165,7 @@ class _PickupStatusTab extends StatelessWidget {
   }
 }
 
-// ================================================================
 // TAB 2: Riwayat Penukaran Poin (REST API MySQL)
-// ================================================================
 class _TransactionHistoryTab extends StatefulWidget {
   const _TransactionHistoryTab();
   @override
