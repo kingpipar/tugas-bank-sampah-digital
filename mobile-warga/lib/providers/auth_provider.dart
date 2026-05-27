@@ -164,9 +164,6 @@ class AuthProvider extends ChangeNotifier {
     String? rw,
     String? jenisKelamin,
   }) async {
-    // Bug fix #1: saat login, rt/rw/jenisKelamin diambil dari Firestore
-    // (userData sudah berisi field tsb dari _ensureFirestoreUser).
-    // Hanya pakai parameter jika memang dikirim (registrasi baru).
     final effectiveRt = rt ?? userData['rt']?.toString() ?? '';
     final effectiveRw = rw ?? userData['rw']?.toString() ?? '';
     final effectiveJk = jenisKelamin ?? userData['jenisKelamin']?.toString() ?? '';
@@ -191,12 +188,10 @@ class AuthProvider extends ChangeNotifier {
       );
     }
 
-    // Bug fix #2: ambil saldo aktual dari MySQL
     double saldoPoin = (syncResult['saldo_poin'] ?? 0).toDouble();
     try {
       saldoPoin = await _apiService.fetchUserSaldo(mysqlUserId.toString());
     } on ApiException {
-      // gunakan saldo dari sync response
     }
 
     final mysqlNama = syncResult['nama']?.toString();
@@ -232,7 +227,6 @@ class AuthProvider extends ChangeNotifier {
   }
 
   /// Refresh saldo dari MySQL dan update _user + notifyListeners.
-  /// Dipanggil dari DashboardScreen agar tidak ada race condition.
   Future<void> refreshSaldo() async {
     final mysqlId = _user?.mysqlUserId;
     if (mysqlId == null) return;

@@ -19,8 +19,6 @@ class AppNotification {
     required this.date,
   });
 
-  /// Factory utama — dari Firestore DocumentSnapshot.
-  /// Field Firestore: judul, pesan, tipe_trigger, user_id, isRead, created_at
   factory AppNotification.fromFirestore(DocumentSnapshot doc) {
     final json = doc.data() as Map<String, dynamic>? ?? {};
 
@@ -43,7 +41,6 @@ class AppNotification {
     );
   }
 
-  /// Backward-compat factory dari plain Map (misal dari REST API).
   factory AppNotification.fromJson(Map<String, dynamic> json) {
     DateTime parsedDate = DateTime.now();
     final rawDate = json['created_at'] ?? json['date'];

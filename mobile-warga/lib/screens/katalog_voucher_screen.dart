@@ -44,7 +44,7 @@ class KatalogVoucherScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // ---- POINT DISPLAY ----
+          // POINT DISPLAY
           Container(
             width: double.infinity,
             margin: const EdgeInsets.all(16),
@@ -94,7 +94,7 @@ class KatalogVoucherScreen extends StatelessWidget {
             ),
           ),
 
-          // ---- VOUCHER LIST ----
+          // VOUCHER LIST
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -332,9 +332,7 @@ class KatalogVoucherScreen extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () async {
-              Navigator.pop(dialogCtx); // Close confirm dialog
-
-              // Show loading dialog
+              Navigator.pop(dialogCtx);
               showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -353,11 +351,8 @@ class KatalogVoucherScreen extends StatelessWidget {
                 );
 
                 if (context.mounted) {
-                  Navigator.pop(context); // Close loading dialog
-
-                  // Refresh points locally
+                  Navigator.pop(context);
                   await auth.refreshSaldo();
-
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -370,7 +365,7 @@ class KatalogVoucherScreen extends StatelessWidget {
                 }
               } catch (e) {
                 if (context.mounted) {
-                  Navigator.pop(context); // Close loading dialog
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Gagal menukarkan voucher: $e'),

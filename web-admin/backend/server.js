@@ -94,7 +94,7 @@ db.getConnection((err, connection) => {
     if (err) {
         console.error('❌ Gagal konek ke database:', err.message);
     } else {
-        console.log(`✅ Database terhubung (bank_sampah_digital) di Port ${PORT}`);
+        console.log(`✅ Database '${process.env.DB_NAME}' terhubung di Port ${PORT}`);
         connection.release();
         syncExistingPricesToFirestore();
         syncExistingVouchersToFirestore();

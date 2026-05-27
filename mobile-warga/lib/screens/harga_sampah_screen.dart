@@ -84,7 +84,7 @@ class _HargaSampahScreenState extends State<HargaSampahScreen> {
       ),
       body: Column(
         children: [
-          // ---- SEARCH BAR ----
+          //  SEARCH BAR 
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
             child: TextField(
@@ -119,7 +119,7 @@ class _HargaSampahScreenState extends State<HargaSampahScreen> {
             ),
           ),
 
-          // ---- LIST OF PRICES ----
+          //  LIST OF PRICES 
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
@@ -163,7 +163,7 @@ class _HargaSampahScreenState extends State<HargaSampahScreen> {
                   );
                 }
 
-                // Filter & Group by Category
+                // Filter & Group by Category 
                 final Map<String, List<DocumentSnapshot>> groupedData = {};
                 for (var doc in docs) {
                   final model = HargaSampahModel.fromFirestore(doc);
@@ -202,7 +202,7 @@ class _HargaSampahScreenState extends State<HargaSampahScreen> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // ---- CATEGORY HEADER ----
+                        //  CATEGORY HEADER 
                         Padding(
                           padding: const EdgeInsets.only(top: 16, bottom: 8),
                           child: Row(
@@ -228,7 +228,7 @@ class _HargaSampahScreenState extends State<HargaSampahScreen> {
                           ),
                         ),
 
-                        // ---- ITEMS IN CATEGORY ----
+                        //  ITEMS IN CATEGORY 
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),

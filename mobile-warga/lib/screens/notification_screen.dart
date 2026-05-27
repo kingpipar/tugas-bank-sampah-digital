@@ -16,8 +16,6 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   bool _hasAutoMarked = false;
 
-  /// Otomatis tandai semua notifikasi sebagai sudah dibaca
-  /// saat pertama kali halaman dibuka.
   void _autoMarkAllRead(List<AppNotification> notifications) {
     if (_hasAutoMarked) return;
     _hasAutoMarked = true;
@@ -45,7 +43,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     });
   }
 
-  /// Manual: tandai semua sebagai dibaca (tombol AppBar).
+  /// Manual: tandai semua sebagai dibaca.
   Future<void> _markAllAsRead(List<AppNotification> notifications) async {
     final unread = notifications.where((n) => !n.isRead).toList();
     if (unread.isEmpty) return;
@@ -242,7 +240,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         final notifications = docs
             .map((doc) => AppNotification.fromFirestore(doc))
             .toList()
-          ..sort((a, b) => b.date.compareTo(a.date)); // terbaru di atas
+          ..sort((a, b) => b.date.compareTo(a.date));
 
         // Auto mark-as-read saat pertama kali data masuk
         WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -3,11 +3,6 @@ import '../models/pickup_request_model.dart';
 import '../services/api_service.dart';
 import '../services/firestore_service.dart';
 
-/// ============================================================
-/// PickupProvider — State Management untuk Request Penjemputan
-/// ============================================================
-/// Mengelola state submit pickup request ke Firebase Firestore.
-
 class PickupProvider extends ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
 
@@ -15,16 +10,12 @@ class PickupProvider extends ChangeNotifier {
   String? _errorMessage;
   String? _lastCreatedDocId;
 
-  // ----------------------------------------------------------
   // Getters
-  // ----------------------------------------------------------
   bool get isSubmitting => _isSubmitting;
   String? get errorMessage => _errorMessage;
   String? get lastCreatedDocId => _lastCreatedDocId;
 
-  // ----------------------------------------------------------
   // SUBMIT PICKUP REQUEST
-  // ----------------------------------------------------------
   /// Kirim ke MySQL lalu Firestore (hybrid).
   Future<bool> submitHybrid({
     required PickupRequestModel firestoreRequest,
@@ -61,7 +52,6 @@ class PickupProvider extends ChangeNotifier {
     }
   }
 
-  /// Firestore saja (legacy).
   Future<bool> submitPickupRequest(PickupRequestModel request) async {
     _isSubmitting = true;
     _errorMessage = null;
@@ -82,11 +72,6 @@ class PickupProvider extends ChangeNotifier {
     }
   }
 
-  // ----------------------------------------------------------
-  // STREAM PICKUP REQUESTS (untuk History Screen)
-  // ----------------------------------------------------------
-  /// Mengembalikan stream daftar pickup request milik [userId].
-  /// Gunakan dengan StreamBuilder di UI.
   Stream<List<PickupRequestModel>> streamPickupRequests(String userId) {
     return _firestoreService.streamMyPickupRequests(userId);
   }
