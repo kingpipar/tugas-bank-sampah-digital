@@ -1,0 +1,8 @@
+steps:
+- name: 'gcr.io/cloud-builders/gsutil'
+  args:
+    ['-m', 'rsync', '-r', '.', 'gs://bucket-admin-bank-sampah']
+
+- name: 'gcr.io/cloud-builders/gsutil'
+  args:
+    ['iam', 'ch', 'allUsers:objectViewer', 'gs://bucket-admin-bank-sampah']
