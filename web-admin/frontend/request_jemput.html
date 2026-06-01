@@ -339,7 +339,7 @@
             if (typeof showLoading === 'function') showLoading(btnRefresh);
 
             try {
-                const res = await fetch('http://https://bank-sampah-backend-1079290367613.us-central1.run.app/api/request_jemput');
+                const res = await fetch('https://bank-sampah-backend-1079290367613.us-central1.run.app/api/request_jemput');
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
                 tbody.innerHTML = '';
@@ -420,7 +420,7 @@
                 return;
             }
             try {
-                const res = await fetch(`http://localhost:3000/api/request_jemput/${id}`, {
+                const res = await fetch(`https://bank-sampah-backend-1079290367613.us-central1.run.app/api/request_jemput/${id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ status: statusBaru })
