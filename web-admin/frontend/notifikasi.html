@@ -80,13 +80,19 @@
 
         .notif-card {
             transition: all .3s ease;
+            cursor: default;
         }
 
-        .notif-card:hover {
+        .notif-card.cursor-pointer:hover {
             transform: translateY(-4px);
-
-            box-shadow:
-                0 20px 40px rgba(15, 23, 42, .06);
+            box-shadow: 0 20px 45px rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.35);
+            background: rgba(255, 255, 255, 0.88);
+        }
+        @media(max-width:768px) {
+            aside {
+                display: none;
+            }
         }
     </style>
 
@@ -97,258 +103,98 @@
     <div class="flex h-screen overflow-hidden">
 
         <aside
-            class="w-[250px] min-w-[250px] bg-[#f3f5f4] border-r border-[#e5e7eb] flex flex-col justify-between px-5 py-7 shadow-sm overflow-y-auto">
+            class="w-[280px] bg-white border-r border-slate-200 flex flex-col justify-between py-6 px-5 shadow-sm overflow-y-auto">
 
             <div>
-
-                <div class="flex items-center gap-4 mb-14 px-2">
-
-                    <div class="w-[58px] h-[58px] rounded-[20px]
-                bg-gradient-to-br from-[#22c55e] to-[#4ade80]
-                flex items-center justify-center
-                shadow-[0_16px_35px_rgba(34,197,94,.25)] shrink-0">
-
-                        <span class="text-[26px]">
-                            ♻️
-                        </span>
-
-                    </div>
-
+                <div class="mb-12 flex items-center gap-4 px-2">
+                    <div
+                        class="w-16 h-16 rounded-[24px] bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center text-white text-3xl shadow-[0_12px_30px_rgba(34,197,94,0.35)] shrink-0">
+                        ♻️</div>
                     <div>
-
-                        <h1 class="text-[16px] font-black leading-5 text-[#0f172a]">
-                            Bank
-                            <br>
-                            Sampah
-                        </h1>
-
-                        <p class="text-[#94a3b8] text-[13px] font-semibold mt-1">
-                            Digital System
-                        </p>
-
+                        <h1 class="text-lg font-black text-slate-800 leading-tight">Bank Sampah</h1>
+                        <p class="text-sm text-slate-400 font-medium">Digital System</p>
                     </div>
-
                 </div>
-
-                <nav class="space-y-4">
-
-                    <a href="index.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-        bg-[#eef2f7]
-        flex items-center justify-center
-        text-[22px]
-        shadow-inner shrink-0">
-
-                            📊
-
-                        </div>
-
+                <nav class="flex flex-col gap-2">
+                    <a href="index.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">📊</div>
                         <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
-                                Dashboard
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
-                                Ringkasan sistem
-                            </p>
-
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Dashboard</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Ringkasan sistem</p>
                         </div>
-
                     </a>
-
                     <a href="warga.html"
-                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-white/70 transition-all duration-300">
-                        <div
-                            class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">
-                            👥
-                        </div>
-                        <div class="mobile-hide">
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">👥</div>
+                        <div>
                             <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Warga</h3>
                             <p class="text-[11px] text-slate-400 mt-0.5">Data warga</p>
                         </div>
                     </a>
-
-                    <a href="harga.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-                hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-                    bg-[#eef2f7]
-                    flex items-center justify-center
-                    text-[22px] shadow-inner shrink-0">
-
-                            💰
-
-                        </div>
-
+                    <a href="harga.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">💰</div>
                         <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
-                                Harga
-                                <br>
-                                Sampah
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
-                                Kelola harga
-                            </p>
-
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Harga Sampah</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Kelola harga realtime</p>
                         </div>
-
                     </a>
-
-                    <a href="request_jemput.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-                hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-                    bg-[#eef2f7]
-                    flex items-center justify-center
-                    text-[22px] shadow-inner shrink-0">
-
-                            🚚
-
-                        </div>
-
+                    <a href="request_jemput.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">🚚</div>
                         <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
-                                Penjemputan
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
-                                Request warga
-                            </p>
-
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Penjemputan</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Request warga</p>
                         </div>
-
                     </a>
-
-                    <a href="transaksi_penukaran.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-                hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-                    bg-[#eef2f7]
-                    flex items-center justify-center
-                    text-[22px] shadow-inner shrink-0">
-
-                            🤝
-
-                        </div>
-
+                    <a href="transaksi_penukaran.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">🤝</div>
                         <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
-                                Penukaran
-                                <br>
-                                Poin
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
-                                Riwayat klaim
-                            </p>
-
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Penukaran Poin</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Riwayat klaim warga</p>
                         </div>
-
                     </a>
-
-                    <a href="voucher_reward.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-                hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-                    bg-[#eef2f7]
-                    flex items-center justify-center
-                    text-[22px] shadow-inner shrink-0">
-
-                            🎟️
-
-                        </div>
-
+                    <a href="voucher_reward.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">🎟️</div>
                         <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
-                                Voucher
-                                <br>
-                                Reward
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
-                                Data reward
-                            </p>
-
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Voucher Reward</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Master data reward</p>
                         </div>
-
                     </a>
-
-                    <a href="laporan.html" class="group flex items-center gap-4 px-5 py-4 rounded-[26px]
-                hover:bg-white transition-all duration-300">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-                    bg-[#eef2f7]
-                    flex items-center justify-center
-                    text-[22px] shadow-inner shrink-0">
-
-                            📄
-
-                        </div>
-
+                    <a href="laporan.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-slate-100 group-hover:bg-white flex items-center justify-center text-slate-500 text-xl transition-all duration-300 shrink-0">📄</div>
                         <div>
-
-                            <h3 class="text-[#334155] font-extrabold text-[15px] leading-5">
-                                Laporan
-                            </h3>
-
-                            <p class="text-[#94a3b8] text-[13px] font-medium mt-1 leading-4">
-                                Statistik data
-                            </p>
-
+                            <h3 class="font-bold text-slate-700 group-hover:text-slate-900">Laporan</h3>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Data & statistik</p>
                         </div>
-
                     </a>
-
-                    <a href="notifikasi.html" class="group flex items-center gap-4 px-5 py-4 rounded-[30px]
-bg-gradient-to-r from-[#22c55e] to-[#34d399]
-shadow-[0_18px_35px_rgba(34,197,94,.25)]
-relative">
-
-                        <div class="w-[48px] h-[48px] rounded-[16px]
-        bg-white/20 border border-white/20
-        flex items-center justify-center
-        text-[22px] text-white shrink-0">
-
-                            🔔
-
+                    <a href="notifikasi.html"
+                        class="group flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-400 shadow-[0_12px_30px_rgba(34,197,94,0.3)] transition-all duration-300">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-xl border border-white/20 shrink-0">🔔</div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-white">Notifikasi</h3>
+                            <p class="text-[11px] text-green-50 mt-0.5">Update terbaru</p>
                         </div>
-
-                        <div>
-
-                            <h3 class="text-white font-extrabold text-[15px] leading-5">
-                                Notifikasi
-                            </h3>
-
-                            <p class="text-[#dcfce7] text-[13px] font-medium mt-1 leading-4">
-                                Update terbaru
-                            </p>
-
-                        </div>
-
-                        <div class="absolute right-5 top-1/2 -translate-y-1/2
-        w-7 h-7 rounded-full
-        bg-[#fca5a5]
-        text-white text-[12px] font-black
-        flex items-center justify-center">
-
-                            4
-
-                        </div>
-
+                        <div id="notif-badge"
+                            class="w-6 h-6 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow-md animate-pulse shrink-0">
+                            0</div>
                     </a>
-
                 </nav>
-
             </div>
-
+            <div class="mt-4">
+                <a href="profile.html"
+                    class="group flex items-center gap-4 px-5 py-4 rounded-2xl bg-green-50 hover:bg-green-100 transition-all duration-300 border border-green-100">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-400 flex items-center justify-center text-white text-xl shadow-lg shrink-0">👤</div>
+                    <div>
+                        <h3 class="font-bold text-slate-700">Profil Admin</h3>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Kelola akun</p>
+                    </div>
+                </a>
+            </div>
         </aside>
 
         <main class="flex-1 h-full overflow-y-auto relative scroll-smooth">
@@ -470,6 +316,18 @@ relative">
 
                 </section>
 
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <h3 class="text-xl font-bold text-slate-700">Aktivitas Terbaru</h3>
+                    <div class="flex gap-3 w-full sm:w-auto">
+                        <button id="btn-read-all" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-white/70 border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 hover:border-slate-300 transition-all text-xs flex items-center justify-center gap-2 shadow-sm cursor-pointer">
+                            ✔ Tandai Semua Dibaca
+                        </button>
+                        <button id="btn-clear-all" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-rose-50 border border-rose-100 text-rose-600 font-bold hover:bg-rose-100 transition-all text-xs flex items-center justify-center gap-2 shadow-sm cursor-pointer">
+                            🗑️ Bersihkan Semua
+                        </button>
+                    </div>
+                </div>
+
                 <section id="notif-container" class="space-y-6">
 
                 </section>
@@ -569,7 +427,10 @@ relative">
                             "success",
 
                         time:
-                            "2 menit lalu"
+                            "2 menit lalu",
+                        
+                        created_at:
+                            new Date(Date.now() - 2 * 60 * 1000).toISOString()
 
                     }
                 );
@@ -588,7 +449,10 @@ relative">
                             "info",
 
                         time:
-                            "10 menit lalu"
+                            "10 menit lalu",
+
+                        created_at:
+                            new Date(Date.now() - 10 * 60 * 1000).toISOString()
 
                     }
                 );
@@ -607,7 +471,10 @@ relative">
                             "warning",
 
                         time:
-                            "1 jam lalu"
+                            "1 jam lalu",
+
+                        created_at:
+                            new Date(Date.now() - 60 * 60 * 1000).toISOString()
 
                     }
                 );
@@ -616,122 +483,247 @@ relative">
 
         }
 
-        async function loadNotif() {
+        // Capture last read time at page load (before notif-badge.js resets it)
+        let pageLoadLastReadTimeStr = localStorage.getItem('last_read_notif_time') || '1970-01-01T00:00:00.000Z';
+        let pageLoadLastReadTime = new Date(pageLoadLastReadTimeStr).getTime();
 
-            const container =
-                document.getElementById(
-                    "notif-container"
-                );
+        const BASE_URL = 'https://bank-sampah-backend-1079290367613.us-central1.run.app/api';
 
-            container.innerHTML = "";
-
-            const snapshot =
-                await getDocs(
-                    collection(db, "notifikasi")
-                );
-
-            let total = 0;
-
-            snapshot.forEach((doc) => {
-
-                total++;
-
-                const data =
-                    doc.data();
-
-                let bg =
-                    "bg-green-100";
-
-                let text =
-                    "text-green-600";
-
-                let emoji =
-                    "♻️";
-
-                if (data.type === "info") {
-
-                    bg = "bg-blue-100";
-
-                    text = "text-blue-600";
-
-                    emoji = "🚛";
-
-                }
-
-                if (data.type === "warning") {
-
-                    bg = "bg-yellow-100";
-
-                    text = "text-yellow-600";
-
-                    emoji = "💰";
-
-                }
-
-                container.innerHTML += `
-
-                    <div class="glass-card rounded-[32px] p-8 notif-card flex items-start gap-5">
-
-                        <div class="w-16 h-16 rounded-2xl ${bg} flex items-center justify-center text-3xl shrink-0">
-
-                            ${emoji}
-
+        function renderCard(bg, emoji, title, message, badgeLabel, badgeClass, timeLabel, redirectUrl, isUnread) {
+            const clickAttr = redirectUrl ? `onclick="window.location.href='${redirectUrl}'"` : '';
+            const cursorClass = redirectUrl ? 'cursor-pointer transition-all duration-300' : '';
+            const unreadDot = isUnread ? '<span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0 ml-2 animate-pulse" title="Baru"></span>' : '';
+            return `
+            <div class="glass-card rounded-[32px] p-8 notif-card flex items-start gap-5 ${cursorClass}" ${clickAttr}>
+                <div class="w-16 h-16 rounded-2xl ${bg} flex items-center justify-center text-3xl shrink-0">${emoji}</div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start gap-5">
+                        <div>
+                            <h3 class="text-2xl font-bold text-slate-800 flex items-center">${title}${unreadDot}</h3>
+                            <p class="text-slate-500 mt-2 leading-relaxed">${message}</p>
                         </div>
-
-                        <div class="flex-1">
-
-                            <div class="flex justify-between items-start gap-5">
-
-                                <div>
-
-                                    <h3 class="text-2xl font-bold text-slate-800">
-
-                                        ${data.title}
-
-                                    </h3>
-
-                                    <p class="text-slate-500 mt-2 leading-relaxed">
-
-                                        ${data.message}
-
-                                    </p>
-
-                                </div>
-
-                                <span class="${bg} ${text} px-4 py-2 rounded-xl text-sm font-semibold">
-
-                                    Baru
-
-                                </span>
-
-                            </div>
-
-                            <p class="text-sm text-slate-400 mt-5">
-
-                                ${data.time}
-
-                            </p>
-
-                        </div>
-
+                        <span class="${badgeClass} px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap">${badgeLabel}</span>
                     </div>
-
-                `;
-
-            });
-
-            document.getElementById(
-                "totalNotif"
-            ).innerText = total;
-
+                    <p class="text-sm text-slate-400 mt-5">${timeLabel}</p>
+                </div>
+            </div>`;
         }
 
-        await seedNotif();
+        async function loadNotif() {
+            const container = document.getElementById("notif-container");
+            container.innerHTML = `<div class="text-center text-slate-400 py-10 font-medium animate-pulse">Memuat notifikasi...</div>`;
 
-        await loadNotif();
+            const clearedTimeStr = localStorage.getItem('cleared_notif_time') || '1970-01-01T00:00:00.000Z';
+            const clearedTime = new Date(clearedTimeStr).getTime();
+
+            let allCards = [];
+            let total = 0;
+
+            // 1. Firestore
+            try {
+                const snapshot = await getDocs(collection(db, "notifikasi"));
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    
+                    const title = data.title || data.judul || "Pemberitahuan";
+                    const message = data.message || data.pesan || "";
+                    const type = data.type || data.tipe_trigger || "";
+                    
+                    let bg = "bg-green-100", text = "text-green-600", emoji = "♻️";
+                    const titleLower = title.toLowerCase();
+
+                    let timestamp = new Date();
+                    if (data.created_at) {
+                        if (data.created_at.seconds !== undefined) {
+                            timestamp = new Date(data.created_at.seconds * 1000);
+                        } else if (typeof data.created_at.toDate === 'function') {
+                            timestamp = data.created_at.toDate();
+                        } else {
+                            timestamp = new Date(data.created_at);
+                        }
+                    }
+
+                    if (timestamp.getTime() <= clearedTime) {
+                        return; // Skip cleared notification
+                    }
+
+                    const isUnread = timestamp.getTime() > pageLoadLastReadTime;
+
+                    // Determine bg and emoji based on type or title keywords
+                    if (type === "info") {
+                        bg = "bg-blue-100"; text = "text-blue-600"; emoji = "🚛";
+                    } else if (type === "warning") {
+                        bg = "bg-yellow-100"; text = "text-yellow-600"; emoji = "💰";
+                    } else if (type === "success") {
+                        bg = "bg-green-100"; text = "text-green-600"; emoji = "♻️";
+                    } else {
+                        if (titleLower.includes('harga')) {
+                            bg = "bg-yellow-100"; text = "text-yellow-600"; emoji = "💰";
+                        } else if (titleLower.includes('pickup') || titleLower.includes('jemput') || titleLower.includes('penjemputan')) {
+                            bg = "bg-blue-100"; text = "text-blue-600"; emoji = "🚛";
+                        } else if (titleLower.includes('voucher') || titleLower.includes('tukar') || titleLower.includes('penukaran') || titleLower.includes('reward')) {
+                            bg = "bg-purple-100"; text = "text-purple-600"; emoji = "🎟️";
+                        } else if (titleLower.includes('warga')) {
+                            bg = "bg-teal-100"; text = "text-teal-600"; emoji = "👥";
+                        } else {
+                            bg = "bg-slate-100"; text = "text-slate-600"; emoji = "🔔";
+                        }
+                    }
+                    
+                    let url = '';
+                    if (titleLower.includes('harga')) url = 'harga.html';
+                    else if (titleLower.includes('pickup') || titleLower.includes('jemput') || titleLower.includes('penjemputan')) url = 'request_jemput.html';
+                    else if (titleLower.includes('setoran') || titleLower.includes('setor') || titleLower.includes('laporan')) url = 'laporan.html';
+                    else if (titleLower.includes('tukar') || titleLower.includes('penukaran')) url = 'transaksi_penukaran.html';
+                    else if (titleLower.includes('voucher') || titleLower.includes('reward')) url = 'voucher_reward.html';
+                    else if (titleLower.includes('warga')) url = 'warga.html';
+                    else if (titleLower.includes('profil') || titleLower.includes('admin')) url = 'profile.html';
+
+                    let badgeLabel = "Sistem";
+                    if (titleLower.includes('harga')) badgeLabel = "Harga";
+                    else if (titleLower.includes('pickup') || titleLower.includes('jemput') || titleLower.includes('penjemputan')) badgeLabel = "Penjemputan";
+                    else if (titleLower.includes('setoran') || titleLower.includes('setor')) badgeLabel = "Setoran";
+                    else if (titleLower.includes('tukar') || titleLower.includes('penukaran')) badgeLabel = "Penukaran";
+                    else if (titleLower.includes('voucher') || titleLower.includes('reward')) badgeLabel = "Voucher";
+
+                    const formatOptions = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+                    const timeLabel = data.time || (data.created_at
+                        ? timestamp.toLocaleDateString('id-ID', formatOptions)
+                        : 'Baru-baru ini');
+
+                    const cardHtml = renderCard(bg, emoji, title, message, badgeLabel, `${bg} ${text}`, timeLabel, url, isUnread);
+                    
+                    allCards.push({
+                        date: timestamp,
+                        html: cardHtml
+                    });
+                    total++;
+                });
+            } catch (e) { console.warn("Firestore error:", e); }
+
+            // 2. API Request Penjemputan
+            try {
+                const res = await fetch(`${BASE_URL}/request_jemput`);
+                if (res.ok) {
+                    const data = await res.json();
+                    data.forEach(item => {
+                        const timestamp = new Date(item.created_at || item.tanggal_jemput);
+                        if (timestamp.getTime() <= clearedTime) {
+                            return; // Skip cleared notification
+                        }
+
+                        const isUnread = timestamp.getTime() > pageLoadLastReadTime;
+                        const isMenunggu = (item.status || 'menunggu').toLowerCase() === 'menunggu';
+                        const badgeLabel = isMenunggu ? '⚠️ Perlu Tindakan' : `Status: ${item.status}`;
+                        const badgeClass = isMenunggu
+                            ? 'bg-orange-100 text-orange-600 border border-orange-200'
+                            : 'bg-blue-100 text-blue-600 border border-blue-200';
+                        const lokasi = (item.rt && item.rw) ? ` (RT ${item.rt}/RW ${item.rw})` : '';
+                        
+                        const formatOptions = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+                        const tglLabel = item.created_at || item.tanggal_jemput
+                            ? new Date(item.created_at || item.tanggal_jemput).toLocaleDateString('id-ID', formatOptions)
+                            : 'Baru-baru ini';
+
+                        const cardHtml = renderCard(
+                            "bg-blue-100", "🚚",
+                            "Request Penjemputan",
+                            `<strong>${item.nama_warga}</strong>${lokasi} mengajukan request jemput sampah: <strong>${item.jenis_sampah}</strong>`,
+                            badgeLabel, badgeClass, tglLabel,
+                            "request_jemput.html",
+                            isUnread
+                        );
+                        
+                        allCards.push({
+                            date: timestamp,
+                            html: cardHtml
+                        });
+                        total++;
+                    });
+                }
+            } catch (e) { console.warn("API request_jemput error:", e); }
+
+            // 3. API Penukaran Voucher
+            try {
+                const res = await fetch(`${BASE_URL}/penukaran`);
+                if (res.ok) {
+                    const data = await res.json();
+                    data.forEach(item => {
+                        const timestamp = new Date(item.tanggal_tukar || item.created_at);
+                        if (timestamp.getTime() <= clearedTime) {
+                            return; // Skip cleared notification
+                        }
+
+                        const isUnread = timestamp.getTime() > pageLoadLastReadTime;
+                        const namaItem = item.nama_voucher || item.jenis_penukaran || 'Reward';
+                        const formatOptions = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+                        const tgl = item.tanggal_tukar || item.created_at
+                            ? new Date(item.tanggal_tukar || item.created_at).toLocaleDateString('id-ID', formatOptions)
+                            : 'Baru-baru ini';
+
+                        const cardHtml = renderCard(
+                            "bg-purple-100", "🎟️",
+                            "Penukaran Voucher",
+                            `<strong>${item.nama_warga}</strong> menukarkan voucher: <strong>${namaItem}</strong> (${item.poin_ditukar} Poin)`,
+                            "Klaim", "bg-purple-100 text-purple-600 border border-purple-200", tgl,
+                            "transaksi_penukaran.html",
+                            isUnread
+                        );
+                        
+                        allCards.push({
+                            date: timestamp,
+                            html: cardHtml
+                        });
+                        total++;
+                    });
+                }
+            } catch (e) { console.warn("API penukaran error:", e); }
+
+            // Urutkan berdasarkan tanggal terbaru (descending)
+            allCards.sort((a, b) => b.date - a.date);
+
+            container.innerHTML = allCards.length > 0
+                ? allCards.map(c => c.html).join('')
+                : `<div class="glass-card rounded-[32px] p-10 text-center text-slate-400 font-medium">Belum ada notifikasi saat ini.</div>`;
+
+            document.getElementById("totalNotif").innerText = total;
+        }
+
+        // Attach action buttons event listeners
+        document.getElementById("btn-read-all").addEventListener("click", () => {
+            localStorage.setItem('last_read_notif_time', new Date().toISOString());
+            pageLoadLastReadTime = Date.now();
+            loadNotif();
+            if (typeof updateNotifBadge === "function") {
+                updateNotifBadge();
+            }
+        });
+
+        document.getElementById("btn-clear-all").addEventListener("click", () => {
+            if (confirm("Apakah Anda yakin ingin membersihkan semua notifikasi?")) {
+                localStorage.setItem('cleared_notif_time', new Date().toISOString());
+                loadNotif();
+                if (typeof updateNotifBadge === "function") {
+                    updateNotifBadge();
+                }
+            }
+        });
+
+        try {
+            await seedNotif();
+        } catch (e) {
+            console.warn("Firestore seeding failed, skipping:", e);
+        }
+
+        try {
+            await loadNotif();
+        } catch (e) {
+            console.error("Failed to load notifications:", e);
+        }
 
     </script>
 
+    <script src="./src/js/notif-badge.js"></script>
 </body>
 
 </html>
