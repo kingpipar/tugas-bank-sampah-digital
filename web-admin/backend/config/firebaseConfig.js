@@ -1,29 +1,40 @@
 const admin = require('firebase-admin');
 const path = require('path');
-
-// Inisialisasi Firebase Admin SDK
-// File serviceAccountKey.json harus di-download dari Firebase Console
-// → Project Settings → Service Accounts → Generate new private key
-const serviceAccountPath = path.join(__dirname, 'serviceAccountKey.json');
-
 let db;
+const firebaseEnv = process.env._FIREBASE_SERVICE_ACCOUNT || process.env.FIREBASE_SERVICE_ACCOUNT;
 
-try {
-    const serviceAccount = require(serviceAccountPath);
+if (firebaseEnv) {
+    try {
+        const serviceAccount = JSON.parse(firebaseEnv);
 
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
-    });
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
 
-    db = admin.firestore();
-    console.log('✅ Firebase Firestore Connected');
+        db = admin.firestore();
+        console.log('✅ Firebase Firestore Connected via Environment Variable (Production)');
+    } catch (error) {
+        console.error('❌ Gagal membaca FIREBASE_SERVICE_ACCOUNT dari Env:', error.message);
+        db = null;
+    }
+} else {
+    const serviceAccountPath = path.join(__dirname, 'serviceAccountKey.json');
+    try {
+        const serviceAccount = require(serviceAccountPath);
 
-} catch (error) {
-    console.warn('⚠️ Firebase belum dikonfigurasi. Letakkan serviceAccountKey.json di folder config/');
-    console.warn('   Download dari: Firebase Console → Project Settings → Service Accounts');
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
 
-    // Buat dummy db agar server tetap jalan tanpa Firebase
-    db = null;
+        db = admin.firestore();
+        console.log('✅ Firebase Firestore Connected');
+
+    } catch (error) {
+        console.warn('⚠️ Firebase belum dikonfigurasi. Letakkan serviceAccountKey.json di folder config/');
+        console.warn('   Download dari: Firebase Console → Project Settings → Service Accounts');
+
+        // Buat dummy db agar server tetap jalan tanpa Firebase
+        db = null;
+    }
 }
-
 module.exports = { admin, db };
