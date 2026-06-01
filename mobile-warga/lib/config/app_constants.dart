@@ -1,7 +1,7 @@
 class AppConstants {
   AppConstants._();
 
-  static const String baseUrl = 'http://localhost:3000/api';
+  static const String baseUrl = 'https://bank-sampah-backend-1079290367613.us-central1.run.app//api';
 
   // FIREBASE FIRESTORE COLLECTIONS
   static const String pickupRequestsCollection = 'request_jemput_realtime';

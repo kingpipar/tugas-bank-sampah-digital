@@ -459,7 +459,7 @@
                 catatan: document.getElementById('edit-catatan').value,
             };
             try {
-                const res = await fetch(`http://https://bank-sampah-backend-1079290367613.us-central1.run.app/api/request_jemput/${id}`, {
+                const res = await fetch(`https://bank-sampah-backend-1079290367613.us-central1.run.app/api/request_jemput/${id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -472,7 +472,7 @@
         async function hapusRequest(id) {
             if (!confirm('Yakin hapus data request ini? Tidak bisa dikembalikan.')) return;
             try {
-                const res = await fetch(`http://https://bank-sampah-backend-1079290367613.us-central1.run.app/api/request_jemput/${id}`, { method: 'DELETE' });
+                const res = await fetch(`https://bank-sampah-backend-1079290367613.us-central1.run.app/api/request_jemput/${id}`, { method: 'DELETE' });
                 if (res.ok) loadRequest();
                 else alert('Gagal menghapus data.');
             } catch (err) { alert('Tidak bisa terhubung ke server.'); }
