@@ -1,31 +1,33 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  dir: 'web-admin/frontend'
+  dir: 'web-admin/backend'
   args:
     - 'build'
     - '-t'
-    - 'gcr.io/$PROJECT_ID/bank-sampah-frontend:$COMMIT_SHA'
+    - 'gcr.io/$PROJECT_ID/bank-sampah-backend:$COMMIT_SHA'
     - '.'
 - name: 'gcr.io/cloud-builders/docker'
   args:
     - 'push'
-    - 'gcr.io/$PROJECT_ID/bank-sampah-frontend:$COMMIT_SHA'
+    - 'gcr.io/$PROJECT_ID/bank-sampah-backend:$COMMIT_SHA'
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
     - 'run'
     - 'deploy'
-    - 'bank-sampah-frontend'
+    - 'bank-sampah-backend'
     - '--image'
-    - 'gcr.io/$PROJECT_ID/bank-sampah-frontend:$COMMIT_SHA'
+    - 'gcr.io/$PROJECT_ID/bank-sampah-backend:$COMMIT_SHA'
     - '--region'
     - 'us-central1'
     - '--platform'
     - 'managed'
     - '--allow-unauthenticated'
+    - '--set-env-vars'
+    - 'DB_NAME=${_DB_NAME},DB_USER=${_DB_USER},DB_PASS=${_DB_PASS},DB_HOST=${_DB_HOST}'
     - '--port'
-    - '80'
+    - '3000'
 images:
-- 'gcr.io/$PROJECT_ID/bank-sampah-frontend:$COMMIT_SHA'
+- 'gcr.io/$PROJECT_ID/bank-sampah-backend:$COMMIT_SHA'
 options:
   logging: CLOUD_LOGGING_ONLY

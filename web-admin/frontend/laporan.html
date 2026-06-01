@@ -323,7 +323,7 @@
             tbody.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-slate-500 font-medium animate-pulse">Memuat data laporan...</td></tr>';
 
             try {
-                const res = await fetch('http://localhost:3000/api/laporan');
+                const res = await fetch('http://https://bank-sampah-backend-1079290367613.us-central1.run.app/api/laporan');
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
 

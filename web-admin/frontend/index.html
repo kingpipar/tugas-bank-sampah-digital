@@ -778,7 +778,7 @@
     <script>
         async function loadDashboard() {
             try {
-                const response = await fetch('http://localhost:3000/api/stats');
+                const response = await fetch('http://https://bank-sampah-backend-1079290367613.us-central1.run.app/api/stats');
                 const stats = await response.json();
 
                 document.getElementById('stat-berat').innerText = parseFloat(stats.total_berat || 0).toFixed(2);
@@ -786,7 +786,7 @@
                 document.getElementById('stat-jemput').innerText = stats.total_jemput || 0;
 
                 try {
-                    const resWarga = await fetch('http://localhost:3000/api/users/stats');
+                    const resWarga = await fetch('http://https://bank-sampah-backend-1079290367613.us-central1.run.app/api/users/stats');
                     const wargaStats = await resWarga.json();
                     document.getElementById('stat-warga').innerText = wargaStats.total || 0;
                 } catch (e) {
@@ -794,7 +794,7 @@
                 }
 
                 try {
-                    const resVoucher = await fetch('http://localhost:3000/api/voucher_reward');
+                    const resVoucher = await fetch('http://https://bank-sampah-backend-1079290367613.us-central1.run.app/api/voucher_reward');
                     const vouchers = await resVoucher.json();
                     document.getElementById('stat-sembako').innerText = vouchers.length;
                 } catch (e) {
@@ -822,7 +822,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadAdminData();
             loadDashboard();
-            setInterval(loadDashboard, 5000); 
+            setInterval(loadDashboard, 5000);
         });
     </script>
 
