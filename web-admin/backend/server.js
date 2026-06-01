@@ -582,6 +582,28 @@ app.put('/api/request_jemput/:id', (req, res) => {
                                     if (id_warga && poin_didapat > 0) {
                                         db.query('UPDATE users SET saldo_poin = COALESCE(saldo_poin,0) + ? WHERE id = ?', [poin_didapat, id_warga], (errUpd) => {
                                             if (errUpd) return console.error('update saldo error', errUpd.message);
+
+                                            // Sync saldo poin ke Firestore warga_realtime (real-time update di mobile)
+                                            if (firestoreDb) {
+                                                db.query('SELECT email FROM users WHERE id = ?', [id_warga], (errEmail, rowsEmail) => {
+                                                    if (errEmail || !rowsEmail || !rowsEmail.length) return;
+                                                    const email = rowsEmail[0].email;
+                                                    firestoreDb.collection('warga_realtime')
+                                                        .where('email', '==', email)
+                                                        .get()
+                                                        .then(snapshot => {
+                                                            if (!snapshot.empty) {
+                                                                const currentSaldo = snapshot.docs[0].data().saldoPoin || 0;
+                                                                snapshot.docs[0].ref.update({
+                                                                    saldoPoin: currentSaldo + poin_didapat
+                                                                }).then(() => {
+                                                                    console.log(`✅ Berhasil sync saldo poin +${poin_didapat} ke Firestore user ${id_warga}`);
+                                                                });
+                                                            }
+                                                        })
+                                                        .catch(fsErr => console.error('❌ Gagal sync saldo ke Firestore:', fsErr.message));
+                                                });
+                                            }
                                         });
 
                                         // tipe_trigger 4: Saldo Poin Bertambah

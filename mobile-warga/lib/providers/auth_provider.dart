@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import '../services/api_service.dart';
@@ -11,6 +12,7 @@ class AuthProvider extends ChangeNotifier {
   String? _token;
   bool _isLoading = false;
   String? _errorMessage;
+  StreamSubscription<DocumentSnapshot>? _saldoSubscription;
 
   UserModel? get user => _user;
   String? get token => _token;
@@ -224,6 +226,32 @@ class AuthProvider extends ChangeNotifier {
     _apiService.setToken(_token!);
     _isLoading = false;
     notifyListeners();
+    _startSaldoListener(firebaseUser.uid);
+  }
+  /// Otomatis update saldoPoin di _user tanpa perlu refresh manual.
+  void _startSaldoListener(String uid) {
+    _saldoSubscription?.cancel();
+    _saldoSubscription = FirebaseFirestore.instance
+        .collection('warga_realtime')
+        .doc(uid)
+        .snapshots()
+        .listen((doc) {
+      if (!doc.exists || _user == null) return;
+      final data = doc.data()!;
+      final newSaldo = (data['saldoPoin'] ?? 0).toDouble();
+      if (newSaldo != _user!.saldoPoin) {
+        _user = UserModel(
+          id: _user!.id,
+          mysqlUserId: _user!.mysqlUserId,
+          nama: _user!.nama,
+          email: _user!.email,
+          saldoPoin: newSaldo,
+        );
+        notifyListeners();
+      }
+    }, onError: (e) {
+      debugPrint('[AuthProvider] Saldo listener error: $e');
+    });
   }
 
   /// Refresh saldo dari MySQL dan update _user + notifyListeners.
@@ -271,6 +299,8 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void logout() {
+    _saldoSubscription?.cancel();
+    _saldoSubscription = null;
     FirebaseAuth.instance.signOut();
     _user = null;
     _token = null;
