@@ -1,4 +1,4 @@
-runtime: nodejs20
+runtime: nodejs22
 service: bank-sampah-frontend
 
 # Pengaturan hemat resource (Sangat bagus!)
