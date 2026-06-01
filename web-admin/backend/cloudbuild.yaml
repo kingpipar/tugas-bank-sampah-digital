@@ -24,7 +24,7 @@ steps:
     - 'managed'
     - '--allow-unauthenticated'
     - '--set-env-vars'
-    - 'DB_NAME=${_DB_NAME},DB_USER=${_DB_USER},DB_PASS=${_DB_PASS},DB_HOST=${_DB_HOST},FIREBASE_SERVICE_ACCOUNT=${_FIREBASE_SERVICE_ACCOUNT}'
+    - '^|^DB_NAME=${_DB_NAME}|DB_USER=${_DB_USER}|DB_PASS=${_DB_PASS}|DB_HOST=${_DB_HOST}|FIREBASE_SERVICE_ACCOUNT=${_FIREBASE_SERVICE_ACCOUNT}'
     - '--port'
     - '3000'
 images:
