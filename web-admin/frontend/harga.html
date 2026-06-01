@@ -400,7 +400,7 @@
                         <td class="p-4 text-emerald-600 font-bold">Rp ${parseInt(item.harga_per_kg).toLocaleString('id-ID')}/kg</td>
                         <td class="p-4 text-amber-500 font-bold">⭐ ${item.poin_per_kg || 0} poin</td>
                         <td class="p-4">
-                            <div class="flex gap-2">
+                            <div class="flex items-center justify-center gap-2">
                                 <button onclick="editHarga(${item.id}, '${item.kategori}', '${item.nama_sampah}', ${item.harga_per_kg})" class="px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 font-medium transition-colors">
                                     <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
                                 </button>
