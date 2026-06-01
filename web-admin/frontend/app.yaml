@@ -1,5 +1,5 @@
 runtime: nodejs20
-service: fare
+service: bank-sampah-frontend
 
 # Pengaturan hemat resource (Sangat bagus!)
 automatic_scaling:
