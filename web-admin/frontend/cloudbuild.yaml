@@ -1,8 +1,28 @@
 steps:
-- name: 'gcr.io/cloud-builders/gsutil'
+- name: 'gcr.io/cloud-builders/docker'
   args:
-    ['-m', 'rsync', '-r', '.', 'gs://bucket-admin-bank-sampah']
-
-- name: 'gcr.io/cloud-builders/gsutil'
+    - 'build'
+    - '-t'
+    - 'gcr.io/$PROJECT_ID/bank-sampah-frontend:$COMMIT_SHA'
+    - '.'
+- name: 'gcr.io/cloud-builders/docker'
   args:
-    ['iam', 'ch', 'allUsers:objectViewer', 'gs://bucket-admin-bank-sampah']
+    - 'push'
+    - 'gcr.io/$PROJECT_ID/bank-sampah-frontend:$COMMIT_SHA'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+    - 'run'
+    - 'deploy'
+    - 'bank-sampah-frontend'
+    - '--image'
+    - 'gcr.io/$PROJECT_ID/bank-sampah-frontend:$COMMIT_SHA'
+    - '--region'
+    - 'us-central1'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+    - '--port'
+    - '80'
+images:
+- 'gcr.io/$PROJECT_ID/bank-sampah-frontend:$COMMIT_SHA'
